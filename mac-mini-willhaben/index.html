@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mac mini на WillHaben — M1 и новее</title>
+<style>
+  :root {
+    --bg: #f2f4f1;
+    --surface: #ffffff;
+    --ink: #1b1d1c;
+    --ink-muted: #62685f;
+    --line: #dde1da;
+    --accent: #a2662f;
+    --accent-ink: #6d431c;
+    --accent-soft: #f2e4d3;
+
+    --m1: #64748b;
+    --m1-soft: #eaedf1;
+    --m2: #2f6fa8;
+    --m2-soft: #e4eef7;
+    --m2p: #6a4fa0;
+    --m2p-soft: #ece5f5;
+    --m4: #2f7a5e;
+    --m4-soft: #e2f0e9;
+    --m4p: #a2662f;
+    --m4p-soft: #f2e4d3;
+    --unclear-soft: #efece6;
+
+    --warn: #97591c;
+    --warn-soft: #f6e6d0;
+    --reserved-soft: #eceae4;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  header.page {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 28px;
+  }
+
+  .eyebrow {
+    font-family: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+  }
+
+  h1 {
+    font-size: 30px;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    margin: 0;
+    text-wrap: balance;
+  }
+
+  .subtitle {
+    color: var(--ink-muted);
+    font-size: 15px;
+    max-width: 62ch;
+    line-height: 1.5;
+    margin: 2px 0 0;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 24px 0 20px;
+  }
+
+  .stat {
+    background: var(--surface);
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .stat .n {
+    font-family: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+  .stat .l {
+    font-size: 12px;
+    color: var(--ink-muted);
+  }
+
+  details.excluded {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 4px 16px;
+    margin-bottom: 24px;
+    font-size: 13.5px;
+    color: var(--ink-muted);
+  }
+
+  details.excluded summary {
+    cursor: pointer;
+    padding: 12px 0;
+    font-weight: 600;
+    color: var(--ink);
+    list-style: none;
+  }
+  details.excluded summary::-webkit-details-marker { display: none; }
+  details.excluded summary::before {
+    content: "▸";
+    display: inline-block;
+    margin-right: 6px;
+    color: var(--accent);
+    transition: transform 0.15s ease;
+  }
+  details.excluded[open] summary::before { transform: rotate(90deg); }
+
+  details.excluded ul {
+    margin: 0 0 14px;
+    padding-left: 18px;
+    line-height: 1.6;
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .chip-filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    color: var(--ink-muted);
+    transition: border-color 0.12s ease, color 0.12s ease, background 0.12s ease;
+  }
+  .chip-filter .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: currentColor;
+    opacity: 0.55;
+  }
+  .chip-filter.active {
+    background: var(--accent-soft);
+    border-color: var(--accent);
+    color: var(--accent-ink);
+  }
+  .chip-filter.active .dot { opacity: 1; }
+
+  .search-box {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 7px 12px;
+    min-width: 220px;
+  }
+  .search-box input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 13.5px;
+    width: 100%;
+    color: var(--ink);
+    font-family: inherit;
+  }
+  .search-box svg { flex: none; opacity: 0.5; }
+
+  .reset-link {
+    font-size: 13px;
+    color: var(--accent-ink);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+  .reset-link:hover { border-bottom-color: var(--accent-ink); }
+
+  .table-shell {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: auto;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 760px;
+    font-size: 14px;
+  }
+
+  thead th {
+    position: sticky;
+    top: 0;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+    padding: 12px 14px;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  thead th.sortable:hover { color: var(--ink); }
+  thead th .arrow { margin-left: 4px; opacity: 0; font-size: 10px; }
+  thead th.sorted .arrow { opacity: 1; color: var(--accent-ink); }
+  thead th.num { text-align: right; }
+
+  tbody tr {
+    border-bottom: 1px solid var(--line);
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #f8f8f6; }
+
+  tbody tr.anomaly { background: var(--warn-soft); }
+  tbody tr.anomaly:hover { background: #f2dfb8; }
+  tbody tr.reserved { opacity: 0.62; }
+
+  td { padding: 11px 14px; vertical-align: top; }
+
+  td.title-cell { max-width: 360px; }
+  .title-main { font-weight: 560; line-height: 1.35; }
+  .title-flags { display: flex; gap: 6px; margin-top: 5px; flex-wrap: wrap; }
+  .flag {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 999px;
+    display: inline-block;
+  }
+  .flag.warn { background: var(--warn-soft); color: var(--warn); }
+  .flag.reserved { background: var(--reserved-soft); color: var(--ink-muted); }
+  .flag.unclear { background: var(--unclear-soft); color: var(--ink-muted); }
+
+  .chip-badge {
+    display: inline-block;
+    font-family: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  .chip-badge.M1 { background: var(--m1-soft); color: var(--m1); }
+  .chip-badge.M2 { background: var(--m2-soft); color: var(--m2); }
+  .chip-badge.M2P { background: var(--m2p-soft); color: var(--m2p); }
+  .chip-badge.M4 { background: var(--m4-soft); color: var(--m4); }
+  .chip-badge.M4P { background: var(--m4p-soft); color: var(--m4p); }
+
+  td.specs { font-family: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace; font-size: 13px; color: var(--ink-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  td.price { text-align: right; font-family: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace; font-variant-numeric: tabular-nums; font-weight: 650; font-size: 14.5px; white-space: nowrap; }
+
+  td.loc { color: var(--ink-muted); font-size: 13px; white-space: nowrap; }
+
+  td.link a {
+    color: var(--accent-ink);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    border-bottom: 1px solid transparent;
+  }
+  td.link a:hover { border-bottom-color: var(--accent-ink); }
+  td.link a:focus-visible, .chip-filter:focus-visible, .reset-link:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .empty-state {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--ink-muted);
+    font-size: 14px;
+  }
+
+  footer.note {
+    margin-top: 18px;
+    font-size: 12.5px;
+    color: var(--ink-muted);
+    line-height: 1.6;
+  }
+  footer.note a { color: var(--accent-ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+
+  @media (max-width: 640px) {
+    .wrap { padding: 24px 14px 60px; }
+    .search-box { margin-left: 0; width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="page">
+    <div class="eyebrow">willhaben.at · marktplatz · computer &amp; tablets</div>
+    <h1>Mac mini — Apple Silicon, весь рынок WillHaben</h1>
+    <p class="subtitle">Все объявления по запросу «mac mini», отфильтрованные на M1 и новее. Пройдено 8 страниц выдачи, Intel-модели (2012–2018) и товары-аксессуары (SSD, доки, кейсы) исключены.</p>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><span class="n">223</span><span class="l">объявлений в поиске</span></div>
+    <div class="stat"><span class="n">213</span><span class="l">уникальных, без дублей</span></div>
+    <div class="stat"><span class="n">41</span><span class="l">M1 и новее</span></div>
+    <div class="stat"><span class="n">€250–2650</span><span class="l">диапазон цен M1+</span></div>
+  </div>
+
+  <details class="excluded">
+    <summary>Что отсеяно из 213 объявлений (172 шт.) — раскрыть</summary>
+    <ul>
+      <li><strong>Intel Mac mini, 2009–2018</strong> (i3/i5/i7, «Late 2014», серверные) — порядка 35+ объявлений.</li>
+      <li><strong>Apple Silicon, но не Mac mini</strong> — iPad Pro M1, MacBook Air/Pro M1–M4, iMac M4.</li>
+      <li><strong>Комплектующие и аксессуары без самого системного блока</strong> — отдельный SSD-накопитель, VESA-крепление, блок питания 110 Вт, Thunderbolt-док/подставка, кейс с кабелем.</li>
+    </ul>
+  </details>
+
+  <div class="controls" id="chipFilters">
+    <button class="chip-filter active" data-chip="M1"><span class="dot" style="color:#64748b"></span>M1 · 12</button>
+    <button class="chip-filter active" data-chip="M2"><span class="dot" style="color:#2f6fa8"></span>M2 · 4</button>
+    <button class="chip-filter active" data-chip="M2P"><span class="dot" style="color:#6a4fa0"></span>M2 Pro · 3</button>
+    <button class="chip-filter active" data-chip="M4"><span class="dot" style="color:#2f7a5e"></span>M4 · 19</button>
+    <button class="chip-filter active" data-chip="M4P"><span class="dot" style="color:#a2662f"></span>M4 Pro · 2</button>
+    <a href="#" class="reset-link" id="resetBtn">сбросить фильтры</a>
+    <div class="search-box">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input type="text" id="searchInput" placeholder="поиск по названию или городу…" />
+    </div>
+  </div>
+
+  <div class="table-shell">
+    <table>
+      <thead>
+        <tr>
+          <th class="sortable" data-key="title">Модель<span class="arrow">▲</span></th>
+          <th class="sortable" data-key="chipRank">Чип<span class="arrow">▲</span></th>
+          <th>RAM / SSD</th>
+          <th class="sortable num" data-key="price">Цена<span class="arrow">▲</span></th>
+          <th class="sortable" data-key="location">Локация<span class="arrow">▲</span></th>
+          <th>Объявление</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div class="empty-state" id="emptyState" style="display:none;">Ничего не найдено — измените фильтры или поиск.</div>
+  </div>
+
+  <footer class="note">Данные собраны единоразово 02.07.2026 со страниц выдачи (без захода в каждое объявление) — состояние товара, наличие торга и актуальность стоит проверять по ссылке. Строка с €250 подсвечена как аномально низкая для M2: явно ниже соседних M1-лотов, стоит перепроверить состояние/комплектность перед контактом с продавцом. · <a href="../">← все страницы</a></footer>
+</div>
+
+<script>
+  const listings = [
+    { title: "Apple Mac mini M1 (8GB)", chip: "M1", ram: "8GB", ssd: "—", price: 320, location: "5020 Salzburg", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/apple-mac-mini-m1-8gb-1481029712/" },
+    { title: "Apple Mac mini M1 8Gb RAM, 256Gb SSD", chip: "M1", ram: "8GB", ssd: "256GB", price: 330, location: "1090 Wien, Alsergrund", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/apple-mac-mini-m1-8gb-ram-256gb-ssd-1909220819/" },
+    { title: "Mac mini M1 (8GB RAM, 256GB SSD)", chip: "M1", ram: "8GB", ssd: "256GB", price: 325, location: "6094 Axams", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/mac-mini-m1-8gb-ram-256gb-ssd-1546220218/" },
+    { title: "mac mini m1 8gb 256 gb", chip: "M1", ram: "8GB", ssd: "256GB", price: 360, location: "1220 Wien, Donaustadt", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/mac-mini-m1-8gb-256-gb-2068016084/" },
+    { title: "Apple Mac Mini M1 (8GB)", chip: "M1", ram: "8GB", ssd: "—", price: 350, location: "1150 Wien, Rudolfsheim-Fünfhaus", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/apple-mac-mini-m1-8gb-998647540/" },
+    { title: "Mac Mini 2020 M1 8GB 500GB", chip: "M1", ram: "8GB", ssd: "500GB", price: 400, location: "1160 Wien, Ottakring", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/mac-mini-2020-m1-8gb-500gb-1537799303/" },
+    { title: "Mac Mini M1 8-Core CPU, 8-Core GPU", chip: "M1", ram: "—", ssd: "—", price: 350, location: "1140 Wien, Penzing", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/mac-mini-m1-8-core-cpu-8-core-gpu-1164924289/" },
+    { title: "MacMini M1 16GB", chip: "M1", ram: "16GB", ssd: "—", price: 550, location: "2361 Laxenburg", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/macmini-m1-16gb-942453405/" },
+    { title: "Mac Mini (M1, 16 GB RAM) inkl. Dockingstation", chip: "M1", ram: "16GB", ssd: "—", price: 421, location: "1210 Wien, Floridsdorf", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/mac-mini-m1-prozessor-16-gb-ram-inkl-praktischer-dockingstation-in-gutem-zustand-1246257149/" },
+    { title: "Apple Mac mini M1 8Gb Ram 512Gb + Satechi Hub", chip: "M1", ram: "8GB", ssd: "512GB", price: 420, location: "1020 Wien, Leopoldstadt", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/apple-mac-mini-m1-8gb-ram-512gb-festplatte-satechi-hub-ssd-gehaeuse-1980836065/" },
+    { title: "Apple Mac Mini M1 — 256GB, inkl. Satechi Stand-Hub", chip: "M1", ram: "—", ssd: "256GB", price: 549, location: "5671 Bruck a. d. Großglocknerstraße", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/apple-mac-mini-m1-256gb-inkl-satechi-stand-hub-alles-wie-neu-top-1237607649/" },
+    { title: "Neuwertiger Apple Mac mini M1 8GB/512GB, inkl. OVP", chip: "M1", ram: "8GB", ssd: "512GB", price: 575, location: "4030 Linz", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/neuweriger-apple-mac-mini-m1-8gb-512gb-inkl-ovp-minicomputer-pc-zubehoer-1181032801/" },
+
+    { title: "Apple Mac Mini M2 (2023), 256 GB SSD", chip: "M2", ram: "8GB", ssd: "256GB", price: 250, location: "1030 Wien, Landstraße", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/apple-mac-mini-m2-2023-256-gb-ssd-1055509150/", anomaly: true },
+    { title: "Mac Mini 2023", chip: "?", ram: "—", ssd: "—", price: 600, location: "8010 Graz", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/mac-mini-2023-1967034893/", unclear: true },
+    { title: "Apple Mac mini M2, 8 GB RAM, 512 GB SSD, neuwertig", chip: "M2", ram: "8GB", ssd: "512GB", price: 700, location: "1120 Wien, Meidling", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/apple-mac-mini-m2-8-gb-ram-512-gb-ssd-neuwertig-1320210046/" },
+    { title: "Apple Mac mini M2 16GB (Dez. 2023) / 1TB SSD + Maus + Tastatur", chip: "M2", ram: "16GB", ssd: "1TB", price: 749, location: "6020 Innsbruck", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/apple-mac-mini-m2-16gb-dezember-2023-1tb-ssd-apple-maus-kabellose-tastatur-neuwertig-ovp-rechnung-1937111525/" },
+    { title: "Mac Mini M2, 16 GB RAM, 256 GB SSD", chip: "M2", ram: "16GB", ssd: "256GB", price: 600, location: "8111 Judendorf", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/mac-mini-m2-16-gb-ram-256-gb-speicher-1342523621/" },
+
+    { title: "Mac mini M2 Pro, 16 GB RAM, 512 GB SSD (reserviert)", chip: "M2P", ram: "16GB", ssd: "512GB", price: 549, location: "9020 Klagenfurt", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/mac-mini-m2-pro-16-gb-ram-512-gb-ssd-1794158513/", reserved: true },
+    { title: "Mac Mini M2 Pro 16GB RAM 512GB SSD", chip: "M2P", ram: "16GB", ssd: "512GB", price: 590, location: "2340 Mödling", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/mac-mini-m2-pro-16gb-ram-512gb-ssd-1934283853/" },
+    { title: "Apple Mac mini M2 Pro, 16 GB RAM, 2 TB SSD (2023)", chip: "M2P", ram: "16GB", ssd: "2TB", price: 995, location: "1090 Wien, Alsergrund", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/apple-mac-mini-m2-pro-16-gb-ram-2-tb-ssd-2023-610813579/" },
+
+    { title: "Mac Mini M4 (16GB)", chip: "M4", ram: "16GB", ssd: "—", price: 500, location: "5020 Salzburg", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/mac-mini-m4-16gb-1475081841/" },
+    { title: "Apple Mac mini M4, 256GB", chip: "M4", ram: "—", ssd: "256GB", price: 600, location: "3100 St. Pölten", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/apple-mac-mini-m4-256gb-1652167946/" },
+    { title: "Mac mini M4 16GB RAM", chip: "M4", ram: "16GB", ssd: "—", price: 699, location: "5020 Salzburg", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/mac-mini-m4-16gb-ram-832543746/" },
+    { title: "Mac M4 Mini 16GB RAM 256GB SSD", chip: "M4", ram: "16GB", ssd: "256GB", price: 600, location: "6020 Innsbruck", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/mac-m4-mini-16gb-ram-256gb-ssd-843292786/" },
+    { title: "Apple Mac mini M4, originalverpackt, neu", chip: "M4", ram: "—", ssd: "—", price: 700, location: "6020 Innsbruck", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/apple-mac-mini-m4-originalverpackt-neu-1151722684/" },
+    { title: "Apple Mac mini M4 (originalverpackt) — 16GB / 256GB", chip: "M4", ram: "16GB", ssd: "256GB", price: 740, location: "4201 Gramastetten", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/apple-mac-mini-m4-originalverpackt-16gb-ram-256gb-ssd-1167652546/" },
+    { title: "Neu & versiegelt: Mac Mini M4, 16GB, 256GB", chip: "M4", ram: "16GB", ssd: "256GB", price: 730, location: "4230 Aist", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/-neu-versiegelt-mac-mini-m4-16gb-256gb-905594355/" },
+    { title: "Apple Mac mini M4 16GB 256GB", chip: "M4", ram: "16GB", ssd: "256GB", price: 649, location: "1130 Wien, Hietzing", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/apple-mac-mini-m4-16gb-256gb-1368401327/" },
+    { title: "Apple Mac mini M4 (originalverpackt)", chip: "M4", ram: "—", ssd: "—", price: 760, location: "4020 Linz", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/apple-mac-mini-m4-originalverpackt-1472206019/" },
+    { title: "Apple Mac Mini M4 / 16 GB RAM / 512 GB SSD", chip: "M4", ram: "16GB", ssd: "512GB", price: 800, location: "1230 Wien, Liesing", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/apple-mac-mini-m4-16-gb-ram-512-gb-ssd-918596869/" },
+    { title: "Apple Mac Mini M4 16/256 (2024), wie neu (reserviert)", chip: "M4", ram: "16GB", ssd: "256GB", price: 595, location: "1100 Wien, Favoriten", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/apple-mac-mini-m4-16-256-2024-wie-neu-ovp-kauf-januar-2025-1459909271/", reserved: true },
+    { title: "Apple Mac mini M4 16GB/256GB, wie neu, Rechnung Jänner 2026", chip: "M4", ram: "16GB", ssd: "256GB", price: 660, location: "1130 Wien, Hietzing", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/apple-mac-mini-m4-16gb-ram-256gb-ssd-wie-neu-rechnung-jaenner-2026-930782485/" },
+    { title: "Apple Mac mini M4 16GB/256GB, OVP, Rechnung & Apple-Abdeckung", chip: "M4", ram: "16GB", ssd: "256GB", price: 599.99, location: "1030 Wien, Landstraße", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/apple-mac-mini-m4-16gb-256gb-ovp-rechnung-apple-abdeckung-1436579406/" },
+    { title: "Apple Mac mini (M4, 2024), 10-Core CPU/GPU, 16GB/256GB", chip: "M4", ram: "16GB", ssd: "256GB", price: 650, location: "4271 St. Oswald bei Freistadt", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/apple-mac-mini-m4-2024-10-core-cpu-10-core-gpu-16-gb-ram-256-gb-ssd-1836867457/" },
+    { title: "Apple Mac mini (M4, 2024), Silber, 16GB/512GB", chip: "M4", ram: "16GB", ssd: "512GB", price: 860, location: "1210 Wien, Floridsdorf", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/apple-mac-mini-m4-2024-silber-16-gb-ram-512-gb-ssd-1874395174/" },
+    { title: "Mac Mini M4 (16GB/256GB) + Thunderbolt 5 Dock + 2TB SSD", chip: "M4", ram: "16GB", ssd: "256GB + 2TB внеш.", price: 1090, location: "1040 Wien, Wieden", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/mac-mini-m4-16gb-256gb-thunderbolt-5-dock-2tb-ssd-2124019680/" },
+    { title: "Mac mini M4, локальная LLM предустановлена, 10c/10c, 24GB/256GB", chip: "M4", ram: "24GB", ssd: "256GB", price: 1499, location: "5020 Salzburg", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/ki-ai-vorinstalliertes-lokales-llm-apple-mac-mini-m4-10c-cpu-10c-gpu-24gb-ram-256gb-ssd-1677524029/" },
+    { title: "Mac Mini M4 / 24 GB RAM / 512 GB SSD", chip: "M4", ram: "24GB", ssd: "512GB", price: 1200, location: "9020 Klagenfurt", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/mac-mini-m4-24-gb-ram-512-gb-ssd-1623062786/" },
+    { title: "Apple CTO Mac mini, M4, 24GB RAM, 2TB SSD, Silber", chip: "M4", ram: "24GB", ssd: "2TB", price: 1750, location: "8010 Graz, Geidorf", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/apple-cto-mac-mini-apple-m4-chip-10-core-cpu-mit-4-performance-kernen-und-6-effizienz-kernen-10-core-gpu-24-gb-ram-2-tb-ssd-m4-macos-silber-1431623635/" },
+
+    { title: "Apple Mac Mini M4 Pro — 24GB RAM / 512GB SSD, wie neu, OVP", chip: "M4P", ram: "24GB", ssd: "512GB", price: 1400, location: "1020 Wien, Leopoldstadt", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/apple-mac-mini-m4-pro-24gb-ram-512gb-ssd-type-a-stecker-wie-neu-ovp-rechnung-digital-1201348719/" },
+    { title: "Mac mini M4 Pro, 14-Core CPU / 20-Core GPU, 48GB RAM, 1TB SSD", chip: "M4P", ram: "48GB", ssd: "1TB", price: 2650, location: "1020 Wien, Leopoldstadt", url: "https://www.willhaben.at/iad/kaufen-und-verkaufen/d/mac-mini-m4-pro-mit-14-core-cpu-20-core-gpu-48-gb-ram-und-1-tb-ssd-2038707179/" },
+  ];
+
+  const chipLabel = { M1: "M1", M2: "M2", M2P: "M2 Pro", M4: "M4", M4P: "M4 Pro", "?": "?" };
+  const chipRank = { M1: 1, M2: 2, M2P: 3, M4: 4, M4P: 5, "?": 2.4 };
+
+  listings.forEach(l => { l.chipRank = chipRank[l.chip]; });
+
+  const tbody = document.getElementById("tbody");
+  const emptyState = document.getElementById("emptyState");
+  const searchInput = document.getElementById("searchInput");
+  const chipFilters = document.getElementById("chipFilters");
+  const resetBtn = document.getElementById("resetBtn");
+
+  let activeChips = new Set(["M1", "M2", "M2P", "M4", "M4P"]);
+  let sortKey = "price";
+  let sortDir = 1;
+  let query = "";
+
+  function fmtPrice(p) {
+    const rounded = Number.isInteger(p) ? p : p.toFixed(2);
+    return "€ " + rounded.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  }
+
+  function render() {
+    const q = query.trim().toLowerCase();
+    let rows = listings.filter(l => {
+      const chipOk = l.chip === "?" ? activeChips.has("M2") : activeChips.has(l.chip);
+      const qOk = !q || l.title.toLowerCase().includes(q) || l.location.toLowerCase().includes(q);
+      return chipOk && qOk;
+    });
+
+    rows.sort((a, b) => {
+      let av = a[sortKey], bv = b[sortKey];
+      if (typeof av === "string") { av = av.toLowerCase(); bv = bv.toLowerCase(); }
+      if (av < bv) return -1 * sortDir;
+      if (av > bv) return 1 * sortDir;
+      return 0;
+    });
+
+    tbody.innerHTML = "";
+    emptyState.style.display = rows.length ? "none" : "block";
+
+    for (const l of rows) {
+      const tr = document.createElement("tr");
+      if (l.anomaly) tr.classList.add("anomaly");
+      if (l.reserved) tr.classList.add("reserved");
+
+      const flags = [];
+      if (l.anomaly) flags.push('<span class="flag warn">ниже рынка</span>');
+      if (l.reserved) flags.push('<span class="flag reserved">забронировано</span>');
+      if (l.unclear) flags.push('<span class="flag unclear">чип не указан</span>');
+
+      tr.innerHTML = `
+        <td class="title-cell">
+          <div class="title-main">${l.title}</div>
+          ${flags.length ? `<div class="title-flags">${flags.join("")}</div>` : ""}
+        </td>
+        <td><span class="chip-badge ${l.chip === "?" ? "M2" : l.chip}">${l.chip === "?" ? "M2?" : chipLabel[l.chip]}</span></td>
+        <td class="specs">${l.ram} / ${l.ssd}</td>
+        <td class="price">${fmtPrice(l.price)}</td>
+        <td class="loc">${l.location}</td>
+        <td class="link"><a href="${l.url}" target="_blank" rel="noopener">Открыть ↗</a></td>
+      `;
+      tbody.appendChild(tr);
+    }
+  }
+
+  chipFilters.querySelectorAll(".chip-filter").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const chip = btn.dataset.chip;
+      if (activeChips.has(chip)) { activeChips.delete(chip); btn.classList.remove("active"); }
+      else { activeChips.add(chip); btn.classList.add("active"); }
+      render();
+    });
+  });
+
+  resetBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    activeChips = new Set(["M1", "M2", "M2P", "M4", "M4P"]);
+    chipFilters.querySelectorAll(".chip-filter").forEach(b => b.classList.add("active"));
+    query = "";
+    searchInput.value = "";
+    render();
+  });
+
+  searchInput.addEventListener("input", (e) => { query = e.target.value; render(); });
+
+  document.querySelectorAll("th.sortable").forEach(th => {
+    th.addEventListener("click", () => {
+      const key = th.dataset.key;
+      if (sortKey === key) { sortDir *= -1; }
+      else { sortKey = key; sortDir = key === "price" ? 1 : 1; }
+      document.querySelectorAll("th.sortable").forEach(t => {
+        t.classList.remove("sorted");
+        t.querySelector(".arrow").textContent = "▲";
+      });
+      th.classList.add("sorted");
+      th.querySelector(".arrow").textContent = sortDir === 1 ? "▲" : "▼";
+      render();
+    });
+  });
+
+  document.querySelector('th[data-key="price"]').classList.add("sorted");
+  document.querySelector('th[data-key="price"] .arrow').textContent = "▲";
+
+  render();
+</script>
+</body>
+</html>

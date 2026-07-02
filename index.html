@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Страницы Макса</title>
+<style>
+  :root {
+    --bg: #f2f4f1;
+    --surface: #ffffff;
+    --ink: #1b1d1c;
+    --ink-muted: #62685f;
+    --line: #dde1da;
+    --accent: #a2662f;
+    --accent-ink: #6d431c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 60px 24px 80px; }
+  .eyebrow {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--accent-ink);
+  }
+  h1 { font-size: 28px; font-weight: 650; margin: 4px 0 8px; letter-spacing: -0.01em; }
+  p.sub { color: var(--ink-muted); font-size: 15px; line-height: 1.5; margin: 0 0 32px; max-width: 60ch; }
+  ul.pages { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  ul.pages li { background: var(--surface); }
+  ul.pages a { display: block; padding: 16px 18px; text-decoration: none; color: var(--ink); }
+  ul.pages a:hover { background: #f8f8f6; }
+  ul.pages .title { font-weight: 600; font-size: 15px; }
+  ul.pages .desc { color: var(--ink-muted); font-size: 13px; margin-top: 3px; }
+  ul.pages .date { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 11px; color: var(--ink-muted); float: right; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">dzhabali/shared-pages</div>
+  <h1>Страницы Макса</h1>
+  <p class="sub">Публичные страницы, которые удобно расшарить одной ссылкой без привязки к аккаунту claude.ai. Каждая — своя папка ниже.</p>
+  <ul class="pages">
+    <li>
+      <a href="mac-mini-willhaben/">
+        <span class="date">02.07.2026</span>
+        <div class="title">Mac mini на WillHaben</div>
+        <div class="desc">Все объявления M1 и новее с willhaben.at, сортировка по цене и фильтр по чипу</div>
+      </a>
+    </li>
+  </ul>
+</div>
+</body>
+</html>
