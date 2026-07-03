@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Diamond Wisdom Group — июнь 2026</title>
+<style>
+  :root {
+    --page:      #f9f9f7;
+    --surface:   #fcfcfb;
+    --ink:       #0b0b0b;
+    --ink-2:     #52514e;
+    --muted:     #898781;
+    --grid:      #e1e0d9;
+    --baseline:  #c3c2b7;
+    --border:    rgba(11,11,11,.10);
+    --s1:        #2a78d6;  /* blue — спенд */
+    --s2:        #1baf7a;  /* aqua — покупки */
+    --seq-250:   #86b6ef;
+    --seq-450:   #2a78d6;
+    --seq-650:   #104281;
+    --good:      #006300;
+    --bad:       #d03b3b;
+    --wash:      rgba(11,11,11,.045);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page:     #0d0d0d;
+      --surface:  #1a1a19;
+      --ink:      #ffffff;
+      --ink-2:    #c3c2b7;
+      --muted:    #898781;
+      --grid:     #2c2c2a;
+      --baseline: #383835;
+      --border:   rgba(255,255,255,.10);
+      --s1:       #3987e5;
+      --s2:       #199e70;
+      --seq-250:  #86b6ef;
+      --seq-450:  #3987e5;
+      --seq-650:  #184f95;
+      --good:     #0ca30c;
+      --bad:      #e66767;
+      --wash:     rgba(255,255,255,.06);
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--page);
+    color: var(--ink);
+    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+    padding: 32px 20px 60px;
+  }
+  .wrap { max-width: 1060px; margin: 0 auto; }
+  header h1 { font-size: 26px; letter-spacing: -.01em; }
+  header .sub { color: var(--ink-2); margin-top: 6px; font-size: 14px; }
+  .kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px; margin: 26px 0 8px;
+  }
+  .tile {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .tile .lbl { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  .tile .val { font-size: 26px; font-weight: 650; margin-top: 4px; letter-spacing: -.01em; }
+  .tile .note { font-size: 12px; color: var(--ink-2); margin-top: 2px; }
+  .tile .val .accent { font-size: 15px; color: var(--ink-2); font-weight: 500; }
+  section { margin-top: 40px; }
+  h2 { font-size: 19px; margin-bottom: 4px; }
+  .h2sub { color: var(--ink-2); font-size: 13.5px; margin-bottom: 16px; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .tablewrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; white-space: nowrap; }
+  th {
+    text-align: right; font-weight: 600; color: var(--muted); font-size: 12px;
+    text-transform: uppercase; letter-spacing: .03em;
+    padding: 8px 12px; border-bottom: 1px solid var(--baseline);
+  }
+  th:first-child, td:first-child { text-align: left; padding-left: 0; }
+  th:last-child, td:last-child { padding-right: 0; }
+  td {
+    padding: 9px 12px; border-bottom: 1px solid var(--grid);
+    text-align: right; font-variant-numeric: tabular-nums;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr.total td { border-top: 1px solid var(--baseline); font-weight: 650; border-bottom: none; }
+  .name { font-weight: 550; }
+  .pill {
+    display: inline-block; font-size: 11px; font-weight: 600; border-radius: 99px;
+    padding: 1px 8px; margin-left: 8px; vertical-align: 1px;
+  }
+  .pill.on  { color: var(--good); border: 1px solid var(--good); }
+  .pill.off { color: var(--muted); border: 1px solid var(--baseline); }
+  .fn { color: var(--muted); font-size: 12.5px; margin-top: 12px; }
+  .charttitle { font-size: 13px; font-weight: 600; color: var(--ink-2); margin: 4px 0 2px; display: flex; align-items: center; gap: 7px; }
+  .swatch { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+  svg { display: block; width: 100%; height: auto; }
+  svg text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  @media (max-width: 720px) { .row2 { grid-template-columns: 1fr; } }
+  .insights { margin-top: 16px; }
+  .insights li { margin: 8px 0 8px 20px; color: var(--ink-2); }
+  .insights b { color: var(--ink); font-weight: 600; }
+  details { margin-top: 14px; }
+  summary { cursor: pointer; color: var(--muted); font-size: 13px; }
+  #tip {
+    position: fixed; pointer-events: none; z-index: 10; display: none;
+    background: var(--ink); color: var(--page);
+    font-size: 12.5px; line-height: 1.35; padding: 6px 9px; border-radius: 7px;
+    max-width: 220px;
+  }
+  footer { margin-top: 48px; color: var(--muted); font-size: 12.5px; }
+</style>
+</head>
+<body data-palette="#2a78d6,#1baf7a">
+<div class="wrap">
+
+<header>
+  <h1>Diamond Wisdom Group — июнь 2026</h1>
+  <div class="sub">Facebook Ads (кабинет 485193041348973) + продажи мини-курса «Денежный прорыв за 21 день».
+  Период: 1–30 июня 2026. Покупки — по письмам GetCourse, дубли (WayForPay + повторные письма) убраны, дедуп по номеру заказа.</div>
+</header>
+
+<div class="kpis">
+  <div class="tile"><div class="lbl">Спенд FB, июнь</div><div class="val">$2 566</div><div class="note">8 кампаний</div></div>
+  <div class="tile"><div class="lbl">Показы</div><div class="val">213 K</div><div class="note">4 534 клика</div></div>
+  <div class="tile"><div class="lbl">Покупок «ДП»</div><div class="val">67</div><div class="note">по €9.77</div></div>
+  <div class="tile"><div class="lbl">Выручка «ДП»</div><div class="val">€654.59</div><div class="note">≈ $751</div></div>
+  <div class="tile"><div class="lbl">Цена покупки</div><div class="val">$29.97</div><div class="note">спенд ДП $2 008 / 67</div></div>
+  <div class="tile"><div class="lbl">ROAS фронта</div><div class="val">0.37</div><div class="note">окупаемость — по бэкенду</div></div>
+</div>
+
+<section>
+  <h2>Кампании июня</h2>
+  <div class="h2sub">Всё, что крутилось в кабинете в июне (статус — на 3 июля).</div>
+  <div class="card tablewrap">
+    <table>
+      <thead><tr>
+        <th>Кампания</th><th>Цель</th><th>Спенд</th><th>Показы</th><th>Клики</th><th>CTR</th><th>CPM</th><th>CPC</th>
+      </tr></thead>
+      <tbody>
+        <tr><td class="name">конв_ДП_европа<span class="pill on">active</span></td><td>Продажи</td><td>$668.38</td><td>37 265</td><td>903</td><td>2.42%</td><td>$17.94</td><td>$0.74</td></tr>
+        <tr><td class="name">конверс_ДП_2.0_euro<span class="pill off">пауза</span></td><td>Продажи</td><td>$507.74</td><td>27 392</td><td>655</td><td>2.39%</td><td>$18.54</td><td>$0.78</td></tr>
+        <tr><td class="name">конверс_ДП_2.0_usa_kanada<span class="pill off">пауза</span></td><td>Продажи</td><td>$412.47</td><td>10 089</td><td>183</td><td>1.81%</td><td>$40.88</td><td>$2.25</td></tr>
+        <tr><td class="name">конверс_ДП_2.0_kz<span class="pill off">пауза</span></td><td>Продажи</td><td>$404.63</td><td>20 445</td><td>266</td><td>1.30%</td><td>$19.79</td><td>$1.52</td></tr>
+        <tr><td class="name">рилс_трафик_euro<span class="pill on">active</span></td><td>Трафик</td><td>$264.33</td><td>90 086</td><td>2 226</td><td>2.47%</td><td>$2.93</td><td>$0.12</td></tr>
+        <tr><td class="name">ретаргет_конверс_ретриты_пранамув<span class="pill on">active</span></td><td>Лиды</td><td>$224.59</td><td>20 149</td><td>137</td><td>0.68%</td><td>$11.15</td><td>$1.64</td></tr>
+        <tr><td class="name">ретаргет_веб_02.07<span class="pill off">пауза</span></td><td>Лиды</td><td>$68.94</td><td>6 671</td><td>139</td><td>2.08%</td><td>$10.33</td><td>$0.50</td></tr>
+        <tr><td class="name">А_конверс_ДП_2.0_euro<span class="pill off">пауза</span></td><td>Продажи</td><td>$14.98</td><td>897</td><td>25</td><td>2.79%</td><td>$16.70</td><td>$0.60</td></tr>
+        <tr class="total"><td>Итого</td><td></td><td>$2 566.06</td><td>212 994</td><td>4 534</td><td>2.13%</td><td>$12.05</td><td>$0.57</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="fn">«ДП» = «Денежный прорыв». Кампании <b>конв_ДП_украина</b> и <b>конв_ДП_казахстан</b> запущены 1–2 июля — в июне спенда не имели и здесь не учтены. Ещё две старые ДП-кампании без июньского спенда не показаны. Самый дорогой рынок — USA/Канада: CPM $40.88 (×2.3 к Европе), CPC $2.25.</div>
+</section>
+
+<section>
+  <h2>«Денежный прорыв» — фронт воронки, день за днём</h2>
+  <div class="h2sub">Спенд пяти ДП-кампаний против покупок мини-курса (€9.77). Всего за июнь: $2 008.20 спенда → 67 покупок.</div>
+  <div class="card">
+    <div class="charttitle"><span class="swatch" style="background:var(--s1)"></span>Спенд ДП-кампаний, $/день</div>
+    <div id="chartSpend"></div>
+    <div class="charttitle" style="margin-top:14px"><span class="swatch" style="background:var(--s2)"></span>Покупки, шт/день</div>
+    <div id="chartBuys"></div>
+    <details>
+      <summary>Данные таблицей</summary>
+      <div class="tablewrap" id="dailyTable"></div>
+    </details>
+  </div>
+
+  <div class="row2">
+    <div class="card">
+      <div class="charttitle">Цена покупки по декадам, $</div>
+      <div id="chartCac"></div>
+      <div class="fn">Чем сильнее масштабировали к концу месяца (26–30 июня — $138/день против $44 в начале), тем дороже выходила покупка.</div>
+    </div>
+    <div class="card">
+      <div class="charttitle">Покупки по способу оплаты</div>
+      <div id="chartPay"></div>
+      <div class="fn">48 из 67 оплат — Stripe (карта, €), 18 — WayForPay, 1 — Т-Банк.</div>
+    </div>
+  </div>
+
+  <ul class="insights">
+    <li><b>67 покупок за месяц</b> — в среднем 2.2 в день. Лучший день — 10 июня (7 покупок), затем 3–4 июня и 26 июня (по 5).</li>
+    <li><b>Пауза 22–24 июня видна мгновенно:</b> спенд $0 — и за три дня одна покупка (23-го). Органики у трипваера почти нет, продажи держатся на рекламе.</li>
+    <li><b>Масштабирование пока не окупается линейно:</b> первая декада — покупка за $14.6, вторая — $32.3, третья — $55.6. Спенд вырос вдвое, покупки — нет. Стоит смотреть крео/аудитории конв_ДП_европа после буста 19 июня.</li>
+    <li><b>Фронт возвращает 37% рекламы</b> (€654.59 ≈ $751 против $2 008). Для трипваера это нормальная механика — экономика сходится на бэкенде (основные курсы), но бэкенд-конверсию июньской когорты стоит замерить отдельно.</li>
+  </ul>
+</section>
+
+<footer>
+  Источники: Facebook Ads (MCP, кабинет Diamond Wisdom Group) · письма GetCourse (info@pinkdiamond.online) и WayForPay за 1–30 июня 2026, дедупликация по номеру заказа · курс €/$ = 1.147 из фактических платежей WayForPay. Собрано 3 июля 2026. Имена покупателей не публикуются.
+</footer>
+
+</div>
+<div id="tip"></div>
+
+<script>
+(function () {
+  var css = getComputedStyle(document.documentElement);
+  var C = function (v) { return css.getPropertyValue(v).trim(); };
+
+  var spend = [38.77,35.20,32.72,45.10,44.29,42.28,59.95,49.65,45.10,46.17,39.36,52.87,69.93,71.72,63.87,72.73,68.53,57.22,100.32,82.49,105.51,0,0,0,94.97,176.23,176.38,125.23,101.32,110.29];
+  var buys  = [3,1,5,5,1,1,2,2,3,7,2,0,2,0,4,2,4,1,2,4,3,0,1,0,1,5,1,0,3,2];
+
+  var W = 1000, ML = 44, MR = 8, MT = 14;
+  var innerW = W - ML - MR;
+  var slot = innerW / 30, gap = 2, bw = slot - gap;
+
+  function fmt(n, d) { return n.toLocaleString('ru-RU', {minimumFractionDigits: d||0, maximumFractionDigits: d||0}); }
+
+  function bars(el, data, color, opts) {
+    var H = opts.h, MB = 22, plotH = H - MT - MB;
+    var max = opts.max;
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + opts.aria + '">';
+    // pause band 22–24
+    if (opts.pause) {
+      var px = ML + 21 * slot, pw = 3 * slot;
+      s += '<rect x="' + px + '" y="' + MT + '" width="' + pw + '" height="' + plotH + '" fill="var(--wash)"/>';
+      if (opts.pauseLabel) s += '<text x="' + (px + pw/2) + '" y="' + (MT + 14) + '" font-size="11" fill="var(--muted)" text-anchor="middle">пауза</text>';
+    }
+    // gridlines + y labels
+    opts.ticks.forEach(function (t) {
+      var y = MT + plotH - (t / max) * plotH;
+      s += '<line x1="' + ML + '" y1="' + y + '" x2="' + (W - MR) + '" y2="' + y + '" stroke="var(--grid)" stroke-width="1"/>';
+      s += '<text x="' + (ML - 8) + '" y="' + (y + 4) + '" font-size="11" fill="var(--muted)" text-anchor="end">' + opts.tickFmt(t) + '</text>';
+    });
+    // baseline
+    s += '<line x1="' + ML + '" y1="' + (MT + plotH) + '" x2="' + (W - MR) + '" y2="' + (MT + plotH) + '" stroke="var(--baseline)" stroke-width="1"/>';
+    // bars
+    data.forEach(function (v, i) {
+      var h = Math.max(v > 0 ? 2 : 0, (v / max) * plotH);
+      var x = ML + i * slot + gap / 2, y = MT + plotH - h;
+      if (v > 0) {
+        s += '<path d="M' + x + ' ' + (MT + plotH) + ' V' + (y + 4) + ' Q' + x + ' ' + y + ' ' + (x + 4) + ' ' + y +
+             ' H' + (x + bw - 4) + ' Q' + (x + bw) + ' ' + y + ' ' + (x + bw) + ' ' + (y + 4) +
+             ' V' + (MT + plotH) + ' Z" fill="' + color + '"/>';
+      }
+      if (opts.label(v, i)) {
+        s += '<text x="' + (x + bw/2) + '" y="' + (y - 5) + '" font-size="11" font-weight="600" fill="var(--ink-2)" text-anchor="middle">' + opts.label(v, i) + '</text>';
+      }
+      // hover hit target (full column height)
+      s += '<rect class="hit" data-tip="' + opts.tip(v, i) + '" x="' + (ML + i * slot) + '" y="' + MT + '" width="' + slot + '" height="' + plotH + '" fill="transparent"/>';
+      // x labels
+      if ((i + 1) % 2 === 1) {
+        s += '<text x="' + (ML + i * slot + slot/2) + '" y="' + (H - 6) + '" font-size="10.5" fill="var(--muted)" text-anchor="middle">' + (i + 1) + '</text>';
+      }
+    });
+    s += '</svg>';
+    el.innerHTML = s;
+  }
+
+  bars(document.getElementById('chartSpend'), spend, 'var(--s1)', {
+    h: 190, max: 190, ticks: [0, 50, 100, 150],
+    tickFmt: function (t) { return '$' + t; },
+    aria: 'Дневной спенд ДП-кампаний в июне',
+    pause: true, pauseLabel: true,
+    label: function (v, i) { return (i === 26) ? '$176' : (i === 20 ? '$106' : ''); },
+    tip: function (v, i) { return (i + 1) + ' июня — спенд $' + fmt(v, 2); }
+  });
+
+  bars(document.getElementById('chartBuys'), buys, 'var(--s2)', {
+    h: 150, max: 8, ticks: [0, 4, 8],
+    tickFmt: function (t) { return t; },
+    aria: 'Покупки Денежного прорыва по дням июня',
+    pause: true, pauseLabel: false,
+    label: function (v, i) { return (i === 9) ? '7' : ''; },
+    tip: function (v, i) { return (i + 1) + ' июня — ' + v + ' ' + (v === 1 ? 'покупка' : (v >= 2 && v <= 4 ? 'покупки' : 'покупок')); }
+  });
+
+  // horizontal bars: CAC by decade (ordinal, one hue light→dark) & payment methods (one hue)
+  function hbars(el, rows, opts) {
+    var HW = 480, rowH = 34, LW = opts.lw, H = rows.length * rowH + 6;
+    var maxv = Math.max.apply(null, rows.map(function (r) { return r.v; }));
+    var barMax = HW - LW - 74;
+    var s = '<svg viewBox="0 0 ' + HW + ' ' + H + '" role="img" aria-label="' + opts.aria + '">';
+    rows.forEach(function (r, i) {
+      var y = i * rowH + 6, h = 20;
+      var w = Math.max(2, (r.v / maxv) * barMax);
+      s += '<text x="0" y="' + (y + 15) + '" font-size="12.5" fill="var(--ink-2)">' + r.name + '</text>';
+      s += '<path d="M' + LW + ' ' + y + ' H' + (LW + w - 4) + ' Q' + (LW + w) + ' ' + y + ' ' + (LW + w) + ' ' + (y + 4) +
+           ' V' + (y + h - 4) + ' Q' + (LW + w) + ' ' + (y + h) + ' ' + (LW + w - 4) + ' ' + (y + h) +
+           ' H' + LW + ' Z" fill="' + r.c + '"/>';
+      s += '<text x="' + (LW + w + 8) + '" y="' + (y + 15) + '" font-size="12.5" font-weight="650" fill="var(--ink)">' + r.txt + '</text>';
+    });
+    s += '</svg>';
+    el.innerHTML = s;
+  }
+
+  hbars(document.getElementById('chartCac'), [
+    { name: '1–10 июня',  v: 14.64, c: 'var(--seq-250)', txt: '$14.6' },
+    { name: '11–20 июня', v: 32.34, c: 'var(--seq-450)', txt: '$32.3' },
+    { name: '21–30 июня', v: 55.62, c: 'var(--seq-650)', txt: '$55.6' }
+  ], { lw: 96, aria: 'Цена покупки по декадам июня' });
+
+  hbars(document.getElementById('chartPay'), [
+    { name: 'Stripe',    v: 48, c: 'var(--s2)', txt: '48' },
+    { name: 'WayForPay', v: 18, c: 'var(--s2)', txt: '18' },
+    { name: 'Т-Банк',    v: 1,  c: 'var(--s2)', txt: '1' }
+  ], { lw: 96, aria: 'Покупки по способу оплаты' });
+
+  // daily data table (accessibility / verification)
+  var t = '<table><thead><tr><th>День</th><th>Спенд ДП, $</th><th>Покупок</th></tr></thead><tbody>';
+  for (var i = 0; i < 30; i++) {
+    t += '<tr><td>' + (i + 1) + ' июня</td><td>' + fmt(spend[i], 2) + '</td><td>' + buys[i] + '</td></tr>';
+  }
+  t += '<tr class="total"><td>Итого</td><td>' + fmt(2008.20, 2) + '</td><td>67</td></tr></tbody></table>';
+  document.getElementById('dailyTable').innerHTML = t;
+
+  // tooltip
+  var tip = document.getElementById('tip');
+  document.addEventListener('mousemove', function (e) {
+    var el = e.target.closest ? e.target.closest('.hit') : null;
+    if (el && el.dataset.tip) {
+      tip.textContent = el.dataset.tip;
+      tip.style.display = 'block';
+      var x = Math.min(e.clientX + 12, window.innerWidth - tip.offsetWidth - 8);
+      tip.style.left = x + 'px';
+      tip.style.top = (e.clientY - 34) + 'px';
+    } else {
+      tip.style.display = 'none';
+    }
+  });
+})();
+</script>
+</body>
+</html>
