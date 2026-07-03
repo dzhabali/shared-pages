@@ -16,10 +16,8 @@
     --baseline:  #c3c2b7;
     --border:    rgba(11,11,11,.10);
     --s1:        #2a78d6;  /* blue — спенд */
-    --s2:        #1baf7a;  /* aqua — покупки */
-    --seq-250:   #86b6ef;
-    --seq-450:   #2a78d6;
-    --seq-650:   #104281;
+    --s2:        #1baf7a;  /* aqua — продажи/выручка */
+    --deemph:    #c3c2b7;  /* emphasis-gray for non-focus months */
     --good:      #006300;
     --bad:       #d03b3b;
     --wash:      rgba(11,11,11,.045);
@@ -36,9 +34,7 @@
       --border:   rgba(255,255,255,.10);
       --s1:       #3987e5;
       --s2:       #199e70;
-      --seq-250:  #86b6ef;
-      --seq-450:  #3987e5;
-      --seq-650:  #184f95;
+      --deemph:   #4a4a47;
       --good:     #0ca30c;
       --bad:      #e66767;
       --wash:     rgba(255,255,255,.06);
@@ -66,9 +62,11 @@
     padding: 14px 16px;
   }
   .tile .lbl { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
-  .tile .val { font-size: 26px; font-weight: 650; margin-top: 4px; letter-spacing: -.01em; }
+  .tile .val { font-size: 25px; font-weight: 650; margin-top: 4px; letter-spacing: -.01em; }
   .tile .note { font-size: 12px; color: var(--ink-2); margin-top: 2px; }
-  .tile .val .accent { font-size: 15px; color: var(--ink-2); font-weight: 500; }
+  .tile.hero { border-color: var(--bad); }
+  .tile.hero .val { color: var(--bad); }
+  .tile.pos .val { color: var(--good); }
   section { margin-top: 40px; }
   h2 { font-size: 19px; margin-bottom: 4px; }
   .h2sub { color: var(--ink-2); font-size: 13.5px; margin-bottom: 16px; }
@@ -93,6 +91,7 @@
   }
   tr:last-child td { border-bottom: none; }
   tr.total td { border-top: 1px solid var(--baseline); font-weight: 650; border-bottom: none; }
+  tr.hl td { background: var(--wash); }
   .name { font-weight: 550; }
   .pill {
     display: inline-block; font-size: 11px; font-weight: 600; border-radius: 99px;
@@ -101,7 +100,7 @@
   .pill.on  { color: var(--good); border: 1px solid var(--good); }
   .pill.off { color: var(--muted); border: 1px solid var(--baseline); }
   .fn { color: var(--muted); font-size: 12.5px; margin-top: 12px; }
-  .charttitle { font-size: 13px; font-weight: 600; color: var(--ink-2); margin: 4px 0 2px; display: flex; align-items: center; gap: 7px; }
+  .charttitle { font-size: 13px; font-weight: 600; color: var(--ink-2); margin: 4px 0 2px; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
   .swatch { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
   svg { display: block; width: 100%; height: auto; }
   svg text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
@@ -110,15 +109,21 @@
   .insights { margin-top: 16px; }
   .insights li { margin: 8px 0 8px 20px; color: var(--ink-2); }
   .insights b { color: var(--ink); font-weight: 600; }
+  .romi { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 0; margin-top: 4px; }
+  .romi .step { padding: 6px 16px 6px 0; }
+  .romi .step .n { font-size: 20px; font-weight: 650; font-variant-numeric: tabular-nums; }
+  .romi .step .c { font-size: 12px; color: var(--muted); }
+  .romi .op { color: var(--muted); font-size: 20px; align-self: center; padding: 0 4px; }
   details { margin-top: 14px; }
   summary { cursor: pointer; color: var(--muted); font-size: 13px; }
   #tip {
     position: fixed; pointer-events: none; z-index: 10; display: none;
     background: var(--ink); color: var(--page);
     font-size: 12.5px; line-height: 1.35; padding: 6px 9px; border-radius: 7px;
-    max-width: 220px;
+    max-width: 240px;
   }
   footer { margin-top: 48px; color: var(--muted); font-size: 12.5px; }
+  .badge { display:inline-block; font-size:11px; padding:1px 7px; border-radius:99px; border:1px solid var(--baseline); color:var(--muted); margin-left:6px; vertical-align:2px;}
 </style>
 </head>
 <body data-palette="#2a78d6,#1baf7a">
@@ -126,80 +131,95 @@
 
 <header>
   <h1>Diamond Wisdom Group — июнь 2026</h1>
-  <div class="sub">Facebook Ads (кабинет 485193041348973) + продажи мини-курса «Денежный прорыв за 21 день».
-  Период: 1–30 июня 2026. Покупки — по письмам GetCourse, дубли (WayForPay + повторные письма) убраны, дедуп по номеру заказа.</div>
+  <div class="sub">Facebook Ads (кабинет 485193041348973) × мини-курс «Денежный прорыв за 21 день» (€9.77).
+  Продажи и выручка — из вкладки «отчет по продажам» таблицы «2026 Pink Diamond финансы» (источник истины). Реклама — из Facebook Ads. Период: 1–30 июня 2026.</div>
 </header>
 
 <div class="kpis">
-  <div class="tile"><div class="lbl">Спенд FB, июнь</div><div class="val">$2 566</div><div class="note">8 кампаний</div></div>
-  <div class="tile"><div class="lbl">Показы</div><div class="val">213 K</div><div class="note">4 534 клика</div></div>
-  <div class="tile"><div class="lbl">Покупок «ДП»</div><div class="val">67</div><div class="note">по €9.77</div></div>
-  <div class="tile"><div class="lbl">Выручка «ДП»</div><div class="val">€654.59</div><div class="note">≈ $751</div></div>
-  <div class="tile"><div class="lbl">Цена покупки</div><div class="val">$29.97</div><div class="note">спенд ДП $2 008 / 67</div></div>
-  <div class="tile"><div class="lbl">ROAS фронта</div><div class="val">0.37</div><div class="note">окупаемость — по бэкенду</div></div>
+  <div class="tile"><div class="lbl">Спенд на ДП, июнь</div><div class="val">$2 008</div><div class="note">5 ДП-кампаний</div></div>
+  <div class="tile"><div class="lbl">Продаж ДП</div><div class="val">120</div><div class="note">по данным финтаблицы</div></div>
+  <div class="tile"><div class="lbl">Выручка ДП</div><div class="val">$1 340</div><div class="note">≈ €1 172 · чек $11.16</div></div>
+  <div class="tile"><div class="lbl">CAC (цена продажи)</div><div class="val">$16.74</div><div class="note">спенд / 120</div></div>
+  <div class="tile hero"><div class="lbl">ROMI фронта</div><div class="val">−33%</div><div class="note">ROAS 0.67</div></div>
+  <div class="tile"><div class="lbl">Спенд кабинета всего</div><div class="val">$2 566</div><div class="note">8 кампаний</div></div>
 </div>
 
 <section>
+  <h2>ROMI фронт-воронки</h2>
+  <div class="h2sub">Прямая окупаемость трипваера: выручка ДП против рекламы на ДП. Бэкенд (основные курсы, ретриты этих покупателей) сюда НЕ включён.</div>
+  <div class="card">
+    <div class="romi">
+      <div class="step"><div class="n">$1 340</div><div class="c">выручка ДП, июнь</div></div>
+      <div class="op">−</div>
+      <div class="step"><div class="n">$2 008</div><div class="c">реклама на ДП</div></div>
+      <div class="op">=</div>
+      <div class="step"><div class="n" style="color:var(--bad)">−$668</div><div class="c">на фронте</div></div>
+      <div class="op">→</div>
+      <div class="step"><div class="n" style="color:var(--bad)">ROMI −33%</div><div class="c">ROAS 0.67</div></div>
+    </div>
+    <div class="fn">Трипваер за €9.77 на входе не окупается — и не должен: цель мини-курса не заработать, а купить покупателя дёшево и дальше продать ему основные продукты. CAC $16.74 при чеке $11.16 = минус $5.58 с продажи на входе. <b>Чтобы посчитать настоящий ROMI, нужна конверсия этих 120 в бэкенд</b> (какая доля дошла до курсов/ретритов и на какую сумму) — этих данных в связке пока нет.</div>
+  </div>
+</section>
+
+<section>
+  <h2>«Денежный прорыв» по месяцам 2026</h2>
+  <div class="h2sub">Из финтаблицы. Апрель — запуск курса (337 продаж), затем спад, и июнь — второй пик благодаря рекламному пушу.</div>
+  <div class="card">
+    <div class="charttitle"><span class="swatch" style="background:var(--s2)"></span>Продажи ДП, шт/мес <span class="badge">июнь выделен</span></div>
+    <div id="chartMonths"></div>
+    <div class="fn">Март 7 · Апрель 337 · Май 21 · <b>Июнь 120</b> · Июль 13 (неполный, идёт) · всего с запуска — 498 продаж на $5 432. Выручка по месяцам, $: 78.6 / 3 638 / 235 / <b>1 340</b> / 141.</div>
+  </div>
+</section>
+
+<section>
   <h2>Кампании июня</h2>
-  <div class="h2sub">Всё, что крутилось в кабинете в июне (статус — на 3 июля).</div>
+  <div class="h2sub">Всё, что крутилось в кабинете Diamond Wisdom Group (статус — на 3 июля). «ДП» = «Денежный прорыв».</div>
   <div class="card tablewrap">
     <table>
       <thead><tr>
         <th>Кампания</th><th>Цель</th><th>Спенд</th><th>Показы</th><th>Клики</th><th>CTR</th><th>CPM</th><th>CPC</th>
       </tr></thead>
       <tbody>
-        <tr><td class="name">конв_ДП_европа<span class="pill on">active</span></td><td>Продажи</td><td>$668.38</td><td>37 265</td><td>903</td><td>2.42%</td><td>$17.94</td><td>$0.74</td></tr>
-        <tr><td class="name">конверс_ДП_2.0_euro<span class="pill off">пауза</span></td><td>Продажи</td><td>$507.74</td><td>27 392</td><td>655</td><td>2.39%</td><td>$18.54</td><td>$0.78</td></tr>
-        <tr><td class="name">конверс_ДП_2.0_usa_kanada<span class="pill off">пауза</span></td><td>Продажи</td><td>$412.47</td><td>10 089</td><td>183</td><td>1.81%</td><td>$40.88</td><td>$2.25</td></tr>
-        <tr><td class="name">конверс_ДП_2.0_kz<span class="pill off">пауза</span></td><td>Продажи</td><td>$404.63</td><td>20 445</td><td>266</td><td>1.30%</td><td>$19.79</td><td>$1.52</td></tr>
+        <tr class="hl"><td class="name">конв_ДП_европа<span class="pill on">active</span></td><td>Продажи</td><td>$668.38</td><td>37 265</td><td>903</td><td>2.42%</td><td>$17.94</td><td>$0.74</td></tr>
+        <tr class="hl"><td class="name">конверс_ДП_2.0_euro<span class="pill off">пауза</span></td><td>Продажи</td><td>$507.74</td><td>27 392</td><td>655</td><td>2.39%</td><td>$18.54</td><td>$0.78</td></tr>
+        <tr class="hl"><td class="name">конверс_ДП_2.0_usa_kanada<span class="pill off">пауза</span></td><td>Продажи</td><td>$412.47</td><td>10 089</td><td>183</td><td>1.81%</td><td>$40.88</td><td>$2.25</td></tr>
+        <tr class="hl"><td class="name">конверс_ДП_2.0_kz<span class="pill off">пауза</span></td><td>Продажи</td><td>$404.63</td><td>20 445</td><td>266</td><td>1.30%</td><td>$19.79</td><td>$1.52</td></tr>
+        <tr class="hl"><td class="name">А_конверс_ДП_2.0_euro<span class="pill off">пауза</span></td><td>Продажи</td><td>$14.98</td><td>897</td><td>25</td><td>2.79%</td><td>$16.70</td><td>$0.60</td></tr>
         <tr><td class="name">рилс_трафик_euro<span class="pill on">active</span></td><td>Трафик</td><td>$264.33</td><td>90 086</td><td>2 226</td><td>2.47%</td><td>$2.93</td><td>$0.12</td></tr>
         <tr><td class="name">ретаргет_конверс_ретриты_пранамув<span class="pill on">active</span></td><td>Лиды</td><td>$224.59</td><td>20 149</td><td>137</td><td>0.68%</td><td>$11.15</td><td>$1.64</td></tr>
         <tr><td class="name">ретаргет_веб_02.07<span class="pill off">пауза</span></td><td>Лиды</td><td>$68.94</td><td>6 671</td><td>139</td><td>2.08%</td><td>$10.33</td><td>$0.50</td></tr>
-        <tr><td class="name">А_конверс_ДП_2.0_euro<span class="pill off">пауза</span></td><td>Продажи</td><td>$14.98</td><td>897</td><td>25</td><td>2.79%</td><td>$16.70</td><td>$0.60</td></tr>
-        <tr class="total"><td>Итого</td><td></td><td>$2 566.06</td><td>212 994</td><td>4 534</td><td>2.13%</td><td>$12.05</td><td>$0.57</td></tr>
+        <tr class="total"><td>Итого ДП-кампании</td><td></td><td>$2 008.20</td><td>96 088</td><td>2 032</td><td>2.11%</td><td>$20.90</td><td>$0.99</td></tr>
+        <tr class="total"><td>Итого кабинет</td><td></td><td>$2 566.06</td><td>212 994</td><td>4 534</td><td>2.13%</td><td>$12.05</td><td>$0.57</td></tr>
       </tbody>
     </table>
   </div>
-  <div class="fn">«ДП» = «Денежный прорыв». Кампании <b>конв_ДП_украина</b> и <b>конв_ДП_казахстан</b> запущены 1–2 июля — в июне спенда не имели и здесь не учтены. Ещё две старые ДП-кампании без июньского спенда не показаны. Самый дорогой рынок — USA/Канада: CPM $40.88 (×2.3 к Европе), CPC $2.25.</div>
+  <div class="fn">Первые 5 строк (подсвечены) — прямая реклама на «Денежный прорыв» ($2 008), по ним считается ROMI. Рилс-трафик и ретаргет ретритов работают на верх воронки и на бэкенд. <b>конв_ДП_украина</b> и <b>конв_ДП_казахстан</b> запущены 1–2 июля — в июне спенда не имели. Самый дорогой рынок — USA/Канада: CPM $40.88 (×2.3 к Европе).</div>
 </section>
 
 <section>
-  <h2>«Денежный прорыв» — фронт воронки, день за днём</h2>
-  <div class="h2sub">Спенд пяти ДП-кампаний против покупок мини-курса (€9.77). Всего за июнь: $2 008.20 спенда → 67 покупок.</div>
+  <h2>Июнь по дням</h2>
+  <div class="h2sub">Дневной спенд ДП-кампаний (реальный) и продажи. Продажи по дням — только по 69 оплатам, подтверждённым письмами GetCourse из 120 (почта ловит ~57%), поэтому кривая показывает форму/тайминг, а не полный объём.</div>
   <div class="card">
-    <div class="charttitle"><span class="swatch" style="background:var(--s1)"></span>Спенд ДП-кампаний, $/день</div>
+    <div class="charttitle"><span class="swatch" style="background:var(--s1)"></span>Спенд ДП-кампаний, $/день <span class="badge">факт</span></div>
     <div id="chartSpend"></div>
-    <div class="charttitle" style="margin-top:14px"><span class="swatch" style="background:var(--s2)"></span>Покупки, шт/день</div>
+    <div class="charttitle" style="margin-top:14px"><span class="swatch" style="background:var(--s2)"></span>Продажи, шт/день <span class="badge">69 из 120 · email-подтверждённые</span></div>
     <div id="chartBuys"></div>
     <details>
       <summary>Данные таблицей</summary>
       <div class="tablewrap" id="dailyTable"></div>
     </details>
   </div>
-
-  <div class="row2">
-    <div class="card">
-      <div class="charttitle">Цена покупки по декадам, $</div>
-      <div id="chartCac"></div>
-      <div class="fn">Чем сильнее масштабировали к концу месяца (26–30 июня — $138/день против $44 в начале), тем дороже выходила покупка.</div>
-    </div>
-    <div class="card">
-      <div class="charttitle">Покупки по способу оплаты</div>
-      <div id="chartPay"></div>
-      <div class="fn">48 из 67 оплат — Stripe (карта, €), 18 — WayForPay, 1 — Т-Банк.</div>
-    </div>
-  </div>
-
   <ul class="insights">
-    <li><b>67 покупок за месяц</b> — в среднем 2.2 в день. Лучший день — 10 июня (7 покупок), затем 3–4 июня и 26 июня (по 5).</li>
-    <li><b>Пауза 22–24 июня видна мгновенно:</b> спенд $0 — и за три дня одна покупка (23-го). Органики у трипваера почти нет, продажи держатся на рекламе.</li>
-    <li><b>Масштабирование пока не окупается линейно:</b> первая декада — покупка за $14.6, вторая — $32.3, третья — $55.6. Спенд вырос вдвое, покупки — нет. Стоит смотреть крео/аудитории конв_ДП_европа после буста 19 июня.</li>
-    <li><b>Фронт возвращает 37% рекламы</b> (€654.59 ≈ $751 против $2 008). Для трипваера это нормальная механика — экономика сходится на бэкенде (основные курсы), но бэкенд-конверсию июньской когорты стоит замерить отдельно.</li>
+    <li><b>120 продаж за июнь, CAC $16.74.</b> Это здоровая цена лида для трипваера — на входе минус $5.58 с продажи, отбивается на основных курсах.</li>
+    <li><b>Пауза 22–24 июня видна по спенду ($0)</b> — продажи почти встали. Органики у трипваера мало, поток держится на рекламе.</li>
+    <li><b>Масштабирование в конце месяца дорогое:</b> 26–30 июня спенд $138/день против $44 в начале, а CPM рос. Стоит смотреть крео/аудитории конв_ДП_европа после буста 19 июня — не растёт ли CAC быстрее объёма.</li>
+    <li><b>Апрель (337) против июня (120):</b> запуск дал в 2.8× больше продаж. Если июнь — это «на рекламе», то апрельский пик — это запуск по прогретой базе. Разные механики, но апрель показывает потолок спроса.</li>
+    <li><b>Дальше — считать бэкенд.</b> Фронт −33% ничего не говорит про итог, пока не известно, сколько из 120 июньских купили основные продукты. Это ключ к настоящему ROMI.</li>
   </ul>
 </section>
 
 <footer>
-  Источники: Facebook Ads (MCP, кабинет Diamond Wisdom Group) · письма GetCourse (info@pinkdiamond.online) и WayForPay за 1–30 июня 2026, дедупликация по номеру заказа · курс €/$ = 1.147 из фактических платежей WayForPay. Собрано 3 июля 2026. Имена покупателей не публикуются.
+  Источники: Facebook Ads (MCP, кабинет Diamond Wisdom Group) · вкладка «отчет по продажам» таблицы «2026 Pink Diamond финансы» (продажи/выручка ДП, суммы в $) · дневная разбивка продаж — письма GetCourse (info@pinkdiamond.online), 69 из 120 оплат, дедуп по номеру заказа. Курс €→$ ≈ 1.142. Собрано 3 июля 2026. Имена покупателей не публикуются.
 </footer>
 
 </div>
@@ -207,37 +227,31 @@
 
 <script>
 (function () {
-  var css = getComputedStyle(document.documentElement);
-  var C = function (v) { return css.getPropertyValue(v).trim(); };
+  function fmt(n, d) { return n.toLocaleString('ru-RU', {minimumFractionDigits: d||0, maximumFractionDigits: d||0}); }
 
+  // ---- June daily ----
   var spend = [38.77,35.20,32.72,45.10,44.29,42.28,59.95,49.65,45.10,46.17,39.36,52.87,69.93,71.72,63.87,72.73,68.53,57.22,100.32,82.49,105.51,0,0,0,94.97,176.23,176.38,125.23,101.32,110.29];
-  var buys  = [3,1,5,5,1,1,2,2,3,7,2,0,2,0,4,2,4,1,2,4,3,0,1,0,1,5,1,0,3,2];
+  var buys  = [3,1,5,5,1,1,2,2,3,7,4,0,2,0,4,2,4,1,2,4,3,0,1,0,1,5,1,0,3,2]; // email-confirmed subset (69)
 
   var W = 1000, ML = 44, MR = 8, MT = 14;
   var innerW = W - ML - MR;
   var slot = innerW / 30, gap = 2, bw = slot - gap;
 
-  function fmt(n, d) { return n.toLocaleString('ru-RU', {minimumFractionDigits: d||0, maximumFractionDigits: d||0}); }
-
   function bars(el, data, color, opts) {
     var H = opts.h, MB = 22, plotH = H - MT - MB;
     var max = opts.max;
     var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + opts.aria + '">';
-    // pause band 22–24
     if (opts.pause) {
       var px = ML + 21 * slot, pw = 3 * slot;
       s += '<rect x="' + px + '" y="' + MT + '" width="' + pw + '" height="' + plotH + '" fill="var(--wash)"/>';
       if (opts.pauseLabel) s += '<text x="' + (px + pw/2) + '" y="' + (MT + 14) + '" font-size="11" fill="var(--muted)" text-anchor="middle">пауза</text>';
     }
-    // gridlines + y labels
     opts.ticks.forEach(function (t) {
       var y = MT + plotH - (t / max) * plotH;
       s += '<line x1="' + ML + '" y1="' + y + '" x2="' + (W - MR) + '" y2="' + y + '" stroke="var(--grid)" stroke-width="1"/>';
       s += '<text x="' + (ML - 8) + '" y="' + (y + 4) + '" font-size="11" fill="var(--muted)" text-anchor="end">' + opts.tickFmt(t) + '</text>';
     });
-    // baseline
     s += '<line x1="' + ML + '" y1="' + (MT + plotH) + '" x2="' + (W - MR) + '" y2="' + (MT + plotH) + '" stroke="var(--baseline)" stroke-width="1"/>';
-    // bars
     data.forEach(function (v, i) {
       var h = Math.max(v > 0 ? 2 : 0, (v / max) * plotH);
       var x = ML + i * slot + gap / 2, y = MT + plotH - h;
@@ -249,9 +263,7 @@
       if (opts.label(v, i)) {
         s += '<text x="' + (x + bw/2) + '" y="' + (y - 5) + '" font-size="11" font-weight="600" fill="var(--ink-2)" text-anchor="middle">' + opts.label(v, i) + '</text>';
       }
-      // hover hit target (full column height)
       s += '<rect class="hit" data-tip="' + opts.tip(v, i) + '" x="' + (ML + i * slot) + '" y="' + MT + '" width="' + slot + '" height="' + plotH + '" fill="transparent"/>';
-      // x labels
       if ((i + 1) % 2 === 1) {
         s += '<text x="' + (ML + i * slot + slot/2) + '" y="' + (H - 6) + '" font-size="10.5" fill="var(--muted)" text-anchor="middle">' + (i + 1) + '</text>';
       }
@@ -272,49 +284,49 @@
   bars(document.getElementById('chartBuys'), buys, 'var(--s2)', {
     h: 150, max: 8, ticks: [0, 4, 8],
     tickFmt: function (t) { return t; },
-    aria: 'Покупки Денежного прорыва по дням июня',
+    aria: 'Продажи Денежного прорыва по дням июня (email-подтверждённые)',
     pause: true, pauseLabel: false,
     label: function (v, i) { return (i === 9) ? '7' : ''; },
-    tip: function (v, i) { return (i + 1) + ' июня — ' + v + ' ' + (v === 1 ? 'покупка' : (v >= 2 && v <= 4 ? 'покупки' : 'покупок')); }
+    tip: function (v, i) { return (i + 1) + ' июня — ' + v + ' email-подтв.'; }
   });
 
-  // horizontal bars: CAC by decade (ordinal, one hue light→dark) & payment methods (one hue)
-  function hbars(el, rows, opts) {
-    var HW = 480, rowH = 34, LW = opts.lw, H = rows.length * rowH + 6;
-    var maxv = Math.max.apply(null, rows.map(function (r) { return r.v; }));
-    var barMax = HW - LW - 74;
-    var s = '<svg viewBox="0 0 ' + HW + ' ' + H + '" role="img" aria-label="' + opts.aria + '">';
-    rows.forEach(function (r, i) {
-      var y = i * rowH + 6, h = 20;
-      var w = Math.max(2, (r.v / maxv) * barMax);
-      s += '<text x="0" y="' + (y + 15) + '" font-size="12.5" fill="var(--ink-2)">' + r.name + '</text>';
-      s += '<path d="M' + LW + ' ' + y + ' H' + (LW + w - 4) + ' Q' + (LW + w) + ' ' + y + ' ' + (LW + w) + ' ' + (y + 4) +
-           ' V' + (y + h - 4) + ' Q' + (LW + w) + ' ' + (y + h) + ' ' + (LW + w - 4) + ' ' + (y + h) +
-           ' H' + LW + ' Z" fill="' + r.c + '"/>';
-      s += '<text x="' + (LW + w + 8) + '" y="' + (y + 15) + '" font-size="12.5" font-weight="650" fill="var(--ink)">' + r.txt + '</text>';
+  // ---- ДП by month (emphasis: June highlighted) ----
+  (function () {
+    var months = [
+      {m:'Март', s:7, hl:false}, {m:'Апрель', s:337, hl:false}, {m:'Май', s:21, hl:false},
+      {m:'Июнь', s:120, hl:true}, {m:'Июль*', s:13, hl:false}
+    ];
+    var H = 210, ML2 = 40, MR2 = 8, MT2 = 16, MB2 = 24, plotH = H - MT2 - MB2;
+    var innerW2 = W - ML2 - MR2, slot2 = innerW2 / months.length, bw2 = Math.min(120, slot2 - 26);
+    var max = 350, ticks = [0, 100, 200, 300];
+    var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Продажи Денежного прорыва по месяцам 2026">';
+    ticks.forEach(function (t) {
+      var y = MT2 + plotH - (t / max) * plotH;
+      s += '<line x1="' + ML2 + '" y1="' + y + '" x2="' + (W - MR2) + '" y2="' + y + '" stroke="var(--grid)"/>';
+      s += '<text x="' + (ML2 - 8) + '" y="' + (y + 4) + '" font-size="11" fill="var(--muted)" text-anchor="end">' + t + '</text>';
+    });
+    s += '<line x1="' + ML2 + '" y1="' + (MT2 + plotH) + '" x2="' + (W - MR2) + '" y2="' + (MT2 + plotH) + '" stroke="var(--baseline)"/>';
+    months.forEach(function (d, i) {
+      var h = Math.max(3, (d.s / max) * plotH);
+      var cx = ML2 + i * slot2 + slot2 / 2, x = cx - bw2 / 2, y = MT2 + plotH - h;
+      var col = d.hl ? 'var(--s2)' : 'var(--deemph)';
+      s += '<path d="M' + x + ' ' + (MT2 + plotH) + ' V' + (y + 4) + ' Q' + x + ' ' + y + ' ' + (x + 4) + ' ' + y +
+           ' H' + (x + bw2 - 4) + ' Q' + (x + bw2) + ' ' + y + ' ' + (x + bw2) + ' ' + (y + 4) +
+           ' V' + (MT2 + plotH) + ' Z" fill="' + col + '"/>';
+      s += '<text x="' + cx + '" y="' + (y - 6) + '" font-size="13" font-weight="' + (d.hl ? 700 : 600) + '" fill="' + (d.hl ? 'var(--ink)' : 'var(--ink-2)') + '" text-anchor="middle">' + d.s + '</text>';
+      s += '<text x="' + cx + '" y="' + (H - 6) + '" font-size="12" fill="' + (d.hl ? 'var(--ink)' : 'var(--muted)') + '" font-weight="' + (d.hl ? 600 : 400) + '" text-anchor="middle">' + d.m + '</text>';
+      s += '<rect class="hit" data-tip="' + d.m.replace('*','') + ' — ' + d.s + ' продаж" x="' + (ML2 + i*slot2) + '" y="' + MT2 + '" width="' + slot2 + '" height="' + plotH + '" fill="transparent"/>';
     });
     s += '</svg>';
-    el.innerHTML = s;
-  }
+    document.getElementById('chartMonths').innerHTML = s;
+  })();
 
-  hbars(document.getElementById('chartCac'), [
-    { name: '1–10 июня',  v: 14.64, c: 'var(--seq-250)', txt: '$14.6' },
-    { name: '11–20 июня', v: 32.34, c: 'var(--seq-450)', txt: '$32.3' },
-    { name: '21–30 июня', v: 55.62, c: 'var(--seq-650)', txt: '$55.6' }
-  ], { lw: 96, aria: 'Цена покупки по декадам июня' });
-
-  hbars(document.getElementById('chartPay'), [
-    { name: 'Stripe',    v: 48, c: 'var(--s2)', txt: '48' },
-    { name: 'WayForPay', v: 18, c: 'var(--s2)', txt: '18' },
-    { name: 'Т-Банк',    v: 1,  c: 'var(--s2)', txt: '1' }
-  ], { lw: 96, aria: 'Покупки по способу оплаты' });
-
-  // daily data table (accessibility / verification)
-  var t = '<table><thead><tr><th>День</th><th>Спенд ДП, $</th><th>Покупок</th></tr></thead><tbody>';
+  // daily table
+  var t = '<table><thead><tr><th>День</th><th>Спенд ДП, $</th><th>Продажи (email-подтв.)</th></tr></thead><tbody>';
   for (var i = 0; i < 30; i++) {
     t += '<tr><td>' + (i + 1) + ' июня</td><td>' + fmt(spend[i], 2) + '</td><td>' + buys[i] + '</td></tr>';
   }
-  t += '<tr class="total"><td>Итого</td><td>' + fmt(2008.20, 2) + '</td><td>67</td></tr></tbody></table>';
+  t += '<tr class="total"><td>Итого</td><td>' + fmt(2008.20, 2) + '</td><td>69 из 120</td></tr></tbody></table>';
   document.getElementById('dailyTable').innerHTML = t;
 
   // tooltip
