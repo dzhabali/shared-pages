@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Дом для ретрита · 12.08–16.09.2026</title>
+<style>
+  :root {
+    --bg: #ffffff; --fg: #1a1a1a; --muted: #6b7280; --line: #e5e7eb;
+    --card: #f9fafb; --accent: #0f766e; --accent-bg: #ccfbf1;
+    --good: #15803d; --good-bg: #dcfce7; --warn: #a16207; --warn-bg: #fef9c3;
+    --bad: #b91c1c; --bad-bg: #fee2e2; --link: #0d6efd;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111418; --fg: #e5e7eb; --muted: #9ca3af; --line: #2d333b;
+      --card: #1a1f24; --accent: #2dd4bf; --accent-bg: #134e4a;
+      --good: #4ade80; --good-bg: #14532d; --warn: #facc15; --warn-bg: #713f12;
+      --bad: #f87171; --bad-bg: #7f1d1d; --link: #60a5fa;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.45 -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--fg); }
+  .wrap { max-width: 1400px; margin: 0 auto; padding: 16px; }
+  h1 { font-size: 1.35rem; margin: 4px 0 2px; }
+  .sub { color: var(--muted); font-size: .87rem; margin-bottom: 12px; }
+  .criteria { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; font-size: .85rem; color: var(--muted); margin-bottom: 14px; }
+  .criteria b { color: var(--fg); }
+  .filters { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: end; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; margin-bottom: 6px; }
+  .f { display: flex; flex-direction: column; gap: 3px; font-size: .78rem; color: var(--muted); }
+  .f output { color: var(--fg); font-weight: 600; }
+  select, input[type=search] { background: var(--bg); color: var(--fg); border: 1px solid var(--line); border-radius: 7px; padding: 5px 8px; font-size: .85rem; }
+  input[type=range] { width: 130px; accent-color: var(--accent); }
+  label.chk { display: inline-flex; gap: 5px; align-items: center; font-size: .83rem; color: var(--fg); cursor: pointer; }
+  .count { font-size: .82rem; color: var(--muted); margin: 8px 2px; }
+  .tblwrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
+  table { border-collapse: collapse; width: 100%; min-width: 1150px; font-size: .84rem; }
+  th, td { padding: 7px 9px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { position: sticky; top: 0; background: var(--card); cursor: pointer; user-select: none; white-space: nowrap; font-size: .78rem; }
+  th .arr { opacity: .5; font-size: .7rem; }
+  tr:hover td { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .pill { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: .74rem; white-space: nowrap; }
+  .p-good { background: var(--good-bg); color: var(--good); }
+  .p-warn { background: var(--warn-bg); color: var(--warn); }
+  .p-bad { background: var(--bad-bg); color: var(--bad); }
+  .p-acc { background: var(--accent-bg); color: var(--accent); }
+  .p-mut { background: var(--card); color: var(--muted); border: 1px solid var(--line); }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .name { font-weight: 600; max-width: 240px; }
+  .note { color: var(--muted); font-size: .78rem; max-width: 260px; }
+  .flag { font-size: .95rem; }
+  .maplink { font-size: .76rem; }
+  footer { color: var(--muted); font-size: .78rem; margin: 16px 2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🏡 Дом для молчаливого ретрита</h1>
+  <div class="sub">12 августа → 16 сентября 2026 · 35 ночей · 2 взрослых · обновлено <span id="updated"></span></div>
+  <div class="criteria">
+    <b>Жёсткие критерии:</b> целый дом · 2 изолированные спальни + гостиная · ≤ €3000 за период со сборами · ≤ 2,5 ч от Вены · без соседей в ~300 м · кухня + стиралка · wifi.
+    <b>Желательно:</b> кондиционер, ванна. <br>
+    <b>Безлюдье</b> = зданий в радиусе 300 м / 120 м по OpenStreetMap (для Airbnb координата примерная ±150 м; финально подтверждает хост).
+  </div>
+  <div class="filters">
+    <div class="f">Цена за 35 ночей ≤ <output id="priceOut">€6000</output><input type="range" id="fPrice" min="1000" max="6000" step="100" value="6000"></div>
+    <div class="f">От Вены ≤ <output id="driveOut">3ч30м</output><input type="range" id="fDrive" min="60" max="210" step="10" value="210"></div>
+    <div class="f">Регион<select id="fRegion"><option value="">все</option></select></div>
+    <div class="f">Источник<select id="fSource"><option value="">все</option></select></div>
+    <div class="f">Статус<select id="fStatus"><option value="">все</option><option>топ-10</option><option>shortlist</option><option>longlist</option><option>отклонён</option></select></div>
+    <div class="f">Поиск<input type="search" id="fText" placeholder="название, место…"></div>
+    <label class="chk"><input type="checkbox" id="fWifi"> wifi подтверждён</label>
+    <label class="chk"><input type="checkbox" id="fWasher"> стиралка</label>
+    <label class="chk"><input type="checkbox" id="fSeclusion"> тихое место (≤15 зданий/300м)</label>
+  </div>
+  <div class="count" id="count"></div>
+  <div class="tblwrap"><table id="tbl">
+    <thead><tr>
+      <th data-k="name">Название <span class="arr"></span></th>
+      <th data-k="region">Регион <span class="arr"></span></th>
+      <th data-k="driveMin" class="num">От Вены <span class="arr"></span></th>
+      <th data-k="priceTotal" class="num">€/35 ночей <span class="arr"></span></th>
+      <th data-k="bedrooms" class="num">Спальни <span class="arr"></span></th>
+      <th data-k="b300" class="num">Безлюдье <span class="arr"></span></th>
+      <th>Wifi</th><th>Стир.</th><th>AC</th><th>Ванна</th>
+      <th data-k="status">Статус <span class="arr"></span></th>
+      <th>Заметки</th><th>Карта</th>
+    </tr></thead>
+    <tbody></tbody>
+  </table></div>
+  <footer>Скрытая ссылка, в поисковики не попадает. Данные собраны автоматически (Airbnb, Booking, Vrbo/FeWo-direkt, Traum-Ferienwohnungen, huetten.com, чешские/венгерские/словацкие порталы) — цены за длительный срок финально подтверждает хост.</footer>
+</div>
+<script src="data.js"></script>
+<script>
+(function(){
+  document.getElementById('updated').textContent = (typeof UPDATED !== 'undefined') ? UPDATED : '';
+  const tbody = document.querySelector('#tbl tbody');
+  const state = { sortK: 'priceTotal', sortDir: 1 };
+
+  const regions = [...new Set(DATA.map(d => d.region).filter(Boolean))].sort();
+  const sources = [...new Set(DATA.map(d => d.source).filter(Boolean))].sort();
+  for (const r of regions) fRegion.insertAdjacentHTML('beforeend', `<option>${r}</option>`);
+  for (const s of sources) fSource.insertAdjacentHTML('beforeend', `<option>${s}</option>`);
+
+  function fmtDrive(m){ if(m==null) return '—'; return Math.floor(m/60)+'ч'+String(m%60).padStart(2,'0')+'м'; }
+  function seclPill(d){
+    if (d.b300 == null) return '<span class="pill p-mut">нет данных</span>';
+    let cls='p-bad', txt='село/город';
+    if (d.b300<=6){cls='p-good';txt='уединённо';}
+    else if (d.b300<=15){cls='p-good';txt='малолюдно';}
+    else if (d.b300<=40){cls='p-warn';txt='хутор/край села';}
+    return `<span class="pill ${cls}" title="зданий в 300м / 120м">${txt} ${d.b300}/${d.b120??'?'}</span>`;
+  }
+  function triFlag(v){ return v===true?'<span class="flag">✅</span>':(v===false?'<span class="flag">❌</span>':'<span class="flag" title="неизвестно">❔</span>'); }
+  function statusPill(s){
+    const map={'топ-10':'p-acc','shortlist':'p-good','longlist':'p-mut','отклонён':'p-bad'};
+    return `<span class="pill ${map[s]||'p-mut'}">${s}</span>`;
+  }
+
+  function apply(){
+    const maxP=+fPrice.value, maxD=+fDrive.value;
+    priceOut.textContent='€'+maxP; driveOut.textContent=fmtDrive(maxD);
+    const q=fText.value.trim().toLowerCase();
+    let rows=DATA.filter(d=>{
+      if(d.priceTotal!=null&&d.priceTotal>maxP)return false;
+      if(d.driveMin!=null&&d.driveMin>maxD)return false;
+      if(fRegion.value&&d.region!==fRegion.value)return false;
+      if(fSource.value&&d.source!==fSource.value)return false;
+      if(fStatus.value&&d.status!==fStatus.value)return false;
+      if(fWifi.checked&&d.wifi!==true)return false;
+      if(fWasher.checked&&d.washer!==true)return false;
+      if(fSeclusion.checked&&!(d.b300!=null&&d.b300<=15))return false;
+      if(q&&!((d.name||'')+' '+(d.region||'')+' '+(d.note||'')).toLowerCase().includes(q))return false;
+      return true;
+    });
+    const k=state.sortK, dir=state.sortDir;
+    rows.sort((a,b)=>{
+      const av=a[k], bv=b[k];
+      if(av==null&&bv==null)return 0; if(av==null)return 1; if(bv==null)return -1;
+      return (typeof av==='number'?av-bv:String(av).localeCompare(String(bv),'ru'))*dir;
+    });
+    count.textContent=`Показано ${rows.length} из ${DATA.length}`;
+    tbody.innerHTML=rows.map(d=>`<tr>
+      <td class="name"><a href="${d.url}" target="_blank" rel="noopener">${d.name}</a></td>
+      <td>${d.region||'—'}</td>
+      <td class="num">${fmtDrive(d.driveMin)}</td>
+      <td class="num">${d.priceTotal!=null?'€'+d.priceTotal.toLocaleString('ru'):'—'}${d.priceNote?` <span class="note" title="${d.priceNote.replace(/"/g,'&quot;')}">*</span>`:''}</td>
+      <td class="num">${d.bedrooms??'—'}</td>
+      <td>${seclPill(d)}</td>
+      <td>${triFlag(d.wifi)}</td><td>${triFlag(d.washer)}</td><td>${triFlag(d.ac)}</td><td>${triFlag(d.bathtub)}</td>
+      <td>${statusPill(d.status)}</td>
+      <td class="note">${d.note||''}</td>
+      <td class="maplink">${d.lat?`<a href="https://www.google.com/maps/@${d.lat},${d.lng},400m/data=!3m1!1e3" target="_blank" rel="noopener">спутник</a>`:'—'}</td>
+    </tr>`).join('');
+  }
+
+  document.querySelectorAll('th[data-k]').forEach(th=>th.addEventListener('click',()=>{
+    const k=th.dataset.k;
+    if(state.sortK===k)state.sortDir*=-1;else{state.sortK=k;state.sortDir=1;}
+    document.querySelectorAll('th .arr').forEach(a=>a.textContent='');
+    th.querySelector('.arr').textContent=state.sortDir>0?'▲':'▼';
+    apply();
+  }));
+  ['input','change'].forEach(ev=>{
+    [fPrice,fDrive,fRegion,fSource,fStatus,fText,fWifi,fWasher,fSeclusion].forEach(el=>el.addEventListener(ev,apply));
+  });
+  apply();
+})();
+</script>
+</body>
+</html>
