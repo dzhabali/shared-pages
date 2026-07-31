@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Денежный прорыв — продажи по времени суток, июнь–июль 2026</title>
+<style>
+  :root {
+    --page:#f9f9f7; --surface:#fcfcfb; --ink:#0b0b0b; --ink-2:#52514e;
+    --muted:#898781; --grid:#e1e0d9; --baseline:#c3c2b7;
+    --border:rgba(11,11,11,.10);
+    --s1:#2a78d6; --s2:#1baf7a; --s3:#eb6834;
+    --deemph:#c3c2b7; --good:#006300; --bad:#d03b3b; --warn:#eda100;
+    --wash:rgba(11,11,11,.045);
+    --seq0:#eef4fc; --seq1:#cde2fb; --seq2:#9ec5f4; --seq3:#6da7ec;
+    --seq4:#3987e5; --seq5:#256abf; --seq6:#184f95; --seq7:#0d366b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      --page:#0d0d0d; --surface:#1a1a19; --ink:#fff; --ink-2:#c3c2b7;
+      --muted:#898781; --grid:#2c2c2a; --baseline:#383835;
+      --border:rgba(255,255,255,.10);
+      --s1:#3987e5; --s2:#199e70; --s3:#d95926;
+      --deemph:#4a4a47; --good:#0ca30c; --bad:#e66767; --warn:#c98500;
+      --wash:rgba(255,255,255,.06);
+      --seq0:#16233a; --seq1:#0d366b; --seq2:#184f95; --seq3:#256abf;
+      --seq4:#3987e5; --seq5:#6da7ec; --seq6:#9ec5f4; --seq7:#cde2fb;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page:#0d0d0d; --surface:#1a1a19; --ink:#fff; --ink-2:#c3c2b7;
+    --muted:#898781; --grid:#2c2c2a; --baseline:#383835;
+    --border:rgba(255,255,255,.10);
+    --s1:#3987e5; --s2:#199e70; --s3:#d95926;
+    --deemph:#4a4a47; --good:#0ca30c; --bad:#e66767; --warn:#c98500;
+    --wash:rgba(255,255,255,.06);
+    --seq0:#16233a; --seq1:#0d366b; --seq2:#184f95; --seq3:#256abf;
+    --seq4:#3987e5; --seq5:#6da7ec; --seq6:#9ec5f4; --seq7:#cde2fb;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--page);color:var(--ink);
+    font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;padding:32px 20px 72px}
+  .wrap{max-width:1060px;margin:0 auto}
+  header h1{font-size:26px;letter-spacing:-.01em;line-height:1.25}
+  header .sub{color:var(--ink-2);margin-top:8px;font-size:14px}
+  h2{font-size:19px;margin:0 0 4px;letter-spacing:-.005em}
+  h3{font-size:15px;margin:0 0 4px}
+  .lede{color:var(--ink-2);font-size:14px;margin-bottom:16px;max-width:74ch}
+  section{margin-top:40px}
+  .card{background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;padding:18px 18px 14px;margin-top:14px}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:12px;margin:24px 0 8px}
+  .tile{background:var(--surface);border:1px solid var(--border);
+    border-radius:12px;padding:14px 16px}
+  .tile .k{font-size:12px;color:var(--muted);text-transform:uppercase;
+    letter-spacing:.04em}
+  .tile .v{font-size:25px;font-weight:600;margin-top:5px;letter-spacing:-.02em;
+    font-variant-numeric:tabular-nums}
+  .tile .n{font-size:12px;color:var(--ink-2);margin-top:3px}
+  .scroll{overflow-x:auto}
+  svg{display:block;max-width:100%;height:auto}
+  table{border-collapse:collapse;width:100%;font-size:13px;
+    font-variant-numeric:tabular-nums;margin-top:6px}
+  th,td{padding:6px 9px;text-align:right;border-bottom:1px solid var(--border);
+    white-space:nowrap}
+  th:first-child,td:first-child{text-align:left}
+  thead th{color:var(--muted);font-weight:600;font-size:11.5px;
+    text-transform:uppercase;letter-spacing:.04em}
+  tbody tr:last-child td{border-bottom:none}
+  tfoot td{font-weight:600;border-top:1px solid var(--baseline);border-bottom:none}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;margin:2px 0 12px;font-size:13px;
+    color:var(--ink-2)}
+  .legend i{width:11px;height:11px;border-radius:3px;display:inline-block;
+    margin-right:6px;vertical-align:-1px}
+  details{margin-top:8px}
+  summary{cursor:pointer;color:var(--ink-2);font-size:13px;padding:4px 0}
+  summary:hover{color:var(--ink)}
+  .note{background:var(--wash);border-left:3px solid var(--warn);
+    border-radius:0 8px 8px 0;padding:12px 15px;margin-top:14px;font-size:14px;
+    color:var(--ink-2)}
+  .note.ok{border-left-color:var(--good)}
+  .note.bad{border-left-color:var(--bad)}
+  .note b{color:var(--ink)}
+  ul{margin:8px 0 0 18px}li{margin:5px 0;color:var(--ink-2)}li b{color:var(--ink)}
+  .tip{position:fixed;pointer-events:none;opacity:0;transition:opacity .1s;
+    background:var(--ink);color:var(--page);padding:7px 10px;border-radius:7px;
+    font-size:12.5px;line-height:1.45;z-index:9;white-space:nowrap;
+    font-variant-numeric:tabular-nums;box-shadow:0 3px 14px rgba(0,0,0,.22)}
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px}
+  footer{margin-top:48px;padding-top:18px;border-top:1px solid var(--border);
+    color:var(--muted);font-size:12.5px}
+  .hm-lab{font-size:11px;fill:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>«Денежный прорыв» — продажи по времени суток</h1>
+  <div class="sub">
+    1 июня – 31 июля 2026 · время по Вене (Europe/Vienna) · 448 оплат из писем,
+    расход из Meta Ads · Diamond Wisdom Group
+  </div>
+</header>
+
+<div class="kpis" id="kpis"></div>
+
+<!-- ── 1. Прямой ответ ── -->
+<section>
+  <h2>1. Когда покупают — и когда мы за это платим</h2>
+  <p class="lede">
+    Прямой ответ на вопрос. Обе величины — доли от суток, поэтому лежат на одной шкале
+    и сравнимы. Если бы продажи просто повторяли график открутки рекламы, столбики
+    совпали бы по всей ширине.
+  </p>
+  <div class="card">
+    <div class="legend">
+      <span><i style="background:var(--s2)"></i>Доля продаж</span>
+      <span><i style="background:var(--s1)"></i>Доля расхода</span>
+    </div>
+    <div class="scroll"><svg id="cShare" viewBox="0 0 980 300" role="img"
+      aria-label="Доля продаж и доля расхода по двухчасовым слотам"></svg></div>
+    <details><summary>Таблица — все 12 слотов</summary>
+      <div class="scroll"><table id="tShare"></table></div>
+    </details>
+  </div>
+  <div class="note" id="noteShape"></div>
+</section>
+
+<!-- ── 2. Локальное время ── -->
+<section>
+  <h2>2. Венский пик — это склейка трёх локальных утр</h2>
+  <p class="lede">
+    Аудитория живёт в поясах от UTC+2 до UTC+5. Если пересчитать каждую оплату
+    в местное время покупателя (пояс определяется по валюте платежа), картина
+    становится резче: пик собирается, а не размазывается. Это значит, что
+    расписание показов имеет смысл ставить <b>по регионам в их локальном времени</b>,
+    а не одним общим графиком.
+  </p>
+  <div class="card">
+    <div class="legend">
+      <span><i style="background:var(--s2)"></i>Локальное время покупателя</span>
+      <span><i style="background:var(--deemph)"></i>Время по Вене</span>
+    </div>
+    <div class="scroll"><svg id="cLocal" viewBox="0 0 980 280" role="img"
+      aria-label="Распределение продаж по локальному времени покупателя против венского"></svg></div>
+    <details><summary>Таблица</summary>
+      <div class="scroll"><table id="tLocal"></table></div>
+    </details>
+  </div>
+  <h3 style="margin-top:22px">Три региона — три независимых подтверждения</h3>
+  <p class="lede">Каждый регион в своём местном времени. Пик 08–10 повторяется во всех трёх.</p>
+  <div class="grid2" id="regions"></div>
+</section>
+
+<!-- ── 3. CAC ── -->
+<section>
+  <h2>3. Сколько стоит покупка в каждом слоте</h2>
+  <p class="lede">
+    Продажи, нормированные на расход. Усы — 95% доверительный интервал
+    (пуассоновский разброс счётчика): там, где ус длинный, в слоте просто мало
+    заказов и разница с соседями может быть шумом. Пунктир — средний CAC за период.
+  </p>
+  <div class="card">
+    <div class="scroll"><svg id="cCac" viewBox="0 0 980 300" role="img"
+      aria-label="CAC по двухчасовым слотам с доверительными интервалами"></svg></div>
+    <details><summary>Таблица — CAC, доверительный интервал, цена клика, конверсия клика</summary>
+      <div class="scroll"><table id="tCac"></table></div>
+    </details>
+  </div>
+</section>
+
+<!-- ── 4. Устойчивость ── -->
+<section>
+  <h2>4. Главная оговорка: лаг между кликом и оплатой</h2>
+  <p class="lede">
+    Расход относится к часу клика, оплата — к часу платежа. Если человек кликает
+    в 8 утра, а платит в 10, утренний CAC завышен механически. Проверено двумя
+    способами: кросс-корреляция часовых рядов за 61 день даёт максимум на лаге
+    <b id="lagBest"></b>, а ниже показано, что происходит с выводом, если лаг
+    всё-таки есть. Полоса — диапазон CAC при лаге от 0 до 2 часов, точка — оценка при лаге 0.
+  </p>
+  <div class="card">
+    <div class="legend">
+      <span><i style="background:var(--s1);opacity:.8"></i>Вывод устойчив (разброс &lt; $3)</span>
+      <span><i style="background:var(--deemph);opacity:.5"></i>Вывод зависит от допущения</span>
+      <span><i style="background:var(--ink);border-radius:50%"></i>Оценка при лаге 0</span>
+    </div>
+    <div class="scroll"><svg id="cRobust" viewBox="0 0 980 240" role="img"
+      aria-label="Диапазон CAC по кластерам времени при разных предположениях о лаге"></svg></div>
+    <details><summary>Таблица — CAC при лаге 0…6 часов</summary>
+      <div class="scroll"><table id="tRobust"></table></div>
+    </details>
+  </div>
+  <div class="note bad" id="noteRobust"></div>
+</section>
+
+<!-- ── 5. Хитмап ── -->
+<section>
+  <h2>5. Час × день недели</h2>
+  <p class="lede">
+    Все 448 оплат, разложенные по двум измерениям сразу. Ищем, не прячется ли
+    за усреднённым профилем отдельный день со своим ритмом.
+  </p>
+  <div class="card">
+    <div class="scroll"><svg id="cHeat" viewBox="0 0 980 250" role="img"
+      aria-label="Тепловая карта продаж: день недели против часа"></svg></div>
+    <details><summary>Таблица — итоги по дням недели</summary>
+      <div class="scroll"><table id="tWeek"></table></div>
+    </details>
+  </div>
+  <div class="note" id="noteWeek"></div>
+</section>
+
+<!-- ── 6. Проверки ── -->
+<section>
+  <h2>6. Что проверено до того, как делать выводы</h2>
+  <p class="lede">
+    Без этих четырёх проверок график можно было бы нарисовать красивым и неверным.
+  </p>
+  <div class="card" id="checks"></div>
+</section>
+
+<!-- ── 7. Выводы ── -->
+<section>
+  <h2>7. Выводы</h2>
+  <div class="card" id="concl"></div>
+</section>
+
+<footer id="foot"></footer>
+</div>
+<div class="tip" id="tip"></div>
+
+<script>
+const D = {"meta":{"period":"1 июня – 31 июля 2026","tz":"Europe/Vienna","orders_analyzed":448,"spend_dp":7168.58,"spend_all":8814.75,"revenue":4813.58,"avg_cac":16.0,"coverage":{"2026-06":{"emails":73,"truth":119,"pct":61.3},"2026-07":{"emails":375,"truth":375,"pct":100.0}}},"buckets_all":[{"bucket":0,"label":"00–02","orders":12,"revenue":132.04,"share":2.7,"spend":193.02,"spend_share":2.7,"cac":16.09,"sigma":3.5},{"bucket":2,"label":"02–04","orders":4,"revenue":42.91,"share":0.9,"spend":162.29,"spend_share":2.3,"cac":40.57,"sigma":2.0},{"bucket":4,"label":"04–06","orders":20,"revenue":207.93,"share":4.5,"spend":435.94,"spend_share":6.1,"cac":21.8,"sigma":4.5},{"bucket":6,"label":"06–08","orders":50,"revenue":534.9,"share":11.2,"spend":1101.52,"spend_share":15.4,"cac":22.03,"sigma":7.1},{"bucket":8,"label":"08–10","orders":74,"revenue":799.68,"share":16.5,"spend":1207.85,"spend_share":16.8,"cac":16.32,"sigma":8.6},{"bucket":10,"label":"10–12","orders":56,"revenue":605.1,"share":12.5,"spend":791.49,"spend_share":11.0,"cac":14.13,"sigma":7.5},{"bucket":12,"label":"12–14","orders":44,"revenue":473.93,"share":9.8,"spend":557.69,"spend_share":7.8,"cac":12.67,"sigma":6.6},{"bucket":14,"label":"14–16","orders":36,"revenue":390.46,"share":8.0,"spend":519.63,"spend_share":7.2,"cac":14.43,"sigma":6.0},{"bucket":16,"label":"16–18","orders":30,"revenue":322.61,"share":6.7,"spend":507.33,"spend_share":7.1,"cac":16.91,"sigma":5.5},{"bucket":18,"label":"18–20","orders":49,"revenue":526.26,"share":10.9,"spend":570.55,"spend_share":8.0,"cac":11.64,"sigma":7.0},{"bucket":20,"label":"20–22","orders":36,"revenue":380.75,"share":8.0,"spend":646.76,"spend_share":9.0,"cac":17.97,"sigma":6.0},{"bucket":22,"label":"22–24","orders":37,"revenue":397.01,"share":8.3,"spend":474.5,"spend_share":6.6,"cac":12.82,"sigma":6.1}],"buckets_july":[{"bucket":0,"label":"00–02","orders":8,"revenue":87.04,"share":2.1,"spend":103.44,"spend_share":2.0,"cac":12.93,"sigma":2.8},{"bucket":2,"label":"02–04","orders":2,"revenue":20.41,"share":0.5,"spend":89.13,"spend_share":1.7,"cac":44.56,"sigma":1.4},{"bucket":4,"label":"04–06","orders":17,"revenue":174.18,"share":4.5,"spend":305.54,"spend_share":5.9,"cac":17.97,"sigma":4.1},{"bucket":6,"label":"06–08","orders":45,"revenue":478.65,"share":12.0,"spend":878.59,"spend_share":17.0,"cac":19.52,"sigma":6.7},{"bucket":8,"label":"08–10","orders":68,"revenue":732.18,"share":18.1,"spend":950.18,"spend_share":18.4,"cac":13.97,"sigma":8.2},{"bucket":10,"label":"10–12","orders":46,"revenue":492.6,"share":12.3,"spend":587.97,"spend_share":11.4,"cac":12.78,"sigma":6.8},{"bucket":12,"label":"12–14","orders":37,"revenue":395.18,"share":9.9,"spend":388.24,"spend_share":7.5,"cac":10.49,"sigma":6.1},{"bucket":14,"label":"14–16","orders":26,"revenue":277.96,"share":6.9,"spend":342.65,"spend_share":6.6,"cac":13.18,"sigma":5.1},{"bucket":16,"label":"16–18","orders":28,"revenue":300.11,"share":7.5,"spend":324.23,"spend_share":6.3,"cac":11.58,"sigma":5.3},{"bucket":18,"label":"18–20","orders":35,"revenue":368.76,"share":9.3,"spend":391.8,"spend_share":7.6,"cac":11.19,"sigma":5.9},{"bucket":20,"label":"20–22","orders":32,"revenue":335.75,"share":8.5,"spend":470.66,"spend_share":9.1,"cac":14.71,"sigma":5.7},{"bucket":22,"label":"22–24","orders":31,"revenue":329.51,"share":8.3,"spend":322.33,"spend_share":6.3,"cac":10.4,"sigma":5.6}],"buckets_june":[{"bucket":0,"label":"00–02","orders":4,"revenue":45.0,"share":5.5,"spend":89.59,"spend_share":4.5,"cac":22.4,"sigma":2.0},{"bucket":2,"label":"02–04","orders":2,"revenue":22.5,"share":2.7,"spend":73.16,"spend_share":3.6,"cac":36.58,"sigma":1.4},{"bucket":4,"label":"04–06","orders":3,"revenue":33.75,"share":4.1,"spend":130.4,"spend_share":6.5,"cac":43.47,"sigma":1.7},{"bucket":6,"label":"06–08","orders":5,"revenue":56.25,"share":6.8,"spend":222.93,"spend_share":11.1,"cac":44.59,"sigma":2.2},{"bucket":8,"label":"08–10","orders":6,"revenue":67.5,"share":8.2,"spend":257.67,"spend_share":12.8,"cac":42.94,"sigma":2.4},{"bucket":10,"label":"10–12","orders":10,"revenue":112.5,"share":13.7,"spend":203.52,"spend_share":10.1,"cac":20.35,"sigma":3.2},{"bucket":12,"label":"12–14","orders":7,"revenue":78.75,"share":9.6,"spend":169.45,"spend_share":8.4,"cac":24.21,"sigma":2.6},{"bucket":14,"label":"14–16","orders":10,"revenue":112.5,"share":13.7,"spend":176.98,"spend_share":8.8,"cac":17.7,"sigma":3.2},{"bucket":16,"label":"16–18","orders":2,"revenue":22.5,"share":2.7,"spend":183.1,"spend_share":9.1,"cac":91.55,"sigma":1.4},{"bucket":18,"label":"18–20","orders":14,"revenue":157.5,"share":19.2,"spend":178.75,"spend_share":8.9,"cac":12.77,"sigma":3.7},{"bucket":20,"label":"20–22","orders":4,"revenue":45.0,"share":5.5,"spend":176.1,"spend_share":8.7,"cac":44.03,"sigma":2.0},{"bucket":22,"label":"22–24","orders":6,"revenue":67.5,"share":8.2,"spend":151.12,"spend_share":7.5,"cac":25.19,"sigma":2.4}],"cac_ci":[{"label":"00–02","bucket":0,"orders":12,"spend":193.02,"impressions":9510,"clicks":261,"cac":16.09,"cac_lo":10.27,"cac_hi":37.05,"cpc":0.74,"cpm":20.3,"ctr":2.74,"cr":4.598},{"label":"02–04","bucket":2,"orders":4,"spend":162.29,"impressions":7159,"clicks":187,"cac":40.57,"cac_lo":20.49,"cac_hi":2028.58,"cpc":0.868,"cpm":22.67,"ctr":2.61,"cr":2.139},{"label":"04–06","bucket":4,"orders":20,"spend":435.94,"impressions":20102,"clicks":594,"cac":21.8,"cac_lo":15.15,"cac_hi":38.8,"cpc":0.734,"cpm":21.69,"ctr":2.95,"cr":3.367},{"label":"06–08","bucket":6,"orders":50,"spend":1101.52,"impressions":54290,"clicks":1623,"cac":22.03,"cac_lo":17.25,"cac_hi":30.48,"cpc":0.679,"cpm":20.29,"ctr":2.99,"cr":3.081},{"label":"08–10","bucket":8,"orders":74,"spend":1207.85,"impressions":62698,"clicks":1792,"cac":16.32,"cac_lo":13.29,"cac_hi":21.14,"cpc":0.674,"cpm":19.26,"ctr":2.86,"cr":4.129},{"label":"10–12","bucket":10,"orders":56,"spend":791.49,"impressions":45722,"clicks":1173,"cac":14.13,"cac_lo":11.2,"cac_hi":19.15,"cpc":0.675,"cpm":17.31,"ctr":2.57,"cr":4.774},{"label":"12–14","bucket":12,"orders":44,"spend":557.69,"impressions":33039,"clicks":844,"cac":12.67,"cac_lo":9.78,"cac_hi":17.99,"cpc":0.661,"cpm":16.88,"ctr":2.55,"cr":5.213},{"label":"14–16","bucket":14,"orders":36,"spend":519.63,"impressions":31723,"clicks":796,"cac":14.43,"cac_lo":10.88,"cac_hi":21.44,"cpc":0.653,"cpm":16.38,"ctr":2.51,"cr":4.523},{"label":"16–18","bucket":16,"orders":30,"spend":507.33,"impressions":33677,"clicks":815,"cac":16.91,"cac_lo":12.45,"cac_hi":26.33,"cpc":0.622,"cpm":15.06,"ctr":2.42,"cr":3.681},{"label":"18–20","bucket":18,"orders":49,"spend":570.55,"impressions":39036,"clicks":903,"cac":11.64,"cac_lo":9.1,"cac_hi":16.17,"cpc":0.632,"cpm":14.62,"ctr":2.31,"cr":5.426},{"label":"20–22","bucket":20,"orders":36,"spend":646.76,"impressions":42412,"clicks":1108,"cac":17.97,"cac_lo":13.54,"cac_hi":26.68,"cpc":0.584,"cpm":15.25,"ctr":2.61,"cr":3.249},{"label":"22–24","bucket":22,"orders":37,"spend":474.5,"impressions":28627,"clicks":834,"cac":12.82,"cac_lo":9.7,"cac_hi":18.92,"cpc":0.569,"cpm":16.58,"ctr":2.91,"cr":4.436}],"cac_ci_july":[{"label":"00–02","bucket":0,"orders":8,"spend":103.44,"impressions":5848,"clicks":184,"cac":12.93,"cac_lo":7.64,"cac_hi":42.11,"cpc":0.562,"cpm":17.69,"ctr":3.15,"cr":4.348},{"label":"02–04","bucket":2,"orders":2,"spend":89.13,"impressions":4521,"clicks":146,"cac":44.56,"cac_lo":18.68,"cac_hi":null,"cpc":0.61,"cpm":19.71,"ctr":3.23,"cr":1.37},{"label":"04–06","bucket":4,"orders":17,"spend":305.54,"impressions":15103,"clicks":487,"cac":17.97,"cac_lo":12.18,"cac_hi":34.26,"cpc":0.627,"cpm":20.23,"ctr":3.22,"cr":3.491},{"label":"06–08","bucket":6,"orders":45,"spend":878.59,"impressions":44856,"clicks":1393,"cac":19.52,"cac_lo":15.11,"cac_hi":27.58,"cpc":0.631,"cpm":19.59,"ctr":3.11,"cr":3.23},{"label":"08–10","bucket":8,"orders":68,"spend":950.18,"impressions":50882,"clicks":1537,"cac":13.97,"cac_lo":11.29,"cac_hi":18.33,"cpc":0.618,"cpm":18.67,"ctr":3.02,"cr":4.424},{"label":"10–12","bucket":10,"orders":46,"spend":587.97,"impressions":35892,"clicks":950,"cac":12.78,"cac_lo":9.92,"cac_hi":17.98,"cpc":0.619,"cpm":16.38,"ctr":2.65,"cr":4.842},{"label":"12–14","bucket":12,"orders":37,"spend":388.24,"impressions":24450,"clicks":675,"cac":10.49,"cac_lo":7.94,"cac_hi":15.48,"cpc":0.575,"cpm":15.88,"ctr":2.76,"cr":5.481},{"label":"14–16","bucket":14,"orders":26,"spend":342.65,"impressions":23394,"clicks":616,"cac":13.18,"cac_lo":9.52,"cac_hi":21.41,"cpc":0.556,"cpm":14.65,"ctr":2.63,"cr":4.221},{"label":"16–18","bucket":16,"orders":28,"spend":324.23,"impressions":23970,"clicks":621,"cac":11.58,"cac_lo":8.45,"cac_hi":18.39,"cpc":0.522,"cpm":13.53,"ctr":2.59,"cr":4.509},{"label":"18–20","bucket":18,"orders":35,"spend":391.8,"impressions":29219,"clicks":714,"cac":11.19,"cac_lo":8.41,"cac_hi":16.74,"cpc":0.549,"cpm":13.41,"ctr":2.44,"cr":4.902},{"label":"20–22","bucket":20,"orders":32,"spend":470.66,"impressions":32831,"clicks":918,"cac":14.71,"cac_lo":10.92,"cac_hi":22.51,"cpc":0.513,"cpm":14.34,"ctr":2.8,"cr":3.486},{"label":"22–24","bucket":22,"orders":31,"spend":322.33,"impressions":20660,"clicks":651,"cac":10.4,"cac_lo":7.69,"cac_hi":16.05,"cpc":0.495,"cpm":15.6,"ctr":3.15,"cr":4.762}],"clusters":[{"name":"Ночь","label":"00–06","orders":36,"spend":791.25,"clicks":1042,"impressions":36771,"cac":21.98,"cac_lo":16.57,"cac_hi":32.64,"cpc":0.759,"cr":3.455,"share_orders":8.0,"share_spend":11.0},{"name":"Утро","label":"06–10","orders":124,"spend":2309.38,"clicks":3415,"impressions":116988,"cac":18.62,"cac_lo":15.84,"cac_hi":22.6,"cpc":0.676,"cr":3.631,"share_orders":27.7,"share_spend":32.2},{"name":"День","label":"10–16","orders":136,"spend":1868.81,"clicks":2813,"impressions":110484,"cac":13.74,"cac_lo":11.76,"cac_hi":16.52,"cpc":0.664,"cr":4.835,"share_orders":30.4,"share_spend":26.1},{"name":"Вечер","label":"16–22","orders":115,"spend":1724.64,"clicks":2826,"impressions":115125,"cac":15.0,"cac_lo":12.68,"cac_hi":18.35,"cpc":0.61,"cr":4.069,"share_orders":25.7,"share_spend":24.1},{"name":"Поздний вечер","label":"22–24","orders":37,"spend":474.5,"clicks":834,"impressions":28627,"cac":12.82,"cac_lo":9.7,"cac_hi":18.92,"cpc":0.569,"cr":4.436,"share_orders":8.3,"share_spend":6.6}],"clusters_july":[{"name":"Ночь","label":"00–06","orders":27,"spend":498.1,"clicks":817,"impressions":25472,"cac":18.45,"cac_lo":13.4,"cac_hi":29.62,"cpc":0.61,"cr":3.305,"share_orders":7.2,"share_spend":9.7},{"name":"Утро","label":"06–10","orders":113,"spend":1828.78,"clicks":2930,"impressions":95738,"cac":16.18,"cac_lo":13.66,"cac_hi":19.84,"cpc":0.624,"cr":3.857,"share_orders":30.1,"share_spend":35.5},{"name":"День","label":"10–16","orders":109,"spend":1318.87,"clicks":2241,"impressions":83736,"cac":12.1,"cac_lo":10.19,"cac_hi":14.9,"cpc":0.589,"cr":4.864,"share_orders":29.1,"share_spend":25.6},{"name":"Вечер","label":"16–22","orders":95,"spend":1186.7,"clicks":2253,"impressions":86020,"cac":12.49,"cac_lo":10.4,"cac_hi":15.64,"cpc":0.527,"cr":4.217,"share_orders":25.3,"share_spend":23.0},{"name":"Поздний вечер","label":"22–24","orders":31,"spend":322.33,"clicks":651,"impressions":20660,"cac":10.4,"cac_lo":7.69,"cac_hi":16.05,"cpc":0.495,"cr":4.762,"share_orders":8.3,"share_spend":6.3}],"pairs":[{"a":"Ночь","b":"Утро","cac_a":21.98,"cac_b":18.62,"p":0.43570411690484256,"sig":false},{"a":"Ночь","b":"День","cac_a":21.98,"cac_b":13.74,"p":0.011944676486830952,"sig":true},{"a":"Ночь","b":"Вечер","cac_a":21.98,"cac_b":15.0,"p":0.04989625685134835,"sig":true},{"a":"Ночь","b":"Поздний вечер","cac_a":21.98,"cac_b":12.82,"p":0.02923793415127207,"sig":true},{"a":"Утро","b":"День","cac_a":18.62,"cac_b":13.74,"p":0.016889582257241464,"sig":true},{"a":"Утро","b":"Вечер","cac_a":18.62,"cac_b":15.0,"p":0.10805677060659624,"sig":false},{"a":"Утро","b":"Поздний вечер","cac_a":18.62,"cac_b":12.82,"p":0.06466162850791402,"sig":false},{"a":"День","b":"Вечер","cac_a":13.74,"cac_b":15.0,"p":0.5309027848038869,"sig":false},{"a":"День","b":"Поздний вечер","cac_a":13.74,"cac_b":12.82,"p":0.7679099863939678,"sig":false},{"a":"Вечер","b":"Поздний вечер","cac_a":15.0,"cac_b":12.82,"p":0.45993931882850525,"sig":false}],"main_contrast":{"morning_cac":18.62,"rest_cac":15.0,"p":0.04293804287848402,"morning_n":124,"rest_n":324,"morning_spend":2309.38,"rest_spend":4859.2},"robust":[{"name":"Ночь","label":"00–06","lag0":21.98,"lo":20.13,"hi":23.02,"span":2.89,"all_lags":[21.98,20.13,23.02,29.24,36.48,42.52,46.97]},{"name":"Утро","label":"06–10","lag0":18.62,"lo":12.4,"hi":18.62,"span":6.22,"all_lags":[18.62,16.26,12.4,8.06,4.82,3.24,2.87]},{"name":"День","label":"10–16","lag0":13.74,"lo":13.74,"hi":18.8,"span":5.06,"all_lags":[13.74,15.96,18.8,21.49,22.8,22.14,20.19]},{"name":"Вечер","label":"16–22","lag0":15.0,"lo":13.89,"hi":15.0,"span":1.11,"all_lags":[15.0,14.52,13.89,13.67,13.78,14.65,16.25]},{"name":"Поздний вечер","label":"22–24","lag0":12.8,"lo":12.8,"hi":17.48,"span":4.68,"all_lags":[12.8,15.85,17.48,16.79,15.42,14.56,13.71]}],"lag":{"best":0,"r":0.4927,"sensitivity":[{"lag":0,"Ночь":21.98,"Утро":18.62,"День":13.74,"Вечер":15.0,"Поздний вечер":12.8,"p_morning_vs_day":0.0169},{"lag":1,"Ночь":20.13,"Утро":16.26,"День":15.96,"Вечер":14.52,"Поздний вечер":15.85,"p_morning_vs_day":0.9319},{"lag":2,"Ночь":23.02,"Утро":12.4,"День":18.8,"Вечер":13.89,"Поздний вечер":17.48,"p_morning_vs_day":0.0011},{"lag":3,"Ночь":29.24,"Утро":8.06,"День":21.49,"Вечер":13.67,"Поздний вечер":16.79,"p_morning_vs_day":0.0},{"lag":4,"Ночь":36.48,"Утро":4.82,"День":22.8,"Вечер":13.78,"Поздний вечер":15.42,"p_morning_vs_day":0.0},{"lag":5,"Ночь":42.52,"Утро":3.24,"День":22.14,"Вечер":14.65,"Поздний вечер":14.56,"p_morning_vs_day":0.0},{"lag":6,"Ночь":46.97,"Утро":2.87,"День":20.19,"Вечер":16.25,"Поздний вечер":13.71,"p_morning_vs_day":0.0}]},"local":{"vienna":{"0":12,"2":4,"4":20,"6":50,"8":74,"10":56,"12":44,"14":36,"16":30,"18":49,"20":36,"22":37},"local":{"0":20,"2":4,"4":8,"6":31,"8":86,"10":60,"12":46,"14":37,"16":33,"18":35,"20":31,"22":47},"per":{"UAH":{"0":10,"2":2,"4":2,"6":11,"8":42,"10":29,"12":22,"14":16,"16":15,"18":10,"20":15,"22":24},"EUR":{"0":8,"2":2,"4":6,"6":16,"8":34,"10":25,"12":20,"14":18,"16":15,"18":23,"20":10,"22":14},"KZT":{"0":2,"2":0,"4":0,"6":4,"8":10,"10":5,"12":4,"14":3,"16":3,"18":2,"20":6,"22":9}},"n_local":438},"weekday":[{"dow":0,"orders":65,"spend":1012.08,"cac":15.57},{"dow":1,"orders":58,"spend":976.95,"cac":16.84},{"dow":2,"orders":67,"spend":888.41,"cac":13.26},{"dow":3,"orders":70,"spend":1066.11,"cac":15.23},{"dow":4,"orders":66,"spend":1065.18,"cac":16.14},{"dow":5,"orders":55,"spend":993.93,"cac":18.07},{"dow":6,"orders":67,"spend":1165.92,"cac":17.4}],"heatmap":[[4,0,2,7,8,6,7,3,5,10,5,8],[2,1,3,5,10,9,1,4,4,9,8,2],[1,0,5,7,10,11,5,7,10,8,1,2],[1,0,0,14,12,9,10,8,2,5,7,2],[2,2,4,10,12,3,6,5,3,7,2,10],[0,1,3,1,7,12,7,3,3,6,6,6],[2,0,3,6,15,6,8,6,3,4,7,7]],"checks":{"reconcile_worst":0.43,"reconcile_days":29,"bias":{"getcourse":{"0":4,"2":2,"4":5,"6":6,"8":8,"10":11,"12":8,"14":10,"16":2,"18":14,"20":6,"22":5},"n_gc":81,"wayforpay":{"0":8,"2":2,"4":12,"6":42,"8":64,"10":44,"12":36,"14":26,"16":25,"18":31,"20":30,"22":32},"n_wf":352,"chi2":19.08,"df":11,"p":0.0596},"chi2_all":{"chi2":21.9,"df":11,"p":0.02542645988121628},"chi2_july":{"chi2":17.9,"df":11,"p":0.08475066621864989}}};
+
+/* ── помощники ── */
+const $ = s => document.querySelector(s);
+const SVGNS = "http://www.w3.org/2000/svg";
+const el = (n, a = {}) => { const e = document.createElementNS(SVGNS, n);
+  for (const k in a) e.setAttribute(k, a[k]); return e; };
+const fmt = (n, d = 0) => n == null ? "—" :
+  n.toLocaleString("ru-RU", {minimumFractionDigits: d, maximumFractionDigits: d});
+const money = n => n == null ? "—" : "$" + fmt(n, 2);
+const DOW = ["Пн","Вт","Ср","Чт","Пт","Сб","Вс"];
+const tip = $("#tip");
+function hookTip(node, html) {
+  node.addEventListener("mousemove", e => {
+    tip.innerHTML = html; tip.style.opacity = 1;
+    const w = tip.offsetWidth, h = tip.offsetHeight;
+    let x = e.clientX + 14, y = e.clientY - h - 10;
+    if (x + w > innerWidth - 8) x = e.clientX - w - 14;
+    if (y < 8) y = e.clientY + 16;
+    tip.style.left = x + "px"; tip.style.top = y + "px";
+  });
+  node.addEventListener("mouseleave", () => tip.style.opacity = 0);
+}
+/* столбик с закруглённым верхом, посаженный на базовую линию */
+function barPath(x, y, w, h, r = 4) {
+  r = Math.max(0, Math.min(r, w / 2, h));
+  return `M${x},${y+h} L${x},${y+r} Q${x},${y} ${x+r},${y} L${x+w-r},${y}
+          Q${x+w},${y} ${x+w},${y+r} L${x+w},${y+h} Z`;
+}
+function axes(svg, W, H, P, max, ticks = 5, unit = "") {
+  for (let i = 0; i <= ticks; i++) {
+    const v = max * i / ticks, y = H - P.b - (H - P.t - P.b) * (i / ticks);
+    svg.appendChild(el("line", {x1: P.l, x2: W - P.r, y1: y, y2: y,
+      stroke: i ? "var(--grid)" : "var(--baseline)", "stroke-width": 1}));
+    const t = el("text", {x: P.l - 8, y: y + 4, "text-anchor": "end",
+      fill: "var(--muted)", "font-size": 11});
+    t.textContent = (unit === "$" ? "$" : "") + fmt(v, max < 12 ? 1 : 0) +
+      (unit === "%" ? "%" : "");
+    svg.appendChild(t);
+  }
+}
+
+/* ── KPI ── */
+(() => {
+  const m = D.meta, cov = m.coverage;
+  const peak = D.buckets_all.reduce((a, b) => b.orders > a.orders ? b : a);
+  const tiles = [
+    ["Оплат в анализе", fmt(m.orders_analyzed), "июнь + июль, из писем"],
+    ["Покрытие июля", cov["2026-07"].pct + "%", `${cov["2026-07"].emails} из ${cov["2026-07"].truth} по финтаблице`],
+    ["Расход на ДП", "$" + fmt(m.spend_dp), "Meta Ads, почасовой срез"],
+    ["Средний CAC", money(m.avg_cac), "расход ÷ оплаты"],
+    ["Пиковый слот", peak.label, peak.share + "% всех продаж"],
+    ["Самый дешёвый", "16–22", "CAC устойчив к лагу"],
+  ];
+  $("#kpis").innerHTML = tiles.map(([k, v, n]) =>
+    `<div class="tile"><div class="k">${k}</div><div class="v">${v}</div>
+     <div class="n">${n}</div></div>`).join("");
+})();
+
+/* ── 1. доли продаж и расхода ── */
+(() => {
+  const svg = $("#cShare"), W = 980, H = 300, P = {l: 44, r: 14, t: 14, b: 42};
+  const rows = D.buckets_all;
+  const max = Math.ceil(Math.max(...rows.flatMap(r => [r.share, r.spend_share])) / 2) * 2 + 2;
+  axes(svg, W, H, P, max, 5, "%");
+  const iw = (W - P.l - P.r) / rows.length, bw = (iw - 10) / 2;
+  const sc = v => (H - P.t - P.b) * v / max;
+  rows.forEach((r, i) => {
+    const x0 = P.l + i * iw + 3;
+    [[r.share, "var(--s2)", "продаж"], [r.spend_share, "var(--s1)", "расхода"]]
+      .forEach(([v, c], j) => {
+        const h = sc(v), x = x0 + j * (bw + 2);   /* 2px зазор между столбиками */
+        const p = el("path", {d: barPath(x, H - P.b - h, bw, h), fill: c});
+        hookTip(p, `<b>${r.label}</b><br>Продаж: ${r.orders} (${r.share}%)<br>` +
+          `Расход: $${fmt(r.spend)} (${r.spend_share}%)<br>CAC: ${money(r.cac)}`);
+        svg.appendChild(p);
+      });
+    const t = el("text", {x: x0 + iw / 2 - 3, y: H - P.b + 16, "text-anchor": "middle",
+      fill: "var(--ink-2)", "font-size": 11});
+    t.textContent = r.label; svg.appendChild(t);
+    /* прямая подпись только на пике — не на каждом столбике */
+    if (r.orders === Math.max(...rows.map(x => x.orders))) {
+      const lab = el("text", {x: x0 + bw / 2, y: H - P.b - sc(r.share) - 7,
+        "text-anchor": "middle", fill: "var(--ink)", "font-size": 12,
+        "font-weight": 600});
+      lab.textContent = r.share + "%"; svg.appendChild(lab);
+    }
+  });
+  const cap = el("text", {x: P.l, y: H - 8, fill: "var(--muted)", "font-size": 11});
+  cap.textContent = "двухчасовые слоты, время по Вене";
+  svg.appendChild(cap);
+
+  $("#tShare").innerHTML =
+    `<thead><tr><th>Слот</th><th>Продаж</th><th>Доля</th><th>Выручка</th>
+     <th>Расход</th><th>Доля</th><th>CAC</th></tr></thead><tbody>` +
+    rows.map(r => `<tr><td>${r.label}</td><td>${r.orders}</td><td>${r.share}%</td>
+      <td>$${fmt(r.revenue)}</td><td>$${fmt(r.spend)}</td><td>${r.spend_share}%</td>
+      <td>${money(r.cac)}</td></tr>`).join("") +
+    `</tbody><tfoot><tr><td>Итого</td><td>${D.meta.orders_analyzed}</td><td>100%</td>
+     <td>$${fmt(D.meta.revenue)}</td><td>$${fmt(D.meta.spend_dp)}</td><td>100%</td>
+     <td>${money(D.meta.avg_cac)}</td></tr></tfoot>`;
+
+  const top3 = [...rows].sort((a, b) => b.orders - a.orders).slice(0, 3);
+  const sum3 = top3.reduce((s, r) => s + r.share, 0).toFixed(1);
+  const night = rows.filter(r => r.bucket < 6).reduce((s, r) => s + r.share, 0).toFixed(1);
+  $("#noteShape").innerHTML =
+    `<b>Форма суток есть, и она выраженная.</b> Три лучших слота — ` +
+    top3.map(r => r.label).join(", ") + ` — дают <b>${sum3}%</b> всех продаж за 6 часов ` +
+    `из 24. Ночь 00–06 даёт ${night}%. Но обратите внимание, как близко ` +
+    `идут синие и зелёные столбики: расход в целом уже следует за спросом, ` +
+    `и пик продаж во многом куплен, а не пойман.`;
+})();
+
+/* ── 2. локальное время ── */
+(() => {
+  const svg = $("#cLocal"), W = 980, H = 280, P = {l: 44, r: 14, t: 14, b: 42};
+  const B = Object.keys(D.local.local).map(Number).sort((a, b) => a - b);
+  const nl = Object.values(D.local.local).reduce((a, b) => a + b, 0);
+  const nv = Object.values(D.local.vienna).reduce((a, b) => a + b, 0);
+  const loc = B.map(b => 100 * D.local.local[b] / nl);
+  const vie = B.map(b => 100 * D.local.vienna[b] / nv);
+  const max = Math.ceil(Math.max(...loc, ...vie) / 2) * 2 + 2;
+  axes(svg, W, H, P, max, 5, "%");
+  const iw = (W - P.l - P.r) / B.length, bw = (iw - 10) / 2;
+  const sc = v => (H - P.t - P.b) * v / max;
+  B.forEach((b, i) => {
+    const x0 = P.l + i * iw + 3;
+    [[loc[i], "var(--s2)", D.local.local[b]], [vie[i], "var(--deemph)", D.local.vienna[b]]]
+      .forEach(([v, c, n], j) => {
+        const h = sc(v), x = x0 + j * (bw + 2);
+        const p = el("path", {d: barPath(x, H - P.b - h, bw, h), fill: c});
+        hookTip(p, `<b>${String(b).padStart(2,"0")}–${String(b+2).padStart(2,"0")}</b><br>` +
+          (j ? "По Вене" : "Локально") + `: ${n} оплат (${v.toFixed(1)}%)`);
+        svg.appendChild(p);
+      });
+    const t = el("text", {x: x0 + iw / 2 - 3, y: H - P.b + 16, "text-anchor": "middle",
+      fill: "var(--ink-2)", "font-size": 11});
+    t.textContent = `${String(b).padStart(2,"0")}–${String(b+2).padStart(2,"0")}`;
+    svg.appendChild(t);
+    if (loc[i] === Math.max(...loc)) {
+      const lab = el("text", {x: x0 + bw / 2, y: H - P.b - sc(loc[i]) - 7,
+        "text-anchor": "middle", fill: "var(--ink)", "font-size": 12, "font-weight": 600});
+      lab.textContent = loc[i].toFixed(1) + "%"; svg.appendChild(lab);
+    }
+  });
+  $("#tLocal").innerHTML =
+    `<thead><tr><th>Слот</th><th>Локально, оплат</th><th>Доля</th>
+     <th>По Вене, оплат</th><th>Доля</th></tr></thead><tbody>` +
+    B.map((b, i) => `<tr><td>${String(b).padStart(2,"0")}–${String(b+2).padStart(2,"0")}</td>
+      <td>${D.local.local[b]}</td><td>${loc[i].toFixed(1)}%</td>
+      <td>${D.local.vienna[b]}</td><td>${vie[i].toFixed(1)}%</td></tr>`).join("") +
+    `</tbody>`;
+})();
+
+/* ── 2б. регионы ── */
+(() => {
+  const NAMES = {UAH: "🇺🇦 Украина (Киев, UTC+3)", EUR: "🇪🇺 Европа (UTC+2)",
+                 KZT: "🇰🇿 Казахстан (Алматы, UTC+5)"};
+  const box = $("#regions");
+  for (const cur of ["UAH", "EUR", "KZT"]) {
+    const d = D.local.per[cur];
+    const B = Object.keys(d).map(Number).sort((a, b) => a - b);
+    const n = Object.values(d).reduce((a, b) => a + b, 0);
+    const vals = B.map(b => 100 * d[b] / n);
+    const max = Math.max(...vals);
+    const W = 460, H = 170, P = {l: 30, r: 10, t: 26, b: 30};
+    const card = document.createElement("div");
+    card.className = "card"; card.style.marginTop = "0";
+    card.innerHTML = `<h3>${NAMES[cur]}</h3>
+      <div class="n" style="color:var(--muted);font-size:12px;margin-bottom:4px">
+      ${n} оплат · местное время</div>`;
+    const svg = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img",
+      "aria-label": `Продажи ${NAMES[cur]} по локальному времени`});
+    svg.appendChild(el("line", {x1: P.l, x2: W - P.r, y1: H - P.b, y2: H - P.b,
+      stroke: "var(--baseline)", "stroke-width": 1}));
+    const iw = (W - P.l - P.r) / B.length, bw = iw - 3;
+    B.forEach((b, i) => {
+      const h = (H - P.t - P.b) * vals[i] / max;
+      const x = P.l + i * iw + 1.5;
+      const peak = vals[i] === max;
+      const p = el("path", {d: barPath(x, H - P.b - h, bw, h, 3),
+        fill: peak ? "var(--s2)" : "var(--seq2)"});
+      hookTip(p, `<b>${String(b).padStart(2,"0")}–${String(b+2).padStart(2,"0")}</b> ` +
+        `местного<br>${d[b]} оплат (${vals[i].toFixed(1)}%)`);
+      svg.appendChild(p);
+      if (peak) {
+        const lab = el("text", {x: x + bw / 2, y: H - P.b - h - 6,
+          "text-anchor": "middle", fill: "var(--ink)", "font-size": 11, "font-weight": 600});
+        lab.textContent = vals[i].toFixed(1) + "%"; svg.appendChild(lab);
+      }
+      if (b % 6 === 0) {
+        const t = el("text", {x: x + bw / 2, y: H - P.b + 14, "text-anchor": "middle",
+          fill: "var(--muted)", "font-size": 10});
+        t.textContent = String(b).padStart(2, "0"); svg.appendChild(t);
+      }
+    });
+    card.appendChild(svg); box.appendChild(card);
+  }
+})();
+
+/* ── 3. CAC с доверительными интервалами ── */
+(() => {
+  const svg = $("#cCac"), W = 980, H = 300, P = {l: 48, r: 14, t: 18, b: 42};
+  const rows = D.cac_ci.filter(r => r.cac != null);
+  const max = Math.min(Math.ceil(Math.max(...rows.map(r => r.cac_hi || r.cac)) / 10) * 10, 60);
+  axes(svg, W, H, P, max, 6, "$");
+  const iw = (W - P.l - P.r) / rows.length, bw = iw - 12;
+  const sc = v => (H - P.t - P.b) * Math.min(v, max) / max;
+  const avg = D.meta.avg_cac, ay = H - P.b - sc(avg);
+  rows.forEach((r, i) => {
+    const x = P.l + i * iw + 6, h = sc(r.cac);
+    const cheap = r.cac < avg;
+    const p = el("path", {d: barPath(x, H - P.b - h, bw, h),
+      fill: cheap ? "var(--s2)" : "var(--s1)"});
+    hookTip(p, `<b>${r.label}</b><br>CAC ${money(r.cac)} ` +
+      `(95% ДИ ${money(r.cac_lo)}–${money(r.cac_hi)})<br>` +
+      `${r.orders} оплат · расход $${fmt(r.spend)}<br>` +
+      `Цена клика ${money(r.cpc)} · конверсия клика ${r.cr}%`);
+    svg.appendChild(p);
+    if (r.cac_lo && r.cac_hi) {
+      const cx = x + bw / 2, y1 = H - P.b - sc(r.cac_lo), y2 = H - P.b - sc(r.cac_hi);
+      svg.appendChild(el("line", {x1: cx, x2: cx, y1, y2,
+        stroke: "var(--ink)", "stroke-width": 2, opacity: .55}));
+      [y1, y2].forEach(y => svg.appendChild(el("line", {x1: cx - 4, x2: cx + 4,
+        y1: y, y2: y, stroke: "var(--ink)", "stroke-width": 2, opacity: .55})));
+    }
+    const t = el("text", {x: x + bw / 2, y: H - P.b + 16, "text-anchor": "middle",
+      fill: "var(--ink-2)", "font-size": 11});
+    t.textContent = r.label; svg.appendChild(t);
+  });
+  svg.appendChild(el("line", {x1: P.l, x2: W - P.r, y1: ay, y2: ay,
+    stroke: "var(--ink-2)", "stroke-width": 1.5, "stroke-dasharray": "5 4"}));
+  /* подложка под подписью — иначе она ложится поверх столбика */
+  const atxt = `средний CAC ${money(avg)}`;
+  svg.appendChild(el("rect", {x: W - P.r - 6 - atxt.length * 6.1, y: ay - 18,
+    width: atxt.length * 6.1 + 6, height: 16, rx: 4, fill: "var(--surface)",
+    opacity: .92}));
+  const at = el("text", {x: W - P.r - 4, y: ay - 6, "text-anchor": "end",
+    fill: "var(--ink-2)", "font-size": 11.5});
+  at.textContent = atxt; svg.appendChild(at);
+
+  $("#tCac").innerHTML =
+    `<thead><tr><th>Слот</th><th>Оплат</th><th>Расход</th><th>CAC</th>
+     <th>95% ДИ</th><th>Цена клика</th><th>Конверсия клика</th></tr></thead><tbody>` +
+    rows.map(r => `<tr><td>${r.label}</td><td>${r.orders}</td>
+      <td>$${fmt(r.spend)}</td><td>${money(r.cac)}</td>
+      <td>${money(r.cac_lo)} – ${money(r.cac_hi)}</td>
+      <td>${money(r.cpc)}</td><td>${r.cr}%</td></tr>`).join("") + `</tbody>`;
+})();
+
+/* ── 4. устойчивость к лагу ── */
+(() => {
+  $("#lagBest").textContent = D.lag.best + " ч (r=" + D.lag.r + ")";
+  const svg = $("#cRobust"), W = 980, H = 240, P = {l: 158, r: 62, t: 16, b: 38};
+  const rows = D.robust;
+  const max = Math.ceil(Math.max(...rows.map(r => r.hi)) / 5) * 5;
+  const x = v => P.l + (W - P.l - P.r) * v / max;
+  for (let i = 0; i <= 5; i++) {
+    const v = max * i / 5;
+    svg.appendChild(el("line", {x1: x(v), x2: x(v), y1: P.t, y2: H - P.b,
+      stroke: i ? "var(--grid)" : "var(--baseline)", "stroke-width": 1}));
+    const t = el("text", {x: x(v), y: H - P.b + 16, "text-anchor": "middle",
+      fill: "var(--muted)", "font-size": 11});
+    t.textContent = "$" + fmt(v); svg.appendChild(t);
+  }
+  const rh = (H - P.t - P.b) / rows.length;
+  rows.forEach((r, i) => {
+    const cy = P.t + rh * i + rh / 2;
+    /* цвет кодирует УСТОЙЧИВОСТЬ вывода, а не «хорошо/плохо»:
+       синий — оценка не зависит от допущения о лаге, серый — зависит */
+    const stable = r.span < 3;
+    const g = el("g");
+    g.appendChild(el("rect", {x: x(r.lo), y: cy - 9, width: Math.max(x(r.hi) - x(r.lo), 3),
+      height: 18, rx: 5, fill: stable ? "var(--s1)" : "var(--deemph)",
+      opacity: stable ? .8 : .5}));
+    g.appendChild(el("circle", {cx: x(r.lag0), cy, r: 5, fill: "var(--ink)",
+      stroke: "var(--surface)", "stroke-width": 2}));
+    hookTip(g, `<b>${r.name} ${r.label}</b><br>CAC при лаге 0: ${money(r.lag0)}<br>` +
+      `Диапазон при лаге 0–2 ч: ${money(r.lo)} – ${money(r.hi)}<br>` +
+      `Разброс ${money(r.span)} — ${stable ? "вывод устойчив" : "вывод НЕ устойчив"}`);
+    svg.appendChild(g);
+    const t = el("text", {x: P.l - 10, y: cy + 4, "text-anchor": "end",
+      fill: "var(--ink)", "font-size": 12.5});
+    t.textContent = `${r.name} ${r.label}`; svg.appendChild(t);
+    const v = el("text", {x: x(r.hi) + 8, y: cy + 4, fill: "var(--ink-2)", "font-size": 11.5});
+    v.textContent = "±" + fmt(r.span, 2); svg.appendChild(v);
+  });
+  const cap = el("text", {x: P.l, y: H - 6, fill: "var(--muted)", "font-size": 11});
+  cap.textContent = "полоса — диапазон CAC при лаге 0–2 ч · точка — оценка при лаге 0 · справа разброс";
+  svg.appendChild(cap);
+
+  const L = D.lag.sensitivity;
+  $("#tRobust").innerHTML =
+    `<thead><tr><th>Лаг</th>` + rows.map(r => `<th>${r.name}<br>${r.label}</th>`).join("") +
+    `<th>p утро/день</th></tr></thead><tbody>` +
+    L.map(s => `<tr><td>${s.lag} ч</td>` +
+      rows.map(r => `<td>${money(s[r.name])}</td>`).join("") +
+      `<td>${s.p_morning_vs_day < 0.05 ? "<b>" + s.p_morning_vs_day + "</b>" : s.p_morning_vs_day}</td></tr>`
+    ).join("") + `</tbody>`;
+
+  const ev = rows.find(r => r.name === "Вечер"), ni = rows.find(r => r.name === "Ночь");
+  const mo = rows.find(r => r.name === "Утро");
+  $("#noteRobust").innerHTML =
+    `<b>Что устояло и что нет.</b> Вывод «утро дороже дня» держится только при
+     лаге ровно 0: при лаге в один час разница исчезает (p идёт с 0,017 до 0,93),
+     при двух — переворачивается. Разброс утреннего CAC ${money(mo.lo)}–${money(mo.hi)}
+     слишком велик, чтобы на нём что-то решать. <b>Устояли ровно два факта:</b>
+     ночь 00–06 остаётся самым дорогим слотом при любом допущении
+     (${money(ni.lo)}–${money(ni.hi)}), а вечер 16–22 — самым стабильным и одним
+     из самых дешёвых (${money(ev.lo)}–${money(ev.hi)}, разброс всего ${money(ev.span)}).`;
+})();
+
+/* ── 5. хитмап ── */
+(() => {
+  const svg = $("#cHeat"), W = 980, H = 250, P = {l: 42, r: 90, t: 22, b: 30};
+  const hm = D.heatmap, max = Math.max(...hm.flat());
+  const cw = (W - P.l - P.r) / 12, ch = (H - P.t - P.b) / 7;
+  const STEPS = ["--seq0","--seq1","--seq2","--seq3","--seq4","--seq5","--seq6","--seq7"];
+  const col = v => v === 0 ? "var(--wash)" :
+    `var(${STEPS[Math.min(STEPS.length - 1, Math.ceil(v / max * (STEPS.length - 1)))]})`;
+  for (let d = 0; d < 7; d++) {
+    const t = el("text", {x: P.l - 8, y: P.t + ch * d + ch / 2 + 4, "text-anchor": "end",
+      fill: "var(--ink-2)", "font-size": 12});
+    t.textContent = DOW[d]; svg.appendChild(t);
+    for (let b = 0; b < 12; b++) {
+      const v = hm[d][b];
+      const r = el("rect", {x: P.l + cw * b + 1, y: P.t + ch * d + 1,
+        width: cw - 2, height: ch - 2, rx: 3, fill: col(v)});
+      hookTip(r, `<b>${DOW[d]}, ${String(b*2).padStart(2,"0")}–${String(b*2+2).padStart(2,"0")}</b><br>${v} оплат`);
+      svg.appendChild(r);
+      if (v >= max * .72) {
+        const t2 = el("text", {x: P.l + cw * b + cw / 2, y: P.t + ch * d + ch / 2 + 4,
+          "text-anchor": "middle", fill: "var(--surface)", "font-size": 11,
+          "font-weight": 600});
+        t2.textContent = v; svg.appendChild(t2);
+      }
+    }
+  }
+  for (let b = 0; b < 12; b += 2) {
+    const t = el("text", {x: P.l + cw * b + cw / 2, y: P.t - 7, "text-anchor": "middle",
+      fill: "var(--muted)", "font-size": 11});
+    t.textContent = String(b * 2).padStart(2, "0"); svg.appendChild(t);
+  }
+  /* легенда шкалы */
+  STEPS.forEach((s, i) => {
+    svg.appendChild(el("rect", {x: W - P.r + 12, y: P.t + i * 15, width: 14, height: 13,
+      rx: 2, fill: `var(${s})`}));
+  });
+  [["0", P.t + 6], [String(max), P.t + STEPS.length * 15 - 2]].forEach(([txt, y]) => {
+    const t = el("text", {x: W - P.r + 32, y, fill: "var(--muted)", "font-size": 11});
+    t.textContent = txt; svg.appendChild(t);
+  });
+  const cap = el("text", {x: P.l, y: H - 8, fill: "var(--muted)", "font-size": 11});
+  cap.textContent = "оплат в ячейке · время по Вене";
+  svg.appendChild(cap);
+
+  const wd = D.weekday, tn = wd.reduce((s, r) => s + r.orders, 0);
+  $("#tWeek").innerHTML =
+    `<thead><tr><th>День</th><th>Оплат</th><th>Доля</th><th>Расход</th><th>CAC</th></tr></thead><tbody>` +
+    wd.map((r, i) => `<tr><td>${DOW[i]}</td><td>${r.orders}</td>
+      <td>${(100 * r.orders / tn).toFixed(1)}%</td><td>$${fmt(r.spend)}</td>
+      <td>${money(r.cac)}</td></tr>`).join("") + `</tbody>`;
+  const best = wd.reduce((a, b) => b.cac < a.cac ? b : a);
+  const worst = wd.reduce((a, b) => b.cac > a.cac ? b : a);
+  $("#noteWeek").innerHTML =
+    `<b>По дням недели ровно.</b> Разброс долей — от
+     ${(100 * Math.min(...wd.map(r => r.orders)) / tn).toFixed(1)}% до
+     ${(100 * Math.max(...wd.map(r => r.orders)) / tn).toFixed(1)}%, это в пределах
+     обычного шума при ~${Math.round(tn / 7)} оплатах на день. Самый дешёвый день —
+     ${DOW[wd.indexOf(best)]} (${money(best.cac)}), самый дорогой —
+     ${DOW[wd.indexOf(worst)]} (${money(worst.cac)}), но при таких выборках
+     на это опираться рано. Отдельного дня со своим ритмом в карте не видно —
+     утренняя полоса тянется через всю неделю.`;
+})();
+
+/* ── 6. проверки ── */
+(() => {
+  const c = D.checks, cov = D.meta.coverage;
+  const items = [
+    ["ok", "Покрытие писем сверено с финтаблицей",
+     `Июль — <b>${cov["2026-07"].emails} из ${cov["2026-07"].truth}</b> оплат
+      (${cov["2026-07"].pct}%): почта видит июльские продажи целиком, потому что
+      с 29 июня ДП продаётся кнопкой WayForPay, а она шлёт письмо на каждый платёж.
+      Июнь — <b>${cov["2026-06"].emails} из ${cov["2026-06"].truth}</b>
+      (${cov["2026-06"].pct}%): там канал был через GetCourse, и часть оплат
+      писем не порождала. Поэтому июль — основа выводов, июнь — подтверждение.`],
+    ["ok", "Недобор писем в июне не смещён по часам",
+     `Почасовые профили двух каналов сравнены напрямую: χ²=${c.bias.chi2},
+      df=${c.bias.df}, <b>p=${c.bias.p}</b> — распределения не различаются.
+      Значит июньская неполнота срезала оплаты равномерно по суткам, и форму
+      суток она не искажает.`],
+    ["ok", "Почасовой расход сходится с ежедневной сводкой бота",
+     `Суммы по часам сложены обратно в дни и сверены с историей
+      «Пинки» за ${c.reconcile_days} дней: максимальное расхождение
+      <b>$${c.reconcile_worst}</b>. Заодно это проверяет перевод часов из пояса
+      рекламного кабинета (Europe/Tallinn, UTC+3) в венский — кабинет живёт
+      не в том поясе, в котором построен отчёт.`],
+    ["warn", "Проверка на «это вообще не шум?»",
+     `χ² продаж против распределения, ожидаемого из расхода: за весь период
+      p=${c.chi2_all.p.toExponential(2)}, за июль отдельно
+      p=${c.chi2_july.p.toExponential(2)}. По июлю на пороге 0,05 гипотеза
+      «продажи просто повторяют расход» <b>не отвергается</b>. То есть форма
+      суток у продаж есть, но она в основном объясняется тем, когда крутится
+      реклама, а не самостоятельным поведением аудитории.`],
+  ];
+  $("#checks").innerHTML = items.map(([k, t, b]) =>
+    `<div class="note ${k === "ok" ? "ok" : ""}" style="margin-top:10px">
+     <b>${t}</b><br>${b}</div>`).join("");
+})();
+
+/* ── 7. выводы ── */
+(() => {
+  const rows = D.buckets_all;
+  const top3 = [...rows].sort((a, b) => b.orders - a.orders).slice(0, 3);
+  const sum3 = top3.reduce((s, r) => s + r.share, 0).toFixed(1);
+  const night = rows.filter(r => r.bucket < 6);
+  const nOrd = night.reduce((s, r) => s + r.orders, 0);
+  const nSp = night.reduce((s, r) => s + r.spend, 0);
+  const dayCac = D.robust.find(r => r.name === "День").lag0;
+  const would = Math.round(nSp / dayCac);
+  $("#concl").innerHTML = `<ul>
+    <li><b>Тенденция по времени суток есть, и она сильная.</b> Три слота
+      (${top3.map(r => r.label).join(", ")}) дают ${sum3}% продаж за шесть часов
+      из двадцати четырёх. Провал — ночь 00–06: ${(100*nOrd/D.meta.orders_analyzed).toFixed(1)}%
+      продаж.</li>
+    <li><b>Но в локальном времени покупателя пик читается лучше, чем в венском.</b>
+      Пик 08–10 утра по месту жительства подтверждают независимо все три региона:
+      Украина 21,2%, Европа 17,8%, Казахстан 20,8%. По Вене эти три утра
+      размазываются в широкую полку 06–12, потому что пояса разъезжаются на три часа.
+      Практический вывод: расписание показов ставить <b>по регионам в местном
+      времени</b>, а не одним общим графиком на кабинет.</li>
+    <li><b>Пик продаж во многом куплен, а не пойман.</b> Доля расхода почти везде
+      повторяет долю продаж, и по июлю гипотеза «продажи просто следуют за
+      рекламой» статистически не отвергается. Это значит, что закупка уже
+      более-менее попадает в спрос — лёгких денег от «перекладывания часов» не лежит.</li>
+    <li><b>Из всех слотов надёжен ровно один вывод: ночь 00–06 дорогая.</b>
+      CAC ${money(D.robust.find(r => r.name === "Ночь").lag0)} против
+      ${money(dayCac)} днём, и это держится при любом допущении о лаге между
+      кликом и оплатой. Ночь съела $${fmt(nSp)} и принесла ${nOrd} оплат; те же
+      деньги по дневной цене дали бы около ${would}. Порядок выигрыша —
+      <b>${would - nOrd} оплат за два месяца</b>, примерно $${fmt((would-nOrd)*10.7)} выручки.
+      Это реальные деньги, но не переворот: около 4% расхода на ДП.</li>
+    <li><b>Вечер 16–22 — самый предсказуемый слот.</b> CAC
+      ${money(D.robust.find(r => r.name === "Вечер").lo)}–${money(D.robust.find(r => r.name === "Вечер").hi)}
+      вне зависимости от допущений. Если куда-то переливать ночной бюджет —
+      то сюда, здесь меньше всего шансов ошибиться.</li>
+    <li><b>Чего эти данные не говорят.</b> Что утро хуже дня — не доказано, вывод
+      разваливается от часового сдвига. Что суббота хуже среды — тоже не доказано,
+      выборки малы. И вся картина описывает <b>момент оплаты</b>, а не момент
+      решения: человек мог увидеть рекламу вечером, а заплатить утром.</li>
+  </ul>`;
+})();
+
+/* ── подвал ── */
+$("#foot").innerHTML =
+  `Источники: письма об оплатах (GetCourse <code>info@pinkdiamond.online</code>,
+   WayForPay <code>notify@wayforpay.com.ua</code>, Stripe) — 1027 писем разобрано,
+   дедуп по номеру заказа и id платежа; расход — Meta Ads Insights,
+   кабинет Diamond Wisdom Group, почасовая разбивка, пояс кабинета Europe/Tallinn
+   приведён к Europe/Vienna; сверка объёма продаж — финтаблица
+   «2026 Pink Diamond финансы». Период ${D.meta.period}.
+   Персональных данных покупателей страница не содержит.`;
+</script>
+</body>
+</html>
