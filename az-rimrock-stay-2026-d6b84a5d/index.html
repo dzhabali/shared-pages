@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Аризона · дом у Rimrock · 26.09–15.10.2026</title>
+<style>
+  :root {
+    --bg: #ffffff; --fg: #1a1a1a; --muted: #6b7280; --line: #e5e7eb;
+    --card: #f9fafb; --accent: #0f766e; --accent-bg: #ccfbf1;
+    --good: #15803d; --good-bg: #dcfce7; --warn: #a16207; --warn-bg: #fef9c3;
+    --bad: #b91c1c; --bad-bg: #fee2e2; --link: #0d6efd; --mut2: #6b7280;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111418; --fg: #e5e7eb; --muted: #9ca3af; --line: #2d333b;
+      --card: #1a1f24; --accent: #2dd4bf; --accent-bg: #134e4a;
+      --good: #4ade80; --good-bg: #14532d; --warn: #facc15; --warn-bg: #713f12;
+      --bad: #f87171; --bad-bg: #7f1d1d; --link: #60a5fa;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.45 -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--fg); }
+  .wrap { max-width: 1300px; margin: 0 auto; padding: 16px; }
+  h1 { font-size: 1.35rem; margin: 4px 0 2px; }
+  h2 { font-size: 1.05rem; margin: 28px 0 10px; }
+  .sub { color: var(--muted); font-size: .87rem; margin-bottom: 12px; }
+  .criteria { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; font-size: .85rem; color: var(--muted); margin-bottom: 14px; }
+  .criteria b { color: var(--fg); }
+  .short { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; margin-bottom: 8px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+  .card .rank { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: .72rem; color: var(--accent); text-transform: uppercase; letter-spacing: .04em; }
+  .card h3 { margin: 4px 0 6px; font-size: 1rem; }
+  .card h3 a { color: var(--fg); }
+  .card .meta { font-size: .8rem; color: var(--muted); margin-bottom: 6px; }
+  .card .price { font-weight: 700; font-size: 1.05rem; }
+  .card .note { font-size: .83rem; color: var(--muted); margin-top: 6px; }
+  .filters { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: end; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; margin-bottom: 6px; }
+  .f { display: flex; flex-direction: column; gap: 3px; font-size: .78rem; color: var(--muted); }
+  .f output { color: var(--fg); font-weight: 600; }
+  select, input[type=search] { background: var(--bg); color: var(--fg); border: 1px solid var(--line); border-radius: 7px; padding: 5px 8px; font-size: .85rem; }
+  input[type=range] { width: 130px; accent-color: var(--accent); }
+  label.chk { display: inline-flex; gap: 5px; align-items: center; font-size: .83rem; color: var(--fg); cursor: pointer; }
+  .count { font-size: .82rem; color: var(--muted); margin: 8px 2px; }
+  .tblwrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
+  table { border-collapse: collapse; width: 100%; min-width: 1050px; font-size: .84rem; }
+  th, td { padding: 7px 9px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { position: sticky; top: 0; background: var(--card); cursor: pointer; user-select: none; white-space: nowrap; font-size: .78rem; }
+  th .arr { opacity: .5; font-size: .7rem; }
+  tr:hover td { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+  a { color: var(--link); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .pill { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: .74rem; white-space: nowrap; }
+  .p-good { background: var(--good-bg); color: var(--good); }
+  .p-warn { background: var(--warn-bg); color: var(--warn); }
+  .p-bad { background: var(--bad-bg); color: var(--bad); }
+  .p-acc { background: var(--accent-bg); color: var(--accent); }
+  .p-mut { background: var(--card); color: var(--muted); border: 1px solid var(--line); }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .name { font-weight: 600; max-width: 260px; }
+  .note { color: var(--muted); font-size: .78rem; max-width: 280px; }
+  footer { color: var(--muted); font-size: .78rem; margin: 16px 2px; line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🏜️ Дом у Rimrock, Аризона</h1>
+  <div class="sub">26.09 → 15.10.2026 · 19 ночей · 2 взрослых · обновлено <span id="updated"></span></div>
+  <div class="criteria">
+    <b>Критерии:</b> 2 спальни (в идеале мастер-бедрум) · 2 санузла · ≤ 45 мин от Rimrock · бюджетно, не супер-дорого.
+    <b>Проверка:</b> строки с ✅ открыты вживую в браузере на именно эти даты (26.09–15.10) прямо на странице объявления — подтверждён состав спален/санузлов и что бронирование реально доступно (кнопка Reserve активна). Строки с ❔ — только из выдачи поиска, лично не открывал(а), перед бронью проверьте сами.
+  </div>
+
+  <h2>Шорт-лист</h2>
+  <div class="short" id="short"></div>
+
+  <h2>Полный список</h2>
+  <div class="filters">
+    <div class="f">Цена за 19 ночей ≤ <output id="priceOut">$6000</output><input type="range" id="fPrice" min="2000" max="6000" step="100" value="6000"></div>
+    <div class="f">Платформа<select id="fPlatform"><option value="">все</option></select></div>
+    <div class="f">Регион<select id="fRegion"><option value="">все</option></select></div>
+    <div class="f">Совпадение<select id="fMatch"><option value="">все</option><option value="full">2 сп / 2 с.у.</option><option value="partial">2 сп / 1 с.у.</option><option value="no">не подходит</option><option value="unverified">не проверено</option></select></div>
+    <label class="chk"><input type="checkbox" id="fVerified"> только проверенные вживую</label>
+    <div class="f">Поиск<input type="search" id="fText" placeholder="название, место…"></div>
+  </div>
+  <div class="count" id="count"></div>
+  <div class="tblwrap"><table id="tbl">
+    <thead><tr>
+      <th data-k="name">Название <span class="arr"></span></th>
+      <th data-k="platform">Платформа <span class="arr"></span></th>
+      <th data-k="region">Регион <span class="arr"></span></th>
+      <th data-k="driveMin" class="num">Мин. от Rimrock <span class="arr"></span></th>
+      <th data-k="priceTotal" class="num">$ / 19 ночей <span class="arr"></span></th>
+      <th data-k="perNight" class="num">$ / ночь <span class="arr"></span></th>
+      <th data-k="bedrooms" class="num">Спальни <span class="arr"></span></th>
+      <th data-k="bathrooms" class="num">С.у. <span class="arr"></span></th>
+      <th data-k="rating" class="num">Рейтинг <span class="arr"></span></th>
+      <th data-k="match">Статус <span class="arr"></span></th>
+      <th>Заметка</th>
+    </tr></thead>
+    <tbody></tbody>
+  </table></div>
+  <footer>
+    Скрытая ссылка, в поисковики не попадает.<br>
+    Цены — итог за 19 ночей (26.09–15.10.2026, 2 взрослых) в USD, как показали Airbnb / Booking.com на момент проверки; финальная сумма с учётом сборов подтверждается на последнем шаге бронирования.<br>
+    «Мин. от Rimrock» — типовая оценка по карте, не проверялась живым маршрутом.<br>
+    Booking.com в этом радиусе почти сплошь сдаёт студии/1-спальные апартаменты с диван-кроватью под видом «вмещает 4» — реальных вариантов 2 спальни + 2 санузла там не нашлось.
+  </footer>
+</div>
+<script src="data.js"></script>
+<script>
+(function(){
+  document.getElementById('updated').textContent = (typeof UPDATED !== 'undefined') ? UPDATED : '';
+  const tbody = document.querySelector('#tbl tbody');
+  const state = { sortK: 'priceTotal', sortDir: 1 };
+
+  const platforms = [...new Set(DATA.map(d => d.platform).filter(Boolean))].sort();
+  const regions = [...new Set(DATA.map(d => d.region).filter(Boolean))].sort();
+  for (const p of platforms) fPlatform.insertAdjacentHTML('beforeend', `<option>${p}</option>`);
+  for (const r of regions) fRegion.insertAdjacentHTML('beforeend', `<option>${r}</option>`);
+
+  function matchPill(d){
+    if (d.match === 'full') return '<span class="pill p-good">✅ 2 сп / 2 с.у.</span>';
+    if (d.match === 'partial') return '<span class="pill p-warn">⚠️ 2 сп / 1 с.у.</span>';
+    if (d.match === 'no') return '<span class="pill p-bad">❌ не подходит</span>';
+    return '<span class="pill p-mut">❔ не проверено</span>';
+  }
+  function verifiedFlag(d){ return d.verified ? '✅' : '❔'; }
+  function houseFlag(d){ return d.isHouse ? '' : ' <span class="pill p-mut" title="не отдельный дом">не дом</span>'; }
+
+  function apply(){
+    const maxP=+fPrice.value;
+    priceOut.textContent='$'+maxP;
+    const q=fText.value.trim().toLowerCase();
+    let rows=DATA.filter(d=>{
+      if(d.priceTotal!=null&&d.priceTotal>maxP)return false;
+      if(fPlatform.value&&d.platform!==fPlatform.value)return false;
+      if(fRegion.value&&d.region!==fRegion.value)return false;
+      if(fMatch.value&&d.match!==fMatch.value)return false;
+      if(fVerified.checked&&!d.verified)return false;
+      if(q&&!((d.name||'')+' '+(d.region||'')+' '+(d.note||'')).toLowerCase().includes(q))return false;
+      return true;
+    });
+    const k=state.sortK, dir=state.sortDir;
+    rows.sort((a,b)=>{
+      const av=a[k], bv=b[k];
+      if(av==null&&bv==null)return 0; if(av==null)return 1; if(bv==null)return -1;
+      return (typeof av==='number'?av-bv:String(av).localeCompare(String(bv),'ru'))*dir;
+    });
+    count.textContent=`Показано ${rows.length} из ${DATA.length}`;
+    tbody.innerHTML=rows.map(d=>`<tr>
+      <td class="name">${verifiedFlag(d)} <a href="${d.url}" target="_blank" rel="noopener">${d.name}</a>${houseFlag(d)}</td>
+      <td>${d.platform}</td>
+      <td>${d.region||'—'}</td>
+      <td class="num">${d.driveMin!=null?d.driveMin+' мин':'—'}</td>
+      <td class="num">${d.priceTotal!=null?'$'+d.priceTotal.toLocaleString('en-us'):'—'}</td>
+      <td class="num">${d.perNight!=null?'$'+d.perNight:'—'}</td>
+      <td class="num">${d.bedrooms??'—'}</td>
+      <td class="num">${d.bathrooms??'—'}</td>
+      <td class="num">${d.rating!=null?d.rating+(d.reviews?` (${d.reviews})`:''):'—'}</td>
+      <td>${matchPill(d)}</td>
+      <td class="note">${d.note||''}</td>
+    </tr>`).join('');
+  }
+
+  function renderShort(){
+    const short = DATA.filter(d=>d.verified && (d.match==='full'||d.match==='partial')).sort((a,b)=>{
+      const order = {full:0, partial:1};
+      if (order[a.match]!==order[b.match]) return order[a.match]-order[b.match];
+      return a.priceTotal-b.priceTotal;
+    }).slice(0,4);
+    document.getElementById('short').innerHTML = short.map((d,i)=>`
+      <div class="card">
+        <div class="rank">#${i+1} · ${d.platform} · ${d.region}</div>
+        <h3><a href="${d.url}" target="_blank" rel="noopener">${d.name}</a></h3>
+        <div class="meta">${d.bedrooms} спальни · ${d.bathrooms} с.у. · ${d.driveMin} мин от Rimrock ${d.rating?('· ★'+d.rating+' ('+d.reviews+')'):'· без отзывов'}</div>
+        <div class="price">$${d.perNight}/ночь · $${d.priceTotal.toLocaleString('en-us')} за 19 ночей</div>
+        <div class="note">${matchPill(d)} ${d.note}</div>
+      </div>`).join('');
+  }
+
+  document.querySelectorAll('th[data-k]').forEach(th=>th.addEventListener('click',()=>{
+    const k=th.dataset.k;
+    if(state.sortK===k)state.sortDir*=-1;else{state.sortK=k;state.sortDir=1;}
+    document.querySelectorAll('th .arr').forEach(a=>a.textContent='');
+    th.querySelector('.arr').textContent=state.sortDir>0?'▲':'▼';
+    apply();
+  }));
+  ['input','change'].forEach(ev=>{
+    [fPrice,fPlatform,fRegion,fMatch,fVerified,fText].forEach(el=>el.addEventListener(ev,apply));
+  });
+  renderShort();
+  apply();
+})();
+</script>
+</body>
+</html>
