@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Life, after PathPal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single reading column (~68ch) that widens to screenshot "plates" with side captions on desktop; timestamps and source labels in mono, like the app itself. */
+:root{
+  --bg:#f2f6f1; --surface:#fbfdfa; --ink:#13271c; --muted:#56695e; --line:#d4e2d7;
+  --accent:#17804b; --accent-soft:#dcefe2; --car:#2a7cc0; --walk:#d0455b; --plane:#8a8417;
+  --display:"Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --body:"Figtree", "Helvetica Neue", system-ui, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --shadow:0 1px 2px rgba(19,39,28,.06), 0 8px 28px rgba(19,39,28,.08);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1712; --surface:#16211a; --ink:#e3eee6; --muted:#9db3a5; --line:#2a3a30;
+  --accent:#4cc584; --accent-soft:#1b3326; --car:#5aa6e6; --walk:#ef6f82; --plane:#c9c058;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 28px rgba(0,0,0,.35); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1712; --surface:#16211a; --ink:#e3eee6; --muted:#9db3a5; --line:#2a3a30;
+  --accent:#4cc584; --accent-soft:#1b3326; --car:#5aa6e6; --walk:#ef6f82; --plane:#c9c058;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 28px rgba(0,0,0,.35); color-scheme:dark}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+img{max-width:100%}
+[hidden]{display:none!important}
+body{background:var(--bg); color:var(--ink); font:400 17px/1.6 var(--body); margin:0}
+.wrap{max-width:1120px; margin:0 auto; padding-inline:clamp(16px,4vw,40px); padding-block:0 80px}
+h1,h2,h3{font-family:var(--display); text-wrap:balance; margin:0; letter-spacing:-.01em}
+h2{font-size:clamp(28px,3.6vw,40px); font-weight:800; line-height:1.1}
+h3{font-size:21px; font-weight:700; line-height:1.25}
+p{margin:0}
+.prose{max-width:66ch; display:grid; gap:14px}
+.eyebrow{font:500 12px/1.4 var(--mono); text-transform:uppercase; letter-spacing:.12em; color:var(--accent)}
+.muted{color:var(--muted)}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:4px}
+
+/* hero */
+.hero{padding-block:clamp(48px,8vw,96px) 40px; display:grid; gap:22px}
+.brand{display:flex; align-items:center; gap:10px; font:800 26px/1 var(--display); color:var(--accent)}
+.brand i{width:16px; height:20px; background:var(--accent); border-radius:50% 50% 50% 50%/60% 60% 40% 40%; transform:rotate(180deg); display:block}
+.hero h1{font-size:clamp(40px,6.4vw,76px); font-weight:800; line-height:1.02; max-width:16ch}
+.hero h1 em{font-style:normal; color:var(--accent)}
+.lede{font-size:clamp(18px,2vw,21px); max-width:60ch; color:var(--ink)}
+.sig{font:500 13px/1.5 var(--mono); color:var(--muted)}
+
+/* day strip ornament: a real day's 15-minute blocks */
+.strip{display:grid; grid-template-columns:repeat(96,1fr); gap:2px; height:22px; margin-top:8px; max-width:100%}
+.strip span{border-radius:2px}
+.legend{display:flex; flex-wrap:wrap; gap:6px 16px; font:400 12.5px/1.4 var(--mono); color:var(--muted)}
+.legend b{display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:6px; vertical-align:-1px}
+
+section{padding-block:56px 8px; display:grid; gap:28px; border-top:1px solid var(--line); margin-top:40px}
+.hero + section{margin-top:0}
+
+/* answers */
+.qa{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr)); gap:18px}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:24px; display:grid; gap:12px; align-content:start; min-width:0}
+.card .q{font:500 13px/1.5 var(--mono); color:var(--muted)}
+.card ul{margin:0; padding-left:20px; display:grid; gap:6px}
+
+/* plates: screenshot + caption */
+.plate{display:grid; grid-template-columns:minmax(0,1.75fr) minmax(0,1fr); gap:28px; align-items:start}
+.plate.tall{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
+.plate figure{margin:0; min-width:0}
+.shot{display:block; width:100%; padding:0; border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--surface); box-shadow:var(--shadow); cursor:zoom-in}
+.shot img{display:block; width:100%; height:auto}
+.cap{display:grid; gap:12px; min-width:0; position:sticky; top:calc(env(safe-area-inset-top,0px) + 20px)}
+.cap .tag{font:500 12px/1.4 var(--mono); color:var(--muted)}
+.gloss{display:grid; grid-template-columns:auto 1fr; gap:4px 12px; font-size:14.5px; margin:0}
+.gloss dt{font:500 13px/1.6 var(--mono); color:var(--muted); white-space:nowrap}
+.gloss dd{margin:0}
+.pair{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr)); gap:24px}
+.pair figure{margin:0; display:grid; gap:12px; min-width:0}
+.pair figcaption{font-size:15px; color:var(--muted)}
+.privacy{font:400 13px/1.5 var(--mono); color:var(--muted); background:var(--accent-soft); padding:10px 14px; border-radius:10px; max-width:66ch}
+
+/* numbers */
+.stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr)); gap:14px}
+.stat{border-top:2px solid var(--ink); padding-top:10px; display:grid; gap:2px}
+.stat b{font:800 34px/1.1 var(--display); font-variant-numeric:tabular-nums}
+.stat span{font-size:14px; color:var(--muted)}
+
+/* sources table */
+.tbl{overflow-x:auto; border:1px solid var(--line); border-radius:12px; background:var(--surface)}
+table{border-collapse:collapse; width:100%; min-width:640px; font-size:15px}
+th,td{text-align:left; padding:11px 16px; border-bottom:1px solid var(--line); vertical-align:top}
+th{font:500 12px/1.4 var(--mono); text-transform:uppercase; letter-spacing:.08em; color:var(--muted); background:var(--bg)}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:600; white-space:nowrap}
+.since{font:400 13px/1.6 var(--mono); color:var(--muted); white-space:nowrap; font-variant-numeric:tabular-nums}
+.gaps{display:grid; gap:10px; padding:0; margin:0; list-style:none}
+.gaps li{padding-left:22px; position:relative}
+.gaps li::before{content:""; position:absolute; left:0; top:.62em; width:10px; height:2px; background:var(--walk)}
+
+/* architecture */
+.flow{display:grid; grid-template-columns:minmax(0,1.3fr) auto minmax(0,1fr) auto minmax(0,1fr); gap:14px; align-items:stretch}
+.node{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:16px 18px; display:grid; gap:8px; align-content:start; min-width:0}
+.node h3{font-size:17px}
+.node ul{margin:0; padding:0; list-style:none; display:grid; gap:4px; font-size:14px}
+.node ul li{display:flex; justify-content:space-between; gap:10px}
+.node ul li i{font:normal 400 12px/1.6 var(--mono); color:var(--muted); text-align:right}
+.node.mid{border-color:var(--accent); background:var(--accent-soft)}
+.arrow{align-self:center; font:500 22px/1 var(--mono); color:var(--accent)}
+
+/* ideas */
+.ideas{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr)); gap:16px; counter-reset:idea}
+.idea{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:20px; display:grid; gap:8px; align-content:start; min-width:0}
+.idea p{font-size:15.5px; color:var(--muted)}
+.idea .why{font:400 12.5px/1.5 var(--mono); color:var(--accent)}
+
+.close{display:grid; gap:14px; max-width:66ch}
+footer{margin-top:56px; padding-top:20px; border-top:1px solid var(--line); font:400 13px/1.5 var(--mono); color:var(--muted)}
+
+/* lightbox */
+dialog{border:0; padding:0; background:transparent; max-width:96vw; max-height:94vh}
+dialog::backdrop{background:rgba(8,16,11,.82)}
+dialog img{display:block; max-width:96vw; max-height:94vh; width:auto; height:auto; border-radius:10px}
+dialog button{position:fixed; top:calc(env(safe-area-inset-top,0px) + 14px); right:16px; font:500 14px var(--mono); background:var(--surface); color:var(--ink); border:1px solid var(--line); border-radius:999px; padding:8px 14px; cursor:pointer}
+
+@media (max-width:860px){
+  .plate,.plate.tall{grid-template-columns:1fr}
+  .cap{position:static; order:-1}
+  .flow{grid-template-columns:1fr}
+  .arrow{justify-self:center; transform:rotate(90deg)}
+}
+@media (prefers-reduced-motion:no-preference){
+  .shot{transition:transform .2s ease, box-shadow .2s ease}
+  .shot:hover{transform:translateY(-2px)}
+}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="brand"><i aria-hidden="true"></i>life</div>
+  <p class="eyebrow">For Jennie and the PathPal team</p>
+  <h1>Location became one layer of <em>my whole chronicle</em></h1>
+  <p class="lede">Thank you for writing and asking real questions. I left after the export bug, and by then my goal had grown. I don't want an app that only shows where I was. I want one feed of my life: where I went, how I moved, what I did, who I talked to, what I ate, how I slept, what I read. So I built that for myself and called it Life. Here is how it works, with screenshots. I hope some of it is useful for PathPal.</p>
+  <p class="sig">Max Dzhabali · Vienna · October 2026</p>
+  <div aria-hidden="true">
+    <div class="strip" id="strip"></div>
+  </div>
+  <div class="legend" aria-label="Legend for the strip above: one real day in 15-minute blocks">
+    <span><b style="background:#2f6fd0"></b>Sleep 7 h</span>
+    <span><b style="background:#ec6a2c"></b>Work 9 h 45</span>
+    <span><b style="background:#1aa37a"></b>Practice 30 min</span>
+    <span><b style="background:#e5a419"></b>Learning 30 min</span>
+    <span><b style="background:#e57ea0"></b>People 1 h 15</span>
+    <span><b style="background:#1e7a2c"></b>Rest 15 min</span>
+    <span><b style="background:#4a3fae"></b>Video 2 h 30</span>
+    <span><b style="background:#d8414f"></b>Chores &amp; road 45 min</span>
+    <span><b style="background:var(--line)"></b>Not tracked 1 h 30</span>
+    <span>· 7 October 2026, built automatically</span>
+  </div>
+</header>
+
+<section id="answers">
+  <p class="eyebrow">Your two questions</p>
+  <div class="qa">
+    <article class="card">
+      <p class="q">What do you enjoy seeing most when you look back?</p>
+      <h3>The day itself, as a story</h3>
+      <p>Not routes or statistics on their own. I open a date and want to see the whole day: where I was, how I got there, the photos I took, the meetings in my calendar, what I wrote that evening. Movement stats are useful as totals for a week, month or year. And I love going back in time: "what was I doing on this date 1, 5, 10 years ago".</p>
+    </article>
+    <article class="card">
+      <p class="q">Why OwnTracks specifically?</p>
+      <h3>The points go straight to my own server</h3>
+      <ul>
+        <li>Every location point lands on my private server in real time. There is no export step that can break.</li>
+        <li>Open format. My scripts read the raw points and merge them with the rest of my data.</li>
+        <li>It sends the iPhone's own motion sensor (walking, car) and pedometer steps along with the points.</li>
+        <li>It is free and keeps working. I don't depend on support reply times.</li>
+      </ul>
+      <p class="muted">OwnTracks has no interface worth mentioning. That's fine: all the viewing happens in Life.</p>
+    </article>
+  </div>
+</section>
+
+<section id="day">
+  <p class="eyebrow">01 · A day</p>
+  <h2>One dashboard for the whole day</h2>
+  <p class="privacy">The app is in Russian, so each screenshot has an English key. Photos, diary text and addresses are blurred or replaced for privacy.</p>
+
+  <div class="plate">
+    <figure><button class="shot" type="button" aria-label="Enlarge: day overview"><img src="img/overview-top.jpg" alt="Day overview: a 15-minute strip of the day and tiles for sleep, meditation, steps, food, weight, screen time, meetings, tasks, photos and posts, each with a 7-day mini chart" loading="lazy" width="1060" height="830"></button></figure>
+    <div class="cap">
+      <p class="tag">Overview · 7 Oct 2026</p>
+      <h3>The day at a glance</h3>
+      <p>The top bar is the day in 15-minute blocks, colored by what I was doing. Below it are tiles, each with the last 7 days as a mini chart and a goal line.</p>
+      <dl class="gloss">
+        <dt>Сон</dt><dd>Sleep</dd>
+        <dt>Медитация</dt><dd>Meditation</dd>
+        <dt>Шаги</dt><dd>Steps, goal 10,000</dd>
+        <dt>Еда · Вес</dt><dd>Food · Weight</dd>
+        <dt>За компьютером</dt><dd>Screen time on the Mac</dd>
+        <dt>Встречи и звонки</dt><dd>Meetings and calls</dd>
+        <dt>Задачи · Фото</dt><dd>Tasks done · Photos</dd>
+      </dl>
+      <p class="muted">Steps sit on the main screen, no scrolling needed. That was one of my wishes for PathPal.</p>
+    </div>
+  </div>
+
+  <div class="plate">
+    <figure><button class="shot" type="button" aria-label="Enlarge: day timeline"><img src="img/overview-timeline.jpg" alt="Day timeline grouped by place (Home, Event venue), with time blocks for YouTube, TV series, sleep, iPhone apps, meditation, calendar events, a car ride with distance, and social posts with view counts" loading="lazy" width="1060" height="1000"></button></figure>
+    <div class="cap">
+      <p class="tag">Timeline · same day</p>
+      <h3>Places hold the day together</h3>
+      <p>The feed is grouped by place: "Дом" (Home) from midnight to 11:23, then the event venue. Inside each place, everything that happened there in order: what I watched, sleep, which iPhone apps I used, meditation, calendar events, a 2.5 km car ride, posts in our Telegram channel with their views.</p>
+      <p>This is the reason I don't need a separate location app. The place and the route are right there, next to everything else that happened.</p>
+    </div>
+  </div>
+</section>
+
+<section id="movement">
+  <p class="eyebrow">02 · Movement</p>
+  <h2>The part that replaced PathPal</h2>
+  <div class="prose">
+    <p>The "Движение" (Movement) tab has the same four zoom levels I used in PathPal: day, week, month, year. Distance or time, split by mode. Tap a bar and the day opens.</p>
+  </div>
+
+  <div class="plate tall">
+    <figure><button class="shot" type="button" aria-label="Enlarge: one day of movement"><img src="img/move-day.jpg" alt="Movement for 9 July 2026: 62 km total, 1.08 km on foot, 10,459 steps; a list of car and walking segments with times and distances between named stops; route on a blurred map; totals by mode" loading="lazy" width="1060" height="1770"></button></figure>
+    <div class="cap">
+      <p class="tag">Movement · Day · 9 Jul 2026, Melaka, Malaysia</p>
+      <h3>Segments, stops, steps</h3>
+      <p>Three numbers on top: total distance, distance on foot, steps from the iPhone pedometer. Then the day as alternating stops and segments: car 22 min · 16.3 km, walk 4 min · 0.5 km, and so on.</p>
+      <dl class="gloss">
+        <dt>Машина</dt><dd>Car</dd>
+        <dt>Пешком</dt><dd>On foot</dd>
+        <dt>Дом</dt><dd>Home, which on a trip means the hotel</dd>
+        <dt>≈</dt><dd>Mode guessed from speed, because no motion sensor data</dd>
+      </dl>
+      <p><b>No bicycle.</b> I never ride one, so the app has no bicycle mode. Anything faster than walking is a car. Planes show up as their own mode.</p>
+      <p class="muted">Stop names come in order of trust: my own names for places, then "Home" (detected from where I spend the nights), then map data.</p>
+    </div>
+  </div>
+
+  <div class="pair">
+    <figure>
+      <button class="shot" type="button" aria-label="Enlarge: one month of movement"><img src="img/move-month.jpg" alt="Movement for September 2026: 425 km total, 17.2 km on foot, 2,267 steps per day on average; daily bars; places on a blurred map; totals by mode" loading="lazy" width="1060" height="1238"></button>
+      <figcaption><b>Month · September 2026.</b> 425 km, 17.2 km on foot, 2,267 steps a day. The tracker ran 28 days out of 30. Most of the month I stayed in one place, so the bars start only on the 19th.</figcaption>
+    </figure>
+    <figure>
+      <button class="shot" type="button" aria-label="Enlarge: one year of movement"><img src="img/move-year.jpg" alt="Movement for 2025: 11,406 km total, 468 km on foot, 6,457 steps per day; monthly stacked bars for plane, car and walking; totals by mode" loading="lazy" width="1060" height="740"></button>
+      <figcaption><b>Year · 2025.</b> 11,406 km in total: 10,331 by car, 607 by plane, 468 on foot. 6,457 steps a day on average. The tracker recorded 337 days out of 365, and the header says so.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="more">
+  <p class="eyebrow">03 · Around movement</p>
+  <h2>Health, time, and going back in time</h2>
+
+  <div class="plate">
+    <figure><button class="shot" type="button" aria-label="Enlarge: health"><img src="img/health.jpg" alt="Health tab in the style of Apple Health: activity, body (weight, body fat, lean mass, BMI), gait (walking speed, step length, steadiness, asymmetry, double support), hearing and mindfulness, each with a sparkline" loading="lazy" width="1060" height="1150"></button></figure>
+    <div class="cap">
+      <p class="tag">Health</p>
+      <h3>Built like Apple Health</h3>
+      <p>Cards by group: activity, body, gait, hearing, mindfulness. Tap one for a chart over a week, month, 6 months, a year or all time.</p>
+      <p>Data comes from an Apple Health export plus a daily iOS Shortcut that sends fresh values to my server. Weight comes from a Bluetooth smart scale. For days before OwnTracks, steps come from Health.</p>
+    </div>
+  </div>
+
+  <div class="plate">
+    <figure><button class="shot" type="button" aria-label="Enlarge: time breakdown"><img src="img/chrono.jpg" alt="Time tab: a 24-hour donut chart of the day with 22 h 30 min classified, and bars by category: sleep 7 h, work 9 h 45 min, practice, learning, people, rest, video, chores and road" loading="lazy" width="1060" height="590"></button></figure>
+    <div class="cap">
+      <p class="tag">Time · same day</p>
+      <h3>Where the 24 hours went</h3>
+      <p>Every 15 minutes gets one category, chosen automatically from all sources. Road time comes from the movement data, sleep from my meditation tracker, work from the Mac and the calendar. On 7 October 22.5 of 24 hours were classified without me typing anything.</p>
+    </div>
+  </div>
+
+  <div class="plate">
+    <figure><button class="shot" type="button" aria-label="Enlarge: time machine"><img src="img/timemachine.jpg" alt="Time machine: 7 October in 2026, 2025, 2024, 2023 and 2022, each year with the city, photo count, a row of photos and a diary excerpt, all blurred" loading="lazy" width="1060" height="1380"></button></figure>
+    <div class="cap">
+      <p class="tag">Time machine · 7 October, every year</p>
+      <h3>This day, all the years</h3>
+      <p>One date across every year I have data for: the city, photos of that day, and what I wrote. Vienna in 2026, Belek in Turkey in 2024, Vienna again in 2022. One tap opens the full day.</p>
+      <p>This is what I meant by "going back in time" in my email.</p>
+    </div>
+  </div>
+
+  <div class="plate">
+    <figure><button class="shot" type="button" aria-label="Enlarge: archive coverage"><img src="img/archive.jpg" alt="Archive tab: a coverage ribbon from 2012 to 2026 for place, movement, diary, health, food, money, social, photos, calendar and time, plus a table of day counts per source" loading="lazy" width="1060" height="915"></button></figure>
+    <div class="cap">
+      <p class="tag">Archive</p>
+      <h3>What exists, and since when</h3>
+      <p>A ribbon from 2012 to today, one row per data type. It shows where the gaps are at a glance. The movement row starts on 8 August 2019. Those years come from my old MoveX export and my PathPal history, both imported. So years of PathPal data still live inside Life.</p>
+    </div>
+  </div>
+</section>
+
+<section id="numbers">
+  <p class="eyebrow">04 · Scale</p>
+  <h2>What's in it today</h2>
+  <div class="stats">
+    <div class="stat"><b>3,465</b><span>days with places, since 2012</span></div>
+    <div class="stat"><b>1,958</b><span>days with movement, since Aug 2019</span></div>
+    <div class="stat"><b>3,498</b><span>days with health data, since 2017</span></div>
+    <div class="stat"><b>3,823</b><span>days with photos</span></div>
+    <div class="stat"><b>5,027</b><span>days with calendar events</span></div>
+  </div>
+</section>
+
+<section id="sources">
+  <p class="eyebrow">05 · Sources</p>
+  <h2>What it pulls in, and what it doesn't</h2>
+  <p class="prose">Nothing is typed in by hand. Everything below is collected on its own every few minutes or once a day.</p>
+  <div class="tbl">
+    <table>
+      <thead><tr><th>Layer</th><th>Where it comes from</th><th>Since</th></tr></thead>
+      <tbody>
+        <tr><td>Location &amp; movement</td><td>OwnTracks on the iPhone → my server. Mode from the iPhone motion sensor, steps from its pedometer. History imported from PathPal and MoveX.</td><td class="since">2019 · live since Sep 2026</td></tr>
+        <tr><td>Places before 2019</td><td>Locations of geotagged photos</td><td class="since">2012</td></tr>
+        <tr><td>Photos &amp; videos</td><td>My own photo server (Immich), including scanned family albums</td><td class="since">2012</td></tr>
+        <tr><td>Calendar</td><td>Apple Calendar (iCloud + Google)</td><td class="since">2012</td></tr>
+        <tr><td>Calls &amp; meetings</td><td>Zoom recordings, Telegram calls, iPhone and FaceTime call history</td><td class="since">—</td></tr>
+        <tr><td>Screen</td><td>Mac apps and websites (ActivityWatch, browser history), iPhone Screen Time</td><td class="since">—</td></tr>
+        <tr><td>Health</td><td>Apple Health export + a daily iOS Shortcut; smart scale over Bluetooth</td><td class="since">2017</td></tr>
+        <tr><td>Food</td><td>A Telegram bot where I log meals with photos; earlier, a chat with my nutritionist</td><td class="since">2022</td></tr>
+        <tr><td>Money</td><td>My family finance spreadsheet, filled from bank exports</td><td class="since">2026</td></tr>
+        <tr><td>Diary</td><td>Evening voice notes, handwritten retreat diaries, old notes from Evernote and Workflowy</td><td class="since">2013</td></tr>
+        <tr><td>Tasks</td><td>My task list: every checked box with its time</td><td class="since">—</td></tr>
+        <tr><td>Content</td><td>Kindle highlights, YouTube, series and films, music and podcasts on the iPhone</td><td class="since">—</td></tr>
+        <tr><td>Social</td><td>My own posts and their view counts</td><td class="since">2012</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>What it doesn't capture</h3>
+    <ul class="gaps">
+      <li>No heart rate and no sleep stages: I don't wear an Apple Watch.</li>
+      <li>For old PathPal history there is no motion sensor data, so the mode is guessed from speed and marked "≈".</li>
+      <li>When the Mac is asleep, the page shows the last data it sent. Most sources are physically on the Mac.</li>
+      <li>Some of every day stays "not tracked", usually 1–2 hours.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="how">
+  <p class="eyebrow">06 · How it's built</p>
+  <h2>Collected on my Mac, shown from my server</h2>
+  <div class="flow" role="img" aria-label="Diagram: sources on the iPhone, Mac and servers flow into a collector on the Mac every 5 minutes, which writes one file per day and sends it to a private server; the web app on the server is opened on the Mac and the iPhone">
+    <div class="node">
+      <p class="eyebrow">Sources</p>
+      <ul>
+        <li>OwnTracks points <i>iPhone → server</i></li>
+        <li>Screen Time, calls <i>iPhone → iCloud</i></li>
+        <li>Health Shortcut <i>iPhone → server</i></li>
+        <li>Calendar, Zoom, apps <i>Mac</i></li>
+        <li>Photos <i>Immich</i></li>
+        <li>Food, scale, Kindle <i>Mac mini bots</i></li>
+        <li>Notes, diary, tasks <i>text files</i></li>
+      </ul>
+    </div>
+    <div class="arrow" aria-hidden="true">→</div>
+    <div class="node mid">
+      <p class="eyebrow">Collector</p>
+      <h3>Every 5 minutes</h3>
+      <p style="font-size:14.5px">A background app on the Mac rebuilds today and yesterday into one file per day: places, segments, steps, events, photos, time blocks.</p>
+    </div>
+    <div class="arrow" aria-hidden="true">→</div>
+    <div class="node">
+      <p class="eyebrow">Viewer</p>
+      <h3>Private web app</h3>
+      <p style="font-size:14.5px">Day files go to my own server. The page there only displays them. On the iPhone it lives on the Home Screen like an app, behind a password.</p>
+    </div>
+  </div>
+  <p class="prose muted">I build Life together with an AI coding assistant (Claude Code). The version history starts on 27 September 2026, and today it is v1.54. When a feature is missing, I add it the same day.</p>
+</section>
+
+<section id="ideas">
+  <p class="eyebrow">07 · For your roadmap</p>
+  <h2>Ideas from one long-time user</h2>
+  <p class="prose">You asked what PathPal could do better. These are the things I ended up building for myself. Take whatever is useful.</p>
+  <div class="ideas">
+    <article class="idea"><h3>Steps on the main screen</h3><p>Next to distance, not below the fold. Daily average and total for week, month and year.</p><p class="why">Built in Life: top row of every Movement view</p></article>
+    <article class="idea"><h3>Choose your modes once</h3><p>Let me remove modes I never use, like cycling. Then every misdetection is fixed for good, not one trip at a time.</p><p class="why">Built in Life: no bicycle, faster than walking = car</p></article>
+    <article class="idea"><h3>On this day</h3><p>The same date across all years: city, distance, route. PathPal already has years of data per user. This makes it come alive.</p><p class="why">Built in Life: Time machine</p></article>
+    <article class="idea"><h3>Photos on the timeline</h3><p>Show the photos from the camera roll at the place and time they were taken. A stop with a photo is remembered. A stop without one is just a pin.</p><p class="why">Built in Life: photos inside each place</p></article>
+    <article class="idea"><h3>Continuous export</h3><p>A setting that sends every point to the user's own URL or an iCloud folder as it happens. A big one-time export is fragile. The export bug is what made me leave.</p><p class="why">Why I chose OwnTracks</p></article>
+    <article class="idea"><h3>Import from other apps</h3><p>Let new users bring their history from Moves, MoveX, Google Timeline or Arc. I merged two other apps' history into one line myself.</p><p class="why">Built in Life: MoveX + PathPal history</p></article>
+    <article class="idea"><h3>Calendar and Health in the day</h3><p>Read-only, on the timeline: "11:23 car to the café, 15:30 the event in my calendar". Location makes sense next to what it was for.</p><p class="why">Built in Life: the day feed</p></article>
+    <article class="idea"><h3>My names for places</h3><p>Let me name a place once ("Mom's", "the studio") and use that name everywhere. Detect Home from where I spend the nights, also on trips.</p><p class="why">Built in Life: own names → Home → map data</p></article>
+    <article class="idea"><h3>Show coverage</h3><p>Show which days have data and which don't, and how confident the mode is. I trust a tracker more when it is open about its gaps.</p><p class="why">Built in Life: Archive ribbon, "≈" marks</p></article>
+  </div>
+</section>
+
+<section id="thanks">
+  <div class="close">
+    <h2>Thank you</h2>
+    <p>PathPal was my life log for years, and its history is still part of this one. Thank you for supporting it and for asking. If a short call would help your team, I'm happy to show Life live.</p>
+    <p class="sig">— Max</p>
+  </div>
+</section>
+
+<footer>Life v1.54 · screenshots taken 8 October 2026 · personal details blurred</footer>
+</div>
+
+<dialog id="lb" aria-label="Screenshot"><button type="button" id="lbx">Close ✕</button><img id="lbimg" alt=""></dialog>
+
+<script>
+// 96 real 15-minute blocks of 7 Oct 2026 (s sleep, w work, p practice, l learning, c people, r rest, v video, h chores/road, n not tracked)
+const day = "lvvvwwssssssssssssssssssssssscccvvrnnpplwwwwwhhwwwwwwwwwwwwwwwwwwwnnwwwwwwwnnhcwwvvvwvvwwcwsssss";
+const col = {s:'#2f6fd0',w:'#ec6a2c',p:'#1aa37a',l:'#e5a419',c:'#e57ea0',r:'#1e7a2c',v:'#4a3fae',h:'#d8414f',n:'var(--line)'};
+const strip = document.getElementById('strip');
+[...day.padEnd(96,'s').slice(0,96)].forEach(k => { const s = document.createElement('span'); s.style.background = col[k]; strip.appendChild(s); });
+
+const lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg');
+document.querySelectorAll('.shot').forEach(b => b.addEventListener('click', () => {
+  const i = b.querySelector('img'); lbimg.src = i.src; lbimg.alt = i.alt;
+  if (lb.showModal) lb.showModal();
+}));
+document.getElementById('lbx').addEventListener('click', () => lb.close());
+lb.addEventListener('click', e => { if (e.target === lb || e.target === lbimg) lb.close(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   НОЧНОЕ СТЕКЛО — авторский стиль Максима Джабали (утверждён 08.10.2026)
+   Чёрный фон, светящиеся цветные пятна под тёмным стеклом (Apple Liquid Glass ночью),
+   разноцветные акценты — системные цвета Apple, тонкий острый Geologica.
+   Подключение: скопировать файл в папку страницы и <link rel="stylesheet" href="night-glass.css">,
+   шрифты — см. template.html. Описание и правила — README.md рядом.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root{
+  /* поверхность */
+  --bg:#050507;
+  --ink:#f5f5f7;          /* основной текст */
+  --ink2:#a1a1aa;         /* второстепенный */
+  --ink3:#6b6b75;         /* подписи, оси */
+  --glass:rgba(255,255,255,.07);
+  --glass-hi:rgba(255,255,255,.12);
+  --edge:rgba(255,255,255,.16);
+  --line:rgba(255,255,255,.08);
+
+  /* акценты — системные цвета Apple; у каждого раздела/метрики свой */
+  --red:#ff3b30; --orange:#ff9500; --yellow:#ffcc00; --green:#34c759; --mint:#00c7be;
+  --teal:#30b0c7; --cyan:#32ade6; --blue:#007aff; --indigo:#5856d6; --purple:#af52de; --pink:#ff2d55;
+  --accent:var(--mint);   /* фирменный акцент: метки, логотип, ссылки */
+
+  /* шрифты */
+  --font:"Geologica", -apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* геометрия */
+  --r-lg:24px; --r-md:16px; --r-sm:10px;
+  --wrap:1080px;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+body{margin:0; background:var(--bg); color:var(--ink); font:300 17px/1.6 var(--font); font-variation-settings:"SHRP" 0; overflow-x:hidden}
+img{max-width:100%; height:auto}
+h1,h2,h3,h4,p,figure{margin:0}
+h1,h2,h3{text-wrap:balance; font-variation-settings:"SHRP" 100}
+a{color:var(--accent); text-underline-offset:3px}
+::selection{background:color-mix(in srgb, var(--accent) 40%, transparent)}
+:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:6px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+
+/* ── фон: светящиеся пятна, закреплены за контентом ── */
+.orbs{position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden}
+.orbs i{position:absolute; border-radius:50%; filter:blur(70px); opacity:.7}
+.orbs i:nth-child(1){width:560px; height:560px; left:-180px; top:-140px; background:radial-gradient(circle, var(--indigo), transparent 65%)}
+.orbs i:nth-child(2){width:480px; height:480px; right:-160px; top:24vh; background:radial-gradient(circle, var(--pink), transparent 65%)}
+.orbs i:nth-child(3){width:460px; height:460px; left:28%; bottom:-240px; background:radial-gradient(circle, var(--mint), transparent 65%)}
+.orbs i:nth-child(4){width:320px; height:320px; right:20%; top:-100px; background:radial-gradient(circle, var(--orange), transparent 65%); opacity:.5}
+
+/* ── каркас ── */
+.page{position:relative; z-index:1; max-width:var(--wrap); margin:0 auto; padding-inline:16px; padding-block:20px 80px; display:grid; gap:28px}
+.section{display:grid; gap:20px; padding-top:36px}
+.prose{max-width:66ch; display:grid; gap:14px}
+
+/* ── стекло ── */
+.glass{position:relative; background:var(--glass); border:1px solid var(--edge); border-radius:var(--r-lg);
+  backdrop-filter:blur(30px) saturate(160%); -webkit-backdrop-filter:blur(30px) saturate(160%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18), inset 0 0 0 1px rgba(255,255,255,.02), 0 30px 80px rgba(0,0,0,.5)}
+.glass::after{content:""; position:absolute; left:12%; right:12%; top:-1px; height:1px; pointer-events:none;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.7), transparent)}
+.pad{padding:20px}
+
+/* ── навигация (плавающая капсула) ── */
+.nav{position:sticky; top:calc(env(safe-area-inset-top,0px) + 12px); z-index:10; display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:8px 8px 8px 18px; border-radius:999px}
+.logo{display:flex; align-items:center; gap:9px; font-weight:700; font-size:18px; letter-spacing:.01em; color:var(--ink); text-decoration:none; font-variation-settings:"SHRP" 100}
+.logo i{width:10px; height:10px; border-radius:50%; background:var(--accent); box-shadow:0 0 14px var(--accent), 0 0 2px #fff}
+.nav .links{display:flex; gap:2px; flex-wrap:wrap}
+.nav .links a{color:var(--ink2); text-decoration:none; padding:8px 14px; border-radius:999px; font-size:14.5px; font-weight:400}
+.nav .links a:hover{color:var(--ink); background:rgba(255,255,255,.06)}
+.nav .links a[aria-current]{color:var(--ink); background:var(--glass-hi)}
+@media (max-width:760px){ .nav .links{display:none} }
+
+/* ── типографика ── */
+.label{font:500 12px/1.3 var(--mono); letter-spacing:.12em; text-transform:uppercase; color:var(--accent)}
+h1, .h1{font-weight:300; font-size:clamp(40px,7.4vw,88px); line-height:1; letter-spacing:-.035em; max-width:14ch}
+h1 strong, .h1 strong{font-weight:700; color:#fff}
+h2{font-weight:300; font-size:clamp(28px,4vw,44px); line-height:1.08; letter-spacing:-.025em}
+h2 strong{font-weight:700}
+h3{font-weight:500; font-size:19px; line-height:1.3; letter-spacing:-.01em}
+.lede{font-size:clamp(17px,2vw,20px); color:var(--ink2); max-width:54ch}
+.muted{color:var(--ink2)}
+.small{font-size:14px; color:var(--ink2)}
+.hero{display:grid; gap:16px; padding-block:48px 12px}
+
+/* ── кнопки ── */
+.btns{display:flex; gap:10px; flex-wrap:wrap}
+.btn{display:inline-flex; align-items:center; gap:8px; font:600 15.5px/1 var(--font); padding:14px 22px; border-radius:999px; text-decoration:none; border:0; cursor:pointer; transition:transform .15s ease, background .15s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn.solid{background:#fff; color:#000}
+.btn.gl{background:rgba(255,255,255,.08); color:var(--ink); border:1px solid var(--edge); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px)}
+.btn.gl:hover{background:var(--glass-hi)}
+
+/* ── метрики: число светится своим цветом (--c) ── */
+.stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr)); gap:14px}
+.stat{--c:var(--accent); display:grid; gap:4px; padding:20px; border-radius:22px; min-width:0}
+.stat .k{font-size:13px; color:var(--ink2); text-transform:uppercase; letter-spacing:.08em; font-weight:400}
+.stat .n{font-weight:600; font-size:clamp(34px,4vw,46px); line-height:1.05; letter-spacing:-.03em; color:var(--c); font-variant-numeric:tabular-nums;
+  text-shadow:0 0 28px color-mix(in srgb, var(--c) 55%, transparent); font-variation-settings:"SHRP" 100}
+.stat .u{font-size:14px; color:var(--ink2)}
+
+/* ── список-строки с иконками (как Настройки iOS, ночью) ── */
+.list{display:grid; overflow:hidden}
+.row{display:grid; grid-template-columns:auto 1fr auto; gap:14px; align-items:center; padding:13px 16px; min-width:0; color:inherit; text-decoration:none}
+a.row:hover{background:rgba(255,255,255,.04)}
+.row + .row{border-top:1px solid var(--line)}
+.row h3{font-size:16px; font-weight:500}
+.row p{font-size:14px; color:var(--ink2)}
+.chev{color:var(--ink3); font-size:20px}
+.ic{--c:var(--accent); width:34px; height:34px; border-radius:9px; display:grid; place-items:center; color:var(--c);
+  border:1px solid color-mix(in srgb, var(--c) 60%, transparent);
+  box-shadow:0 0 16px color-mix(in srgb, var(--c) 35%, transparent), inset 0 0 10px color-mix(in srgb, var(--c) 20%, transparent)}
+.ic svg{width:19px; height:19px}
+
+/* ── уведомление / выноска ── */
+.notif{display:grid; gap:8px; padding:16px 18px}
+.notif .top{display:flex; align-items:center; gap:8px; font-size:13px; color:var(--ink2)}
+.notif .top time{margin-left:auto}
+.notif h3{font-size:16px; font-weight:600}
+.notif p{font-size:14.5px; color:var(--ink2)}
+
+/* ── метки-капсулы ── */
+.chip{--c:var(--accent); justify-self:start; width:max-content; display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:500; padding:5px 11px; border-radius:999px;
+  color:var(--c); background:color-mix(in srgb, var(--c) 14%, transparent); border:1px solid color-mix(in srgb, var(--c) 35%, transparent)}
+.chip b{width:7px; height:7px; border-radius:50%; background:var(--c); box-shadow:0 0 8px var(--c)}
+
+/* ── полоса долей ── */
+.bar{display:flex; height:10px; border-radius:999px; overflow:hidden; gap:2px}
+.bar span{display:block}
+
+/* ── сетки ── */
+.duo{display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); gap:14px; align-items:start}
+.cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr)); gap:14px}
+.card{display:grid; gap:10px; padding:22px; align-content:start; min-width:0}
+@media (max-width:760px){ .duo{grid-template-columns:1fr} }
+
+/* ── текст статьи ── */
+.prose ul,.prose ol{margin:0; padding-left:22px; display:grid; gap:6px}
+.prose blockquote{margin:0; padding:4px 0 4px 18px; border-left:2px solid var(--accent); color:var(--ink)}
+code{font:400 .9em var(--mono); background:var(--glass-hi); padding:2px 6px; border-radius:6px}
+
+/* ── таблица ── */
+.tbl{overflow-x:auto}
+table{border-collapse:collapse; width:100%; min-width:560px; font-size:15px}
+th,td{text-align:left; padding:12px 16px; border-bottom:1px solid var(--line); vertical-align:top}
+th{font:500 12px/1.4 var(--mono); text-transform:uppercase; letter-spacing:.08em; color:var(--ink3)}
+tr:last-child td{border-bottom:0}
+td.num,th.num{font-variant-numeric:tabular-nums; text-align:right}
+
+/* ── скриншоты и фото ── */
+.shot{display:block; width:100%; padding:0; border:1px solid var(--edge); border-radius:var(--r-md); overflow:hidden; background:#0c0c10; box-shadow:0 20px 60px rgba(0,0,0,.55)}
+.shot img{display:block; width:100%}
+figcaption{font-size:14px; color:var(--ink2); margin-top:10px}
+
+/* ── подвал ── */
+.foot{margin-top:40px; padding-top:20px; border-top:1px solid var(--line); font:400 12.5px/1.5 var(--mono); color:var(--ink3)}

@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Стиль Макса — пробник</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=Geologica:wght,SHRP@300..800,0..100&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Пробник авторского стиля: три характера в духе Apple Liquid Glass на одном материале (Life). Каждый вариант — свой мир со своими токенами. */
+:root{
+  /* системные цвета Apple — общий набор акцентов для всех трёх вариантов */
+  --red:#ff3b30; --orange:#ff9500; --yellow:#ffcc00; --green:#34c759; --mint:#00c7be;
+  --teal:#30b0c7; --cyan:#32ade6; --blue:#007aff; --indigo:#5856d6; --purple:#af52de; --pink:#ff2d55;
+  --sf:-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Onest", system-ui, sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+body{margin:0; background:#f4f5f8; color:#111; font:400 16px/1.5 var(--sf)}
+img{max-width:100%}
+a{color:inherit}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{text-wrap:balance}
+:focus-visible{outline:2px solid var(--blue); outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+
+/* ── переключатель вариантов: сам по себе образец стекла ── */
+.switch{position:fixed; z-index:50; left:50%; transform:translateX(-50%);
+  bottom:calc(env(safe-area-inset-bottom,0px) + 16px); display:flex; gap:4px; padding:5px;
+  border-radius:999px; background:rgba(255,255,255,.55); backdrop-filter:blur(22px) saturate(180%); -webkit-backdrop-filter:blur(22px) saturate(180%);
+  border:1px solid rgba(255,255,255,.7); box-shadow:inset 0 1px 0 rgba(255,255,255,.9), 0 12px 40px rgba(0,0,0,.18); max-width:calc(100vw - 32px)}
+.switch a{font:600 14px/1 var(--sf); text-decoration:none; padding:11px 16px; border-radius:999px; color:#1c1c1e; white-space:nowrap}
+.switch a:hover{background:rgba(0,0,0,.06)}
+.switch a b{display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:7px; vertical-align:1px}
+
+.intro{max-width:760px; margin:0 auto; padding:56px 16px 40px; display:grid; gap:12px}
+.intro h1{font:800 clamp(30px,5vw,46px)/1.05 var(--sf); letter-spacing:-.03em}
+.intro p{font-size:17px; color:#3a3a3c; max-width:62ch}
+.intro .tag{font:500 12px/1 "JetBrains Mono", ui-monospace, monospace; letter-spacing:.1em; text-transform:uppercase; color:#8e8e93}
+
+/* общий каркас варианта */
+.v{position:relative; overflow:hidden; padding-inline:16px; padding-block:28px 96px}
+.v .in{position:relative; z-index:1; max-width:1080px; margin:0 auto; display:grid; gap:22px}
+.v .label{font:500 12px/1 "JetBrains Mono", ui-monospace, monospace; letter-spacing:.12em; text-transform:uppercase}
+.nav{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap}
+.nav .links{display:flex; gap:2px; flex-wrap:wrap}
+.nav .links a{text-decoration:none; padding:8px 14px; border-radius:999px; font-size:14.5px; font-weight:500}
+.hero{display:grid; gap:16px; padding-block:40px 18px}
+.btns{display:flex; gap:10px; flex-wrap:wrap; margin-top:6px}
+.btn{font-weight:600; font-size:15.5px; padding:13px 22px; border-radius:999px; text-decoration:none; border:0; cursor:pointer; display:inline-flex; align-items:center; gap:8px}
+.stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr)); gap:14px}
+.stat{display:grid; gap:4px; padding:20px; min-width:0}
+.stat .n{font-variant-numeric:tabular-nums}
+.duo{display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); gap:14px; align-items:start}
+.list{display:grid}
+.row{display:grid; grid-template-columns:auto 1fr auto; gap:14px; align-items:center; padding:12px 16px; min-width:0}
+.row p{font-size:14px}
+.ic{width:34px; height:34px; border-radius:9px; display:grid; place-items:center; color:#fff}
+.ic svg{width:19px; height:19px}
+.chev{opacity:.35; font-size:20px}
+.notif{display:grid; gap:8px; padding:16px 18px}
+.notif .top{display:flex; align-items:center; gap:8px; font-size:13px}
+.notif .top .ic{width:22px; height:22px; border-radius:6px}
+.notif .top .ic svg{width:13px; height:13px}
+.notif .top time{margin-left:auto}
+.bar{display:flex; height:10px; border-radius:999px; overflow:hidden; gap:2px}
+.bar span{display:block}
+@media (max-width:760px){ .duo{grid-template-columns:1fr} .nav .links{display:none} }
+
+/* ═════════ A · УТРЕННЕЕ СТЕКЛО ═════════ светлый, яркая «сетка» цветов под матовым стеклом, Onest */
+.va{--ink:#0d0f14; --ink2:#454b57; --glass:rgba(255,255,255,.42); --edge:rgba(255,255,255,.75);
+  background:#eef0f6; color:var(--ink); font-family:"Onest", var(--sf)}
+.va .mesh{position:absolute; inset:-10%; z-index:0; filter:blur(60px) saturate(140%); opacity:.9}
+.va .mesh i{position:absolute; border-radius:50%; animation:drift 22s ease-in-out infinite alternate}
+.va .mesh i:nth-child(1){width:46vw; height:46vw; left:-6vw; top:2%; background:var(--cyan)}
+.va .mesh i:nth-child(2){width:40vw; height:40vw; right:-4vw; top:-4%; background:var(--pink); animation-delay:-6s}
+.va .mesh i:nth-child(3){width:38vw; height:38vw; left:30vw; top:38%; background:var(--yellow); animation-delay:-11s}
+.va .mesh i:nth-child(4){width:34vw; height:34vw; right:6vw; bottom:-6%; background:var(--indigo); animation-delay:-3s}
+.va .mesh i:nth-child(5){width:30vw; height:30vw; left:-4vw; bottom:0; background:var(--green); animation-delay:-15s}
+@keyframes drift{to{transform:translate(4vw,3vh) scale(1.08)}}
+.va .glass{background:var(--glass); backdrop-filter:blur(26px) saturate(170%); -webkit-backdrop-filter:blur(26px) saturate(170%);
+  border:1px solid var(--edge); border-radius:26px; position:relative;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 0 rgba(255,255,255,.25), 0 1px 2px rgba(13,15,20,.05), 0 16px 44px rgba(13,15,20,.10)}
+.va .glass::before{content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+  background:linear-gradient(135deg, rgba(255,255,255,.55), rgba(255,255,255,0) 38%, rgba(255,255,255,0) 70%, rgba(255,255,255,.25))}
+.va .nav{padding:8px 8px 8px 18px; border-radius:999px}
+.va .logo{font-weight:800; font-size:19px; letter-spacing:-.02em; display:flex; align-items:center; gap:8px}
+.va .logo i{width:22px; height:22px; border-radius:7px; background:conic-gradient(from 200deg, var(--blue), var(--purple), var(--pink), var(--orange), var(--yellow), var(--green), var(--cyan), var(--blue))}
+.va .links a:hover{background:rgba(255,255,255,.6)}
+.va .links a[aria-current]{background:#fff; box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.va .label{color:var(--ink2)}
+.va h1{font-weight:800; font-size:clamp(44px,8vw,96px); line-height:.95; letter-spacing:-.045em; max-width:12ch}
+.va h1 span{background:linear-gradient(90deg, var(--blue), var(--purple) 45%, var(--pink)); -webkit-background-clip:text; background-clip:text; color:transparent}
+.va .lede{font-size:clamp(17px,2vw,20px); color:var(--ink2); max-width:52ch}
+.va .btn.solid{background:var(--ink); color:#fff}
+.va .btn.gl{background:rgba(255,255,255,.55); color:var(--ink); border:1px solid var(--edge); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px)}
+.va .stat .k{font-size:14px; font-weight:600; display:flex; align-items:center; gap:7px}
+.va .stat .k b{width:9px; height:9px; border-radius:50%}
+.va .stat .n{font-weight:800; font-size:clamp(34px,4vw,44px); letter-spacing:-.035em; line-height:1.05}
+.va .stat .u{font-size:14px; color:var(--ink2)}
+.va .row + .row{border-top:1px solid rgba(13,15,20,.07)}
+.va .row h3{font-size:16px; font-weight:600}
+.va .row p{color:var(--ink2)}
+.va .notif .top{color:var(--ink2)}
+.va .notif h3{font-size:16px; font-weight:700}
+.va .notif p{font-size:14.5px; color:var(--ink2)}
+
+/* ═════════ B · НОЧНОЕ СТЕКЛО ═════════ чёрный, светящиеся цвета под тёмным стеклом, Geologica с острым росчерком */
+.vb{--ink:#f5f5f7; --ink2:#a1a1aa; --glass:rgba(255,255,255,.07); --edge:rgba(255,255,255,.16);
+  background:#050507; color:var(--ink); font-family:"Geologica", var(--sf); font-variation-settings:"SHRP" 0}
+.vb .orb{position:absolute; z-index:0; border-radius:50%; filter:blur(70px); opacity:.75}
+.vb .o1{width:520px; height:520px; left:-160px; top:-120px; background:radial-gradient(circle, var(--indigo), transparent 65%)}
+.vb .o2{width:460px; height:460px; right:-140px; top:200px; background:radial-gradient(circle, var(--pink), transparent 65%)}
+.vb .o3{width:420px; height:420px; left:30%; bottom:-200px; background:radial-gradient(circle, var(--mint), transparent 65%)}
+.vb .o4{width:300px; height:300px; right:22%; top:-80px; background:radial-gradient(circle, var(--orange), transparent 65%); opacity:.55}
+.vb .glass{background:var(--glass); backdrop-filter:blur(30px) saturate(160%); -webkit-backdrop-filter:blur(30px) saturate(160%);
+  border:1px solid var(--edge); border-radius:24px; position:relative;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18), inset 0 0 0 1px rgba(255,255,255,.02), 0 30px 80px rgba(0,0,0,.5)}
+.vb .glass::after{content:""; position:absolute; left:12%; right:12%; top:-1px; height:1px; pointer-events:none;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.7), transparent)}
+.vb .nav{padding:8px 8px 8px 18px; border-radius:999px}
+.vb .logo{font-weight:700; font-size:18px; letter-spacing:.01em; display:flex; align-items:center; gap:9px; font-variation-settings:"SHRP" 100}
+.vb .logo i{width:10px; height:10px; border-radius:50%; background:var(--mint); box-shadow:0 0 14px var(--mint), 0 0 2px #fff}
+.vb .links a{color:var(--ink2)}
+.vb .links a:hover{color:var(--ink); background:rgba(255,255,255,.06)}
+.vb .links a[aria-current]{color:var(--ink); background:rgba(255,255,255,.12)}
+.vb .label{color:var(--mint)}
+.vb h1{font-weight:300; font-size:clamp(42px,7.4vw,88px); line-height:1; letter-spacing:-.035em; max-width:13ch; font-variation-settings:"SHRP" 100}
+.vb h1 strong{font-weight:700; color:#fff}
+.vb .lede{font-size:clamp(17px,2vw,19px); color:var(--ink2); max-width:52ch; font-weight:300}
+.vb .btn.solid{background:#fff; color:#000}
+.vb .btn.gl{background:rgba(255,255,255,.08); color:var(--ink); border:1px solid var(--edge); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px)}
+.vb .stat{border-radius:22px}
+.vb .stat .k{font-size:13px; color:var(--ink2); text-transform:uppercase; letter-spacing:.08em}
+.vb .stat .n{font-weight:600; font-size:clamp(34px,4vw,46px); letter-spacing:-.03em; line-height:1.05; color:var(--c); text-shadow:0 0 28px color-mix(in srgb, var(--c) 55%, transparent); font-variation-settings:"SHRP" 100}
+.vb .stat .u{font-size:14px; color:var(--ink2); font-weight:300}
+.vb .row + .row{border-top:1px solid rgba(255,255,255,.07)}
+.vb .row h3{font-size:16px; font-weight:500}
+.vb .row p{color:var(--ink2); font-weight:300}
+.vb .ic{background:transparent!important; border:1px solid color-mix(in srgb, var(--c) 60%, transparent); color:var(--c); box-shadow:0 0 16px color-mix(in srgb, var(--c) 35%, transparent), inset 0 0 10px color-mix(in srgb, var(--c) 20%, transparent)}
+.vb .notif .top{color:var(--ink2)}
+.vb .notif h3{font-size:16px; font-weight:600}
+.vb .notif p{font-size:14.5px; color:var(--ink2); font-weight:300}
+
+/* ═════════ C · КАПСУЛЫ ═════════ белая тишина, стекло только у плавающих панелей, цвет — в капсулах и цифрах, системный SF */
+.vc{--ink:#1d1d1f; --ink2:#6e6e73; --line:#e8e8ed; background:#fff; color:var(--ink); font-family:var(--sf)}
+.vc .in{gap:28px}
+.vc .nav{position:sticky; top:12px; z-index:3; padding:6px 6px 6px 18px; border-radius:999px;
+  background:rgba(255,255,255,.62); backdrop-filter:blur(24px) saturate(180%); -webkit-backdrop-filter:blur(24px) saturate(180%);
+  border:1px solid rgba(0,0,0,.06); box-shadow:0 8px 30px rgba(0,0,0,.08), inset 0 1px 0 #fff}
+.vc .logo{font-weight:700; font-size:18px; letter-spacing:-.02em; display:flex; gap:3px; align-items:center}
+.vc .logo i{width:7px; height:18px; border-radius:4px}
+.vc .logo span{margin-left:6px}
+.vc .links a:hover{background:#f2f2f7}
+.vc .links a[aria-current]{background:var(--ink); color:#fff}
+.vc .label{color:var(--ink2)}
+.vc h1{font-weight:700; font-size:clamp(44px,8vw,92px); line-height:.98; letter-spacing:-.045em; max-width:13ch}
+.vc h1 em{font-style:normal; display:inline-block; padding:0 .18em; border-radius:.28em; color:#fff; background:var(--blue); transform:rotate(-1.5deg)}
+.vc .lede{font-size:clamp(17px,2vw,21px); color:var(--ink2); max-width:50ch; letter-spacing:-.01em}
+.vc .btn.solid{background:var(--blue); color:#fff}
+.vc .btn.gl{background:#f2f2f7; color:var(--ink)}
+.vc .stats{gap:0; border-top:1px solid var(--line); border-bottom:1px solid var(--line)}
+.vc .stat{padding:22px 20px; border-left:1px solid var(--line)}
+.vc .stat:first-child{border-left:0}
+.vc .stat .k{display:inline-flex; width:max-content; font-size:13px; font-weight:600; padding:4px 10px; border-radius:999px; color:var(--c); background:color-mix(in srgb, var(--c) 12%, #fff)}
+.vc .stat .n{font-weight:700; font-size:clamp(36px,4.4vw,52px); letter-spacing:-.04em; line-height:1.05; color:var(--ink)}
+.vc .stat .u{font-size:14px; color:var(--ink2)}
+.vc .card{background:#f5f5f7; border-radius:22px}
+.vc .row + .row{border-top:1px solid #e5e5ea}
+.vc .row h3{font-size:16px; font-weight:600}
+.vc .row p{color:var(--ink2)}
+.vc .notif{background:rgba(245,245,247,.75); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-radius:22px; border:1px solid rgba(0,0,0,.04)}
+.vc .notif .top{color:var(--ink2)}
+.vc .notif h3{font-size:16px; font-weight:600}
+.vc .notif p{font-size:14.5px; color:var(--ink2)}
+@media (max-width:760px){ .vc .stat{border-left:0; border-top:1px solid var(--line)} .vc .stat:first-child{border-top:0} }
+
+.verdict{max-width:760px; margin:0 auto; padding:56px 16px 140px; display:grid; gap:14px}
+.verdict h2{font:700 28px/1.15 var(--sf); letter-spacing:-.02em}
+.verdict ul{margin:0; padding-left:20px; display:grid; gap:8px; color:#3a3a3c}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-grid" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/></g></symbol>
+  <symbol id="i-route" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5"/></g></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path fill="currentColor" d="M12 20.5s-7.5-4.4-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.8-7.5 10.2-7.5 10.2z"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/></g></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></g></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><rect x="3" y="4" width="18" height="5" rx="1.5"/><path d="M5 9v10a1.5 1.5 0 0 0 1.5 1.5h11A1.5 1.5 0 0 0 19 19V9M10 13h4"/></g></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><path fill="currentColor" d="M20 4c-9 0-15 4-15 11 0 1.7.5 3.2 1.3 4.4C7.7 15 11 11.8 15 10c-3.4 2.4-6 5.6-7.2 10C15 20 20 14 20 4z"/></symbol>
+</svg>
+
+<header class="intro">
+  <p class="tag">Пробник авторского стиля · 08.10.2026</p>
+  <h1>Три характера в духе Liquid Glass</h1>
+  <p>Один и тот же материал (Life: числа за 2025 год, разделы, итог 7 октября) в трёх вариантах. Общее у всех: стекло, системные цвета Apple как разноцветные акценты, минимум декора. Различаются свет, шрифт и сколько в странице стекла. Листай или переключай внизу.</p>
+</header>
+
+<!-- ═════════ A ═════════ -->
+<section class="v va" id="a" aria-label="Вариант A: утреннее стекло">
+  <div class="mesh" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="in">
+    <p class="label">A · Утреннее стекло — светлый, цвет живёт под стеклом</p>
+    <nav class="nav glass"><span class="logo"><i></i>life</span>
+      <span class="links"><a href="#a" aria-current="page">Обзор</a><a href="#a">Движение</a><a href="#a">Здоровье</a><a href="#a">Машина времени</a></span>
+      <a class="btn solid" href="#a" style="padding:10px 18px;font-size:14.5px">Сегодня</a></nav>
+    <div class="hero">
+      <p class="label">Хроника жизни · v1.54</p>
+      <h1>Весь день <span>в одной ленте</span></h1>
+      <p class="lede">Где был, как добирался, с кем говорил, что ел, как спал и что читал. Собирается само, без ручного ввода.</p>
+      <div class="btns"><a class="btn solid" href="#a">Открыть сегодня</a><a class="btn gl" href="#a">Машина времени</a></div>
+    </div>
+    <div class="stats">
+      <div class="stat glass"><span class="k"><b style="background:var(--blue)"></b>В пути за 2025</span><span class="n">11 406</span><span class="u">километров</span></div>
+      <div class="stat glass"><span class="k"><b style="background:var(--pink)"></b>Пешком</span><span class="n">468</span><span class="u">км · 105 ч</span></div>
+      <div class="stat glass"><span class="k"><b style="background:var(--orange)"></b>Шаги</span><span class="n">6 457</span><span class="u">в среднем за день</span></div>
+      <div class="stat glass"><span class="k"><b style="background:var(--green)"></b>Трекер писал</span><span class="n">337</span><span class="u">дней из 365</span></div>
+    </div>
+    <div class="duo">
+      <div class="list glass">
+        <div class="row"><span class="ic" style="background:var(--blue)"><svg><use href="#i-grid"/></svg></span><div><h3>Обзор</h3><p>День по 15 минут и плитки за неделю</p></div><span class="chev">›</span></div>
+        <div class="row"><span class="ic" style="background:var(--orange)"><svg><use href="#i-route"/></svg></span><div><h3>Движение</h3><p>Километры по видам за день, месяц, год</p></div><span class="chev">›</span></div>
+        <div class="row"><span class="ic" style="background:var(--red)"><svg><use href="#i-heart"/></svg></span><div><h3>Здоровье</h3><p>Как Apple Health: тело, походка, слух</p></div><span class="chev">›</span></div>
+        <div class="row"><span class="ic" style="background:var(--purple)"><svg><use href="#i-book"/></svg></span><div><h3>Дневник</h3><p>Записи с 2013 года</p></div><span class="chev">›</span></div>
+        <div class="row"><span class="ic" style="background:var(--indigo)"><svg><use href="#i-clock"/></svg></span><div><h3>Машина времени</h3><p>Этот день во все годы</p></div><span class="chev">›</span></div>
+      </div>
+      <div class="notif glass">
+        <div class="top"><span class="ic" style="background:var(--green)"><svg><use href="#i-leaf"/></svg></span>Life<time>22:45</time></div>
+        <h3>День размечен: 22 ч 30 мин из 24</h3>
+        <p>Больше всего — работа и дела, 9 ч 45 мин. Сон 7 ч, видео 2 ч 30 мин.</p>
+        <div class="bar" aria-hidden="true"><span style="flex:420;background:var(--blue)"></span><span style="flex:585;background:var(--orange)"></span><span style="flex:150;background:var(--indigo)"></span><span style="flex:75;background:var(--pink)"></span><span style="flex:60;background:var(--green)"></span><span style="flex:45;background:var(--red)"></span><span style="flex:90;background:rgba(13,15,20,.12)"></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ B ═════════ -->
+<section class="v vb" id="b" aria-label="Вариант B: ночное стекло">
+  <div class="orb o1" aria-hidden="true"></div><div class="orb o2" aria-hidden="true"></div><div class="orb o3" aria-hidden="true"></div><div class="orb o4" aria-hidden="true"></div>
+  <div class="in">
+    <p class="label">B · Ночное стекло — тёмный, цвета светятся</p>
+    <nav class="nav glass"><span class="logo"><i></i>life</span>
+      <span class="links"><a href="#b" aria-current="page">Обзор</a><a href="#b">Движение</a><a href="#b">Здоровье</a><a href="#b">Машина времени</a></span>
+      <a class="btn solid" href="#b" style="padding:10px 18px;font-size:14.5px">Сегодня</a></nav>
+    <div class="hero">
+      <p class="label">Хроника жизни · v1.54</p>
+      <h1>Весь день <strong>в одной ленте</strong></h1>
+      <p class="lede">Где был, как добирался, с кем говорил, что ел, как спал и что читал. Собирается само, без ручного ввода.</p>
+      <div class="btns"><a class="btn solid" href="#b">Открыть сегодня</a><a class="btn gl" href="#b">Машина времени</a></div>
+    </div>
+    <div class="stats">
+      <div class="stat glass" style="--c:var(--cyan)"><span class="k">В пути за 2025</span><span class="n">11 406</span><span class="u">километров</span></div>
+      <div class="stat glass" style="--c:var(--pink)"><span class="k">Пешком</span><span class="n">468</span><span class="u">км · 105 ч</span></div>
+      <div class="stat glass" style="--c:var(--orange)"><span class="k">Шаги</span><span class="n">6 457</span><span class="u">в среднем за день</span></div>
+      <div class="stat glass" style="--c:var(--green)"><span class="k">Трекер писал</span><span class="n">337</span><span class="u">дней из 365</span></div>
+    </div>
+    <div class="duo">
+      <div class="list glass">
+        <div class="row"><span class="ic" style="--c:var(--cyan)"><svg><use href="#i-grid"/></svg></span><div><h3>Обзор</h3><p>День по 15 минут и плитки за неделю</p></div><span class="chev">›</span></div>
+        <div class="row"><span class="ic" style="--c:var(--orange)"><svg><use href="#i-route"/></svg></span><div><h3>Движение</h3><p>Километры по видам за день, месяц, год</p></div><span class="chev">›</span></div>
+        <div class="row"><span class="ic" style="--c:var(--red)"><svg><use href="#i-heart"/></svg></span><div><h3>Здоровье</h3><p>Как Apple Health: тело, походка, слух</p></div><span class="chev">›</span></div>
+        <div class="row"><span class="ic" style="--c:var(--purple)"><svg><use href="#i-book"/></svg></span><div><h3>Дневник</h3><p>Записи с 2013 года</p></div><span class="chev">›</span></div>
+        <div class="row"><span class="ic" style="--c:var(--indigo)"><svg><use href="#i-clock"/></svg></span><div><h3>Машина времени</h3><p>Этот день во все годы</p></div><span class="chev">›</span></div>
+      </div>
+      <div class="notif glass">
+        <div class="top"><span class="ic" style="--c:var(--mint)"><svg><use href="#i-leaf"/></svg></span>Life<time>22:45</time></div>
+        <h3>День размечен: 22 ч 30 мин из 24</h3>
+        <p>Больше всего — работа и дела, 9 ч 45 мин. Сон 7 ч, видео 2 ч 30 мин.</p>
+        <div class="bar" aria-hidden="true"><span style="flex:420;background:var(--blue)"></span><span style="flex:585;background:var(--orange)"></span><span style="flex:150;background:var(--indigo)"></span><span style="flex:75;background:var(--pink)"></span><span style="flex:60;background:var(--green)"></span><span style="flex:45;background:var(--red)"></span><span style="flex:90;background:rgba(255,255,255,.14)"></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════ C ═════════ -->
+<section class="v vc" id="c" aria-label="Вариант C: капсулы">
+  <div class="in">
+    <p class="label">C · Капсулы — белая тишина, стекло только у плавающих панелей</p>
+    <nav class="nav"><span class="logo"><i style="background:var(--blue)"></i><i style="background:var(--orange)"></i><i style="background:var(--pink)"></i><i style="background:var(--green)"></i><span>life</span></span>
+      <span class="links"><a href="#c" aria-current="page">Обзор</a><a href="#c">Движение</a><a href="#c">Здоровье</a><a href="#c">Машина времени</a></span>
+      <a class="btn solid" href="#c" style="padding:10px 18px;font-size:14.5px">Сегодня</a></nav>
+    <div class="hero">
+      <p class="label">Хроника жизни · v1.54</p>
+      <h1>Весь день в <em>одной</em> ленте</h1>
+      <p class="lede">Где был, как добирался, с кем говорил, что ел, как спал и что читал. Собирается само, без ручного ввода.</p>
+      <div class="btns"><a class="btn solid" href="#c">Открыть сегодня</a><a class="btn gl" href="#c">Машина времени</a></div>
+    </div>
+    <div class="stats">
+      <div class="stat" style="--c:var(--blue)"><span class="k">В пути за 2025</span><span class="n">11 406</span><span class="u">километров</span></div>
+      <div class="stat" style="--c:var(--pink)"><span class="k">Пешком</span><span class="n">468</span><span class="u">км · 105 ч</span></div>
+      <div class="stat" style="--c:var(--orange)"><span class="k">Шаги</span><span class="n">6 457</span><span class="u">в среднем за день</span></div>
+      <div class="stat" style="--c:var(--green)"><span class="k">Трекер писал</span><span class="n">337</span><span class="u">дней из 365</span></div>
+    </div>
+    <div class="duo">
+      <div class="list card">
+        <div class="row"><span class="ic" style="background:var(--blue)"><svg><use href="#i-grid"/></svg></span><div><h3>Обзор</h3><p>День по 15 минут и плитки за неделю</p></div><span class="chev">›</span></div>
+        <div class="row"><span class="ic" style="background:var(--orange)"><svg><use href="#i-route"/></svg></span><div><h3>Движение</h3><p>Километры по видам за день, месяц, год</p></div><span class="chev">›</span></div>
+        <div class="row"><span class="ic" style="background:var(--red)"><svg><use href="#i-heart"/></svg></span><div><h3>Здоровье</h3><p>Как Apple Health: тело, походка, слух</p></div><span class="chev">›</span></div>
+        <div class="row"><span class="ic" style="background:var(--purple)"><svg><use href="#i-book"/></svg></span><div><h3>Дневник</h3><p>Записи с 2013 года</p></div><span class="chev">›</span></div>
+        <div class="row"><span class="ic" style="background:var(--indigo)"><svg><use href="#i-clock"/></svg></span><div><h3>Машина времени</h3><p>Этот день во все годы</p></div><span class="chev">›</span></div>
+      </div>
+      <div class="notif">
+        <div class="top"><span class="ic" style="background:var(--green)"><svg><use href="#i-leaf"/></svg></span>Life<time>22:45</time></div>
+        <h3>День размечен: 22 ч 30 мин из 24</h3>
+        <p>Больше всего — работа и дела, 9 ч 45 мин. Сон 7 ч, видео 2 ч 30 мин.</p>
+        <div class="bar" aria-hidden="true"><span style="flex:420;background:var(--blue)"></span><span style="flex:585;background:var(--orange)"></span><span style="flex:150;background:var(--indigo)"></span><span style="flex:75;background:var(--pink)"></span><span style="flex:60;background:var(--green)"></span><span style="flex:45;background:var(--red)"></span><span style="flex:90;background:#e5e5ea"></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="verdict">
+  <h2>Как выбрать</h2>
+  <ul>
+    <li><b>A</b> — самый «Liquid Glass»: яркий цвет плавает под матовым стеклом, крупный жирный заголовок с переливом. Праздничнее всех.</li>
+    <li><b>B</b> — то же стекло ночью: чёрный фон, цвета светятся, тонкий острый шрифт. Ближе к Vision Pro и Пункту управления.</li>
+    <li><b>C</b> — самый минималистичный: белый фон, стекло только у плавающей панели меню, цвет в капсулах-метках и иконках. Ближе к apple.com.</li>
+  </ul>
+  <p style="color:#3a3a3c">Можно смешивать: например, «фон и стекло из A, заголовки из C». Напиши, что нравится и что нет, и я зафиксирую стиль в одном файле, по которому дальше будут делаться все сайты.</p>
+</section>
+
+<nav class="switch" aria-label="Варианты">
+  <a href="#a"><b style="background:var(--pink)"></b>A</a>
+  <a href="#b"><b style="background:#111"></b>B</a>
+  <a href="#c"><b style="background:var(--blue)"></b>C</a>
+</nav>
+</body>
+</html>

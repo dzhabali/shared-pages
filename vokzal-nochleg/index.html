@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Где ночевать</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geologica:wght,SHRP@300..800,0..100&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="night-glass.css">
+<style>
+  .vs{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:stretch;margin-top:28px}
+  .vs .mid{align-self:center;font-family:'JetBrains Mono',monospace;color:var(--muted,#8a8a96);font-size:14px}
+  .side{padding:24px}
+  .side h3{margin:10px 0 6px;font-size:22px;font-weight:400}
+  .side ul{margin:12px 0 0;padding-left:18px;line-height:1.6;font-weight:300}
+  .score{font-variant-numeric:tabular-nums;font-weight:600}
+  .win{color:var(--green)}
+  .gal{display:grid;grid-template-columns:1.4fr 1fr;grid-auto-rows:220px;gap:12px;margin-top:22px}
+  .gal figure{margin:0;position:relative;overflow:hidden;border-radius:22px;border:1px solid rgba(255,255,255,.08)}
+  .gal figure:first-child{grid-row:span 2}
+  .gal img{width:100%;height:100%;object-fit:cover;display:block}
+  .gal figcaption{position:absolute;left:0;right:0;bottom:0;padding:34px 14px 10px;font-size:13.5px;font-weight:300;background:linear-gradient(transparent,rgba(0,0,0,.6) 35%,rgba(0,0,0,.88))}
+  .gal figcaption small{display:block;opacity:.55;font-size:11px;margin-top:2px}
+  .gal.rev{grid-template-columns:1fr 1.4fr}
+  .gal.rev figure:first-child{grid-column:2;grid-row:1 / span 2}
+  .gal.one{grid-template-columns:1fr;grid-auto-rows:260px}
+  .gal.one figure:first-child{grid-row:auto;grid-column:auto}
+  @media (max-width:720px){.gal,.gal.rev{grid-template-columns:1fr;grid-auto-rows:240px}.gal figure:first-child,.gal.rev figure:first-child{grid-row:auto;grid-column:auto}}
+  @media (max-width:720px){.vs{grid-template-columns:1fr}.vs .mid{text-align:center}}
+</style>
+</head>
+<body>
+<div class="orbs" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-clock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></g></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path fill="currentColor" d="M12 20.5s-7.5-4.4-7.5-10.2A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.7c0 5.8-7.5 10.2-7.5 10.2z"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><path fill="currentColor" d="M20 4c-9 0-15 4-15 11 0 1.7.5 3.2 1.3 4.4C7.7 15 11 11.8 15 10c-3.4 2.4-6 5.6-7.2 10C15 20 20 14 20 4z"/></symbol>
+  <symbol id="i-route" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5"/></g></symbol>
+</svg>
+
+<div class="page">
+  <nav class="nav glass">
+    <a class="logo" href="#"><i></i>Ночлег-аналитика</a>
+    <span class="links"><a href="#vs" aria-current="page">Кандидаты</a><a href="#photo">Фото</a><a href="#table">Таблица</a><a href="#verdict">Вердикт</a></span>
+  </nav>
+
+  <header class="hero">
+    <p class="label">Независимое исследование · Вена · октябрь 2026</p>
+    <h1>Где мужу ночевать: <strong>Westbahnhof или Mödling</strong></h1>
+    <p class="lede">Сравнительная характеристика двух вокзалов для взрослого мужчины, который сегодня, возможно, домой не пойдёт. Восемь критериев, взвешенная оценка, итоговая рекомендация.</p>
+    <div class="btns"><a class="btn solid" href="#verdict">Сразу к вердикту</a><a class="btn gl" href="#table">Таблица баллов</a></div>
+  </header>
+
+  <div class="stats">
+    <div class="stat glass" style="--c:var(--cyan)"><span class="k">Westbahnhof</span><span class="n">31</span><span class="u">балл из 80</span></div>
+    <div class="stat glass" style="--c:var(--orange)"><span class="k">Mödling</span><span class="n">43</span><span class="u">балла из 80</span></div>
+    <div class="stat glass" style="--c:var(--green)"><span class="k">Отрыв лидера</span><span class="n">12</span><span class="u">баллов</span></div>
+    <div class="stat glass" style="--c:var(--purple)"><span class="k">Фото в досье</span><span class="n">8</span><span class="u">кадров</span></div>
+  </div>
+
+  <section class="section" id="vs">
+    <p class="label">Кандидаты</p>
+    <h2>Столичный размах <strong>против провинциального уюта</strong></h2>
+    <div class="vs">
+      <article class="side glass">
+        <span class="chip" style="--c:var(--cyan)"><b></b>Wien Westbahnhof</span>
+        <h3>Большой город, большие возможности</h3>
+        <p class="muted">Вокзал с историей с 1858 года, внутри торговый центр, рядом Мариахильферштрассе, под землёй U3 и U6.</p>
+        <ul>
+          <li>Еда и кофе в шаговой доступности до последнего.</li>
+          <li>Метро рядом: утром быстро исчезнуть с места ночлега.</li>
+          <li>Анонимность: в толпе никто не спросит, почему ты тут.</li>
+          <li>Минус: та же толпа, и не вся она спит.</li>
+          <li>Минус: охрана видела всё и тебя тоже увидит.</li>
+        </ul>
+      </article>
+      <span class="mid">vs</span>
+      <article class="side glass">
+        <span class="chip" style="--c:var(--orange)"><b></b>Bahnhof Mödling</span>
+        <h3>Тихий городок у Венского леса</h3>
+        <p class="muted">Станция на Южной линии, в Мёдлинге когда-то жил Бетховен. Тоже, кстати, сложный был человек.</p>
+        <ul>
+          <li>Тихо: ночью на перроне только ты и совесть.</li>
+          <li>Свежий воздух с Венского леса, утром можно в поход.</li>
+          <li>Культурный бонус: ночевать там, где Бетховен работал над «Торжественной мессой».</li>
+          <li>Минус: ночью поесть особенно негде.</li>
+          <li>Минус: в маленьком городе тебя запомнят.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="photo">
+    <p class="label">Фотодосье · Westbahnhof</p>
+    <h2>Westbahnhof: <strong>где тут прилечь</strong></h2>
+    <div class="gal">
+      <figure><img src="img/w2.jpg" alt="Кассовый зал Westbahnhof"><figcaption>Кассовый зал. Потолок высокий, пол каменный, лавочек мало<small>Фото: Friedrich Böhringer, CC BY-SA 3.0 AT</small></figcaption></figure>
+      <figure><img src="img/w3.jpg" alt="Фасад Westbahnhof днём"><figcaption>Фасад днём: вид на ночлег снаружи<small>Фото: Gugerell, CC0</small></figcaption></figure>
+      <figure><img src="img/w6.jpg" alt="Westbahnhof ночью"><figcaption>Так он выглядит в рабочее время эксперта<small>Фото: Funke, CC BY-SA 4.0</small></figcaption></figure>
+    </div>
+    <div class="gal one">
+      <figure><img src="img/w8.jpg" alt="Westbahnhof в 1860 году"><figcaption>1860 год. Тогда тоже кто-то ночевал, но об этом молчат<small>Фото: Andreas Groll, общественное достояние</small></figcaption></figure>
+    </div>
+  </section>
+
+  <section class="section">
+    <p class="label">Фотодосье · Mödling</p>
+    <h2>Mödling: <strong>тишина и перроны</strong></h2>
+    <div class="gal rev">
+      <figure><img src="img/m2.jpg" alt="Станция Мёдлинг сверху"><figcaption>Общий план: перроны, навесы, на горизонте Венский лес<small>Фото: Karl Gruber, CC BY 3.0 AT</small></figcaption></figure>
+      <figure><img src="img/m3.jpg" alt="Перрон под переходом в Мёдлинге"><figcaption>Перрон под переходом: крыша над головой есть<small>Фото: Karl Gruber, CC BY 3.0 AT</small></figcaption></figure>
+      <figure><img src="img/m6.jpg" alt="Пути и перроны Мёдлинга"><figcaption>Пустой перрон. Ни души, ни ларька<small>Фото: Karl Gruber, CC BY-SA 3.0 AT</small></figcaption></figure>
+    </div>
+    <div class="gal one">
+      <figure><img src="img/m8.jpg" alt="Разрез вокзала Мёдлинг, 1883" style="object-fit:contain;background:#e9e4d6"><figcaption>Разрез вокзала, 1883 год: эксперт изучил планировку заранее<small>Неизвестный автор, общественное достояние</small></figcaption></figure>
+    </div>
+  </section>
+
+  <section class="section" id="table">
+    <p class="label">Методика</p>
+    <h2>Восемь критериев, <strong>десять баллов каждый</strong></h2>
+    <div class="glass tbl">
+      <table>
+        <thead><tr><th>Критерий</th><th>Комментарий эксперта</th><th class="num">West</th><th class="num">Mödling</th></tr></thead>
+        <tbody>
+          <tr><td>Тишина</td><td class="muted">Westbahnhof не спит, Мёдлинг спит раньше тебя</td><td class="num">2</td><td class="num win">8</td></tr>
+          <tr><td>Еда ночью</td><td class="muted">В Мёдлинге после полуночи только шум листвы</td><td class="num win">6</td><td class="num">2</td></tr>
+          <tr><td>Лавочка</td><td class="muted">Обе спроектированы так, чтобы на них не спали</td><td class="num">3</td><td class="num">3</td></tr>
+          <tr><td>Соседи по ночлегу</td><td class="muted">В столице их больше и они разговорчивее</td><td class="num">2</td><td class="num win">7</td></tr>
+          <tr><td>Безопасность</td><td class="muted">Мёдлинг: самая большая угроза — утка</td><td class="num">4</td><td class="num win">7</td></tr>
+          <tr><td>Утро</td><td class="muted">Вид на Венский лес против вида на торговый центр</td><td class="num">3</td><td class="num win">8</td></tr>
+          <tr><td>Культура</td><td class="muted">Бетховен против фуд-корта</td><td class="num">4</td><td class="num win">6</td></tr>
+          <tr><td>Путь домой с повинной</td><td class="muted">Из центра быстрее, но успеешь меньше обдумать</td><td class="num win">7</td><td class="num">2</td></tr>
+          <tr><td><strong>Итого</strong></td><td class="muted">из 80</td><td class="num"><span class="score">31</span></td><td class="num"><span class="score win">43</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section" id="verdict">
+    <p class="label">Вердикт</p>
+    <div class="duo">
+      <div class="prose">
+        <h2>По баллам побеждает <strong>Мёдлинг</strong></h2>
+        <p>Для ночлега Мёдлинг надёжнее: тихо, безопасно, крыша над перроном, а утром Венский лес и хорошая дорога, на которой можно всё обдумать. Westbahnhof выигрывает едой и метро, но проигрывает по тишине и соседям.</p>
+        <p>Westbahnhof стоит выбирать, только если очень хочется есть и совсем не хочется думать. Во всех остальных случаях билет до Мёдлинга.</p>
+        <blockquote>Рекомендация эксперта: брать S-Bahn на юг и занимать лавочку под переходом.</blockquote>
+      </div>
+      <div class="notif glass">
+        <div class="top"><span class="ic" style="--c:var(--orange);width:22px;height:22px;border-radius:6px"><svg style="width:13px;height:13px"><use href="#i-leaf"/></svg></span>Норбу<time>сейчас</time></div>
+        <h3>Итог: Mödling, 43 против 31</h3>
+        <p>Мёдлинг берёт пять критериев из восьми, по лавочкам ничья. Westbahnhof забирает только еду ночью и дорогу обратно.</p>
+        <div class="bar" aria-hidden="true"><span style="flex:31;background:var(--cyan)"></span><span style="flex:43;background:var(--orange)"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot">Исследование подготовил Норбу по заказу Макса · баллы субъективны · фото: Wikimedia Commons</footer>
+</div>
+</body>
+</html>

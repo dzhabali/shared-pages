@@ -1,0 +1,900 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Мандала Ваджрайогини · 3D</title>
+<!--
+  Закрытая страница (только за паролем Life: life.maxdzhabali.com/dharma/vajrayogini-mandala-3d.html).
+  Описание мандалы — Кхен Ринпоче, «Sublime Path to Kechara Paradise», йога 6, перевод Макса
+  (raw/DW series/комментарий Кхена Ринпоче на Садхану ВЙ/…docx). Карточка: wiki/practices/vajrayogini-sadhana-yoga-06-rebirth-as-nirmanakaya.md.
+  Кладбища — восемь круглых чёрных островов на уровне верха источников дхармы, касаются краями (так видит Макс). Деревья, ступы, пруды и костры на них — условность сцены: в комментарии их нет.
+  Огонь — сферой со всех сторон, весь вращается влево; основа, стены и крыша — сплошной полупрозрачный узор ваджр без промежутков.
+-->
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#05030a;color:#f1e8dc;font:15px/1.45 -apple-system,BlinkMacSystemFont,"Inter","Segoe UI",sans-serif;overflow:hidden;-webkit-tap-highlight-color:transparent}
+canvas{display:block;touch-action:none}
+#top{position:fixed;top:0;left:0;right:0;display:flex;gap:12px;align-items:center;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;pointer-events:none}
+#top a{pointer-events:auto;color:#f1e8dc;opacity:.7;text-decoration:none;font-size:14px}
+#top .t{font-weight:600;letter-spacing:.02em;opacity:.9}
+#modes{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + env(safe-area-inset-bottom));display:flex;gap:6px;background:rgba(20,12,24,.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);padding:6px;border-radius:14px;border:1px solid rgba(255,255,255,.08)}
+#modes button,#card button{font:inherit;font-size:14px;color:#f1e8dc;background:transparent;border:0;border-radius:10px;padding:8px 12px;cursor:pointer;white-space:nowrap}
+#modes button.on{background:#b3263a}
+#card{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(70px + env(safe-area-inset-bottom));width:min(620px,calc(100vw - 20px));max-height:44vh;overflow:auto;background:rgba(20,12,24,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:14px 16px 10px}
+#card[hidden]{display:none}
+#card .hd{display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:6px}
+#card .hd b{font-size:16px;color:#ffb36b}
+#card .hd span{opacity:.55;font-size:13px}
+#cq{font-family:Georgia,"Times New Roman",serif;font-size:15.5px;line-height:1.5}
+#cq p{margin:0 0 8px}
+#cc{font-size:13px;opacity:.7;margin-top:4px}
+#card .nav{display:flex;justify-content:space-between;margin-top:8px}
+#card .nav button{background:rgba(255,255,255,.08)}
+#card .nav button.go{background:#b3263a}
+#hint{position:fixed;top:calc(40px + env(safe-area-inset-top));left:0;right:0;text-align:center;font-size:13px;opacity:.55;pointer-events:none;padding:0 12px}
+#pride{position:fixed;left:0;right:0;top:38%;text-align:center;font-family:Georgia,serif;font-size:clamp(22px,4vw,36px);color:#ffd9b0;text-shadow:0 0 18px #ff4a1a;opacity:0;transition:opacity 1.6s;pointer-events:none;padding:0 20px}
+#load{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font-size:15px;opacity:.7}
+@media (max-width:560px){#modes button{padding:8px 8px;font-size:13px}#card{max-height:38vh}#cq{font-size:14.5px}}
+</style>
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+"three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}
+</script>
+</head>
+<body>
+<div id="load">Загружаю мандалу…</div>
+<div id="top"><a href="./">← Дхарма</a><span class="t">Мандала Ваджрайогини</span></div>
+<div id="hint"></div>
+<div id="pride">Это я, я являюсь этим.</div>
+<div id="card" hidden>
+  <div class="hd"><b id="ct"></b><span id="cn"></span></div>
+  <div id="cq"></div>
+  <div id="cc"></div>
+  <div class="nav"><button id="prev">← назад</button><button id="next">дальше →</button></div>
+</div>
+<div id="modes">
+  <button data-m="orbit" class="on">Со стороны</button>
+  <button data-m="top">Сверху</button>
+  <button data-m="tour">Снаружи к центру</button>
+  <button data-m="fp">Её глазами</button>
+</div>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const V = (x, y, z) => new THREE.Vector3(x, y, z);
+const DEG = Math.PI / 180;
+// Стороны света: восток = +Z (лицом к нему стоит Ваджрайогини), её правая рука — юг (−X).
+const dirPos = (deg, r, y = 0) => V(Math.sin(deg * DEG) * r, y, Math.cos(deg * DEG) * r);
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+// ---------- рендер ----------
+const mobile = matchMedia('(pointer: coarse)').matches;
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, mobile ? 1.5 : 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.15;
+document.body.prepend(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x05030a);
+scene.fog = new THREE.FogExp2(0x0a0410, 0.0032);
+const camera = new THREE.PerspectiveCamera(55, innerWidth / innerHeight, 0.03, 4000);
+camera.position.set(2.3, 2.4, 4.6);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 1.7, 0);
+controls.enableDamping = true;
+controls.minDistance = 0.8;
+controls.maxDistance = 280;
+controls.maxPolarAngle = Math.PI - 0.05;   // можно заглянуть и снизу — огонь со всех сторон
+
+scene.add(new THREE.AmbientLight(0x5a3a50, 0.9));
+scene.add(new THREE.HemisphereLight(0x8e9cff, 0x3a1406, 0.9));
+const sunL = new THREE.DirectionalLight(0xffe2c0, 1.4); sunL.position.set(20, 40, 30); scene.add(sunL);
+const deityLight = new THREE.PointLight(0xff4a22, 8, 14, 1.4); deityLight.position.set(0, 2.2, 1.6); scene.add(deityLight);
+const palaceLight = new THREE.PointLight(0xff2244, 3, 12, 1.5); palaceLight.position.set(0, 5.5, 0); scene.add(palaceLight);
+// отсвет огня и основы снизу — чтобы читались каменные днища островов-кладбищ
+const underL = new THREE.PointLight(0xffa070, 70, 90, 1.2); underL.position.set(0, -1, 0); scene.add(underL);
+
+// ---------- общие шейдеры ----------
+const NOISE = `
+vec3 mod289(vec3 x){return x-floor(x*(1.0/289.0))*289.0;}
+vec4 mod289(vec4 x){return x-floor(x*(1.0/289.0))*289.0;}
+vec4 permute(vec4 x){return mod289(((x*34.0)+1.0)*x);}
+vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-0.85373472095314*r;}
+float snoise(vec3 v){
+  const vec2 C=vec2(1.0/6.0,1.0/3.0); const vec4 D=vec4(0.0,0.5,1.0,2.0);
+  vec3 i=floor(v+dot(v,C.yyy)); vec3 x0=v-i+dot(i,C.xxx);
+  vec3 g=step(x0.yzx,x0.xyz); vec3 l=1.0-g; vec3 i1=min(g.xyz,l.zxy); vec3 i2=max(g.xyz,l.zxy);
+  vec3 x1=x0-i1+C.xxx; vec3 x2=x0-i2+C.yyy; vec3 x3=x0-D.yyy;
+  i=mod289(i);
+  vec4 p=permute(permute(permute(i.z+vec4(0.0,i1.z,i2.z,1.0))+i.y+vec4(0.0,i1.y,i2.y,1.0))+i.x+vec4(0.0,i1.x,i2.x,1.0));
+  float n_=0.142857142857; vec3 ns=n_*D.wyz-D.xzx;
+  vec4 j=p-49.0*floor(p*ns.z*ns.z); vec4 x_=floor(j*ns.z); vec4 y_=floor(j-7.0*x_);
+  vec4 x=x_*ns.x+ns.yyyy; vec4 y=y_*ns.x+ns.yyyy; vec4 h=1.0-abs(x)-abs(y);
+  vec4 b0=vec4(x.xy,y.xy); vec4 b1=vec4(x.zw,y.zw);
+  vec4 s0=floor(b0)*2.0+1.0; vec4 s1=floor(b1)*2.0+1.0; vec4 sh=-step(h,vec4(0.0));
+  vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy; vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
+  vec3 p0=vec3(a0.xy,h.x); vec3 p1=vec3(a0.zw,h.y); vec3 p2=vec3(a1.xy,h.z); vec3 p3=vec3(a1.zw,h.w);
+  vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));
+  p0*=norm.x; p1*=norm.y; p2*=norm.z; p3*=norm.w;
+  vec4 m=max(0.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.0); m=m*m;
+  return 42.0*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
+}`;
+const FIRE_VS = `varying vec2 vUv; varying vec3 vP; void main(){ vUv=uv; vP=position; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`;
+// Пламя: угол вокруг оси → бесшовный шум; uSwirl>0 — языки бегут против часовой (если смотреть сверху), т.е. «закручиваются влево»
+const FIRE_FS = NOISE + `
+uniform float uTime,uSwirl,uScale,uRise,uIntensity,uMono,uHF,uLean;
+varying vec2 vUv; varying vec3 vP;
+vec3 pc(float i){ i=mod(i,5.0);
+  if(i<0.5) return vec3(1.0,0.96,0.88); if(i<1.5) return vec3(1.0,0.76,0.12);
+  if(i<2.5) return vec3(1.0,0.17,0.06); if(i<3.5) return vec3(0.16,0.88,0.38); return vec3(0.18,0.42,1.0); }
+vec3 pal(float t){ float x=t*5.0; float i=floor(x); return mix(pc(i),pc(i+1.0),smoothstep(0.55,1.0,fract(x))); }
+void main(){
+  float a=atan(vP.z,vP.x); float h=vUv.y;
+  float ang=a+uTime*uSwirl+h*uLean;
+  vec3 q=vec3(cos(ang)*uScale,sin(ang)*uScale,h*uScale*uRise-uTime*1.7);
+  float n=snoise(q)*0.55+snoise(q*2.07+vec3(0.0,0.0,-uTime*1.1))*0.3+snoise(q*4.3)*0.15;
+  float f=n*0.5+0.5;
+  float shape=f*1.75-0.42-pow(h,uHF)*1.1;
+  float I=smoothstep(0.1,0.75,shape);
+  vec3 col;
+  if(uMono>0.5){ col=mix(vec3(1.0,0.1,0.02),vec3(1.0,0.72,0.22),smoothstep(0.35,0.95,shape)); }
+  else { col=pal(fract(a/6.2831853*5.0+n*0.4+uTime*0.015)); col=mix(col,vec3(1.0),smoothstep(0.7,1.1,shape)*0.5); }
+  gl_FragColor=vec4(col*I*uIntensity,1.0);
+}`;
+// Огонь сферой вокруг всей мандалы: шум по направлению из центра, языки закручиваются влево; uCut — чем дальше оболочка, тем реже языки
+const FIRE_SPH_VS = `varying vec3 vP; void main(){ vP=position; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }`;
+const FIRE_SPH_FS = NOISE + `
+uniform float uTime,uSwirl,uScale,uIntensity,uSeed,uCut;
+varying vec3 vP;
+vec3 pc(float i){ i=mod(i,5.0);
+  if(i<0.5) return vec3(1.0,0.96,0.88); if(i<1.5) return vec3(1.0,0.76,0.12);
+  if(i<2.5) return vec3(1.0,0.17,0.06); if(i<3.5) return vec3(0.16,0.88,0.38); return vec3(0.18,0.42,1.0); }
+vec3 pal(float t){ float x=t*5.0; float i=floor(x); return mix(pc(i),pc(i+1.0),smoothstep(0.55,1.0,fract(x))); }
+void main(){
+  vec3 d=normalize(vP); float a=atan(d.z,d.x); float aa=a+uTime*uSwirl; float rr=sqrt(max(1.0-d.y*d.y,0.0));
+  vec3 q=vec3(cos(aa)*rr,d.y,sin(aa)*rr)*uScale+vec3(uSeed);
+  float n=snoise(q+vec3(0.0,-uTime*0.6,0.0))*0.55+snoise(q*2.07+vec3(uTime*0.5,-uTime*1.1,0.0))*0.3+snoise(q*4.3+vec3(0.0,-uTime*1.6,0.0))*0.15;
+  float f=n*0.5+0.5;
+  float I=smoothstep(uCut,uCut+0.33,f);
+  vec3 col=pal(fract(a/6.2831853*5.0+d.y*0.6+n*0.12+uTime*0.015)); col=mix(col,vec3(1.0),smoothstep(0.8,1.02,f)*0.45);
+  gl_FragColor=vec4(col*I*uIntensity,1.0);
+}`;
+const fireMats = [];
+// Языки пламени — конусы от алмазной сферы наружу, каждый своего из пяти цветов, чуть закручены влево
+// vSide: насколько язык виден сбоку (с торца конус выглядит шаром — такие гасим)
+const TONGUE_VS = `varying vec2 vUv; varying vec3 vP; varying float vS; varying float vSide;
+void main(){ vUv=uv; vP=position; vec4 p=vec4(position,1.0); vec4 ax=vec4(0.0,1.0,0.0,0.0);
+#ifdef USE_INSTANCING
+  p=instanceMatrix*p; ax=instanceMatrix*ax; vS=fract(sin(dot(instanceMatrix[3].xyz,vec3(12.9898,78.233,37.719)))*43758.5453);
+#else
+  vS=0.0;
+#endif
+  vec4 mv=modelViewMatrix*p; vec3 a=normalize((modelViewMatrix*ax).xyz);
+  vSide=length(cross(a,normalize(mv.xyz)));
+  gl_Position=projectionMatrix*mv; }`;
+const TONGUE_FS = NOISE + `
+uniform float uTime,uIntensity; varying vec2 vUv; varying vec3 vP; varying float vS; varying float vSide;
+vec3 pc(float i){ i=mod(i,5.0);
+  if(i<0.5) return vec3(1.0,0.96,0.88); if(i<1.5) return vec3(1.0,0.76,0.12);
+  if(i<2.5) return vec3(1.0,0.17,0.06); if(i<3.5) return vec3(0.16,0.88,0.38); return vec3(0.18,0.42,1.0); }
+void main(){
+  float a=atan(vP.z,vP.x); float h=vUv.y;
+  vec3 q=vec3(cos(a)*1.8,sin(a)*1.8,h*2.6-uTime*(1.6+vS))+vec3(vS*40.0);
+  float n=snoise(q)*0.6+snoise(q*2.1+vec3(0.0,0.0,-uTime))*0.4; float f=n*0.5+0.5;
+  float shape=f*1.6-0.25-pow(h,0.85)*1.2; float I=smoothstep(0.05,0.6,shape)*smoothstep(0.0,0.22,h)*smoothstep(0.35,0.8,vSide);
+  vec3 col=pc(floor(vS*5.0)); col=mix(col,vec3(1.0),smoothstep(0.5,0.95,shape)*0.5);
+  gl_FragColor=vec4(col*I*uIntensity,1.0);
+}`;
+function fireSph(o) {
+  const m = new THREE.ShaderMaterial({
+    uniforms: { uTime: { value: 0 }, uSwirl: { value: o.swirl }, uScale: { value: o.scale }, uIntensity: { value: o.intensity }, uSeed: { value: o.seed }, uCut: { value: o.cut } },
+    vertexShader: FIRE_SPH_VS, fragmentShader: FIRE_SPH_FS, transparent: true, depthWrite: false,
+    blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
+  });
+  fireMats.push(m);
+  return m;
+}
+function fireMat(o = {}) {
+  const m = new THREE.ShaderMaterial({
+    uniforms: {
+      uTime: { value: 0 }, uSwirl: { value: o.swirl ?? 0.12 }, uScale: { value: o.scale ?? 3 }, uRise: { value: o.rise ?? 1 },
+      uIntensity: { value: o.intensity ?? 1 }, uMono: { value: o.mono ? 1 : 0 }, uHF: { value: o.hf ?? 1 }, uLean: { value: o.lean ?? 0.5 },
+    },
+    vertexShader: FIRE_VS, fragmentShader: FIRE_FS, transparent: true, depthWrite: false,
+    blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
+  });
+  fireMats.push(m);
+  return m;
+}
+// «Тело из света»: цвет + ореол по краю (френель), свет — в пространстве камеры
+const LB_VS = `varying vec3 vN; varying vec3 vV; void main(){ vec4 mv=modelViewMatrix*vec4(position,1.0); vN=normalize(normalMatrix*normal); vV=normalize(-mv.xyz); gl_Position=projectionMatrix*mv; }`;
+const LB_FS = `uniform vec3 uColor; uniform vec3 uRim; uniform float uGlow; varying vec3 vN; varying vec3 vV;
+void main(){ vec3 n=normalize(vN); if(!gl_FrontFacing) n=-n; float d=max(dot(n,normalize(vec3(0.35,0.75,0.55))),0.0);
+  float fr=pow(1.0-max(dot(n,vV),0.0),2.0); gl_FragColor=vec4(uColor*(0.5+0.6*d)+uRim*fr*uGlow,1.0); }`;
+const lbMat = (c, r, g) => new THREE.ShaderMaterial({ uniforms: { uColor: { value: new THREE.Color(...c) }, uRim: { value: new THREE.Color(...r) }, uGlow: { value: g } }, vertexShader: LB_VS, fragmentShader: LB_FS });
+
+const std = (color, o = {}) => new THREE.MeshStandardMaterial({ color, roughness: 0.6, ...o });
+const boneM = std(0xeee2c4, { emissive: 0x2c2416, roughness: 0.55 });
+const goldM = std(0xe0b04a, { metalness: 0.85, roughness: 0.28, emissive: 0x2a1a00 });
+const silverM = std(0xdfe3ea, { metalness: 0.9, roughness: 0.22 });
+
+function canvasTex(w, h, draw) {
+  const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+  draw(cv.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8;
+  return t;
+}
+function drawVajra(c, x, y, L, ang, col, lw) {
+  c.save(); c.translate(x, y); c.rotate(ang); c.strokeStyle = col; c.fillStyle = col; c.lineWidth = lw; c.lineCap = 'round';
+  c.beginPath(); c.arc(0, 0, L * 0.07, 0, 7); c.fill();
+  for (const s of [1, -1]) {
+    c.beginPath(); c.ellipse(0, s * L * 0.13, L * 0.075, L * 0.05, 0, 0, 7); c.stroke();
+    const b = s * L * 0.18, t = s * L * 0.5;
+    c.beginPath(); c.moveTo(0, b); c.lineTo(0, t); c.stroke();
+    for (const k of [1, -1]) {
+      c.beginPath(); c.moveTo(0, b); c.quadraticCurveTo(k * L * 0.22, s * L * 0.3, 0, t); c.stroke();
+      c.beginPath(); c.moveTo(0, b); c.quadraticCurveTo(k * L * 0.12, s * L * 0.34, 0, t); c.stroke();
+    }
+  }
+  c.restore();
+}
+const crossVajra = (c, x, y, L, a, col, lw) => { drawVajra(c, x, y, L, a, col, lw); drawVajra(c, x, y, L, a + Math.PI / 2, col, lw); };
+
+// ---------- звёзды ----------
+{
+  const n = 4000, p = new Float32Array(n * 3), r = rng(7);
+  for (let i = 0; i < n; i++) {
+    const u = r() * 2 - 1, th = r() * Math.PI * 2, s = Math.sqrt(1 - u * u);
+    p.set([Math.cos(th) * s * 1500, Math.abs(u) * 1500 - 100, Math.sin(th) * s * 1500], i * 3);
+  }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(p, 3));
+  scene.add(new THREE.Points(g, new THREE.PointsMaterial({ color: 0xd8d0ff, size: 1.5, sizeAttenuation: false, fog: false })));
+}
+
+// ---------- 1–2. Алмазная основа, стены, крыша и потолок ----------
+// Всё из ваджр без промежутков: плитка, где концы скрещённых ваджр смыкаются с соседними, — мелкий сплошной узор, полупрозрачный
+const R_WALL = 52;
+const ISL = 7;   // уровень кладбищ — верх источников дхармы
+{
+  const tile = canvasTex(256, 256, (c, w, h) => {
+    c.clearRect(0, 0, w, h);
+    const gold = 'rgba(232,192,96,1)', blue = 'rgba(130,170,255,1)';
+    crossVajra(c, 128, 128, 256, 0, gold, 7);                     // концы упираются в соседние плитки
+    crossVajra(c, 128, 128, 170, Math.PI / 4, blue, 5);
+    for (const [x, y] of [[0, 0], [256, 0], [0, 256], [256, 256]]) crossVajra(c, x, y, 180, Math.PI / 4, gold, 6);
+    for (const [x, y] of [[64, 64], [192, 64], [64, 192], [192, 192]]) drawVajra(c, x, y, 64, (x - 128) * (y - 128) > 0 ? -Math.PI / 4 : Math.PI / 4, blue, 4);
+  });
+  tile.wrapS = tile.wrapT = THREE.RepeatWrapping;
+  const CELL = 2.2;   // размер плитки в метрах сцены — везде одинаковый
+  const vajraMat = (rx, ry, opacity) => {
+    const t = tile.clone(); t.repeat.set(rx, ry); t.needsUpdate = true;
+    return new THREE.MeshBasicMaterial({ map: t, transparent: true, opacity, side: THREE.DoubleSide, depthWrite: false, alphaTest: 0.03 });
+  };
+  // верх основы: остриё источников дхармы уходит в толщу ваджр
+  const ground = new THREE.Mesh(new THREE.CircleGeometry(R_WALL, 160), vajraMat(2 * R_WALL / CELL, 2 * R_WALL / CELL, 0.55));
+  ground.rotation.x = -Math.PI / 2; ground.renderOrder = 2; scene.add(ground);
+  // стены, крыша и потолок сверху и основа снизу — одна сфера из ваджр
+  const sphereOf = (R, opacity, lower) => {
+    const geo = lower ? new THREE.SphereGeometry(R, 128, 48, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2) : new THREE.SphereGeometry(R, 128, 96);
+    const m = new THREE.Mesh(geo, vajraMat(Math.round(2 * Math.PI * R / CELL), Math.round((lower ? 0.5 : 1) * Math.PI * R / CELL), opacity));
+    m.renderOrder = 2; scene.add(m);
+  };
+  sphereOf(R_WALL, 0.34, false);
+  // толща основы — вложенные слои того же узора
+  [44, 36, 28, 20, 12].forEach(R => sphereOf(R, 0.2, true));
+  const rim = new THREE.Mesh(new THREE.TorusGeometry(R_WALL, 0.25, 8, 200), new THREE.MeshBasicMaterial({ color: 0xffcf70 }));
+  rim.rotation.x = Math.PI / 2; rim.position.y = 0.1; scene.add(rim);
+}
+
+// ---------- 3. Пятицветное кольцо огня с молниями ----------
+// весь огонь вращается влево — против часовой стрелки, если смотреть сверху (рад/с)
+const FIRE_SPIN = 0.07;
+{
+  // огонь охватывает мандалу со всех сторон — сверху, по бокам и снизу: несколько сферических оболочек
+  [[55, 4.5, 0.42, 0.42, FIRE_SPIN], [61, 6, 0.5, 0.3, FIRE_SPIN], [68, 7.5, 0.56, 0.2, FIRE_SPIN]]
+    .forEach(([R, scale, cut, intensity, swirl], i) => {
+      const m = new THREE.Mesh(new THREE.SphereGeometry(R, 144, 96), fireSph({ scale, cut, intensity, swirl, seed: i * 17.3 }));
+      m.renderOrder = 3; scene.add(m);
+    });
+  const tm = new THREE.ShaderMaterial({ uniforms: { uTime: { value: 0 }, uIntensity: { value: 0.85 } }, vertexShader: TONGUE_VS, fragmentShader: TONGUE_FS,
+    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide });
+  fireMats.push(tm);
+  const N = 700, tongues = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.12, 1, 1, 18, 1, true).translate(0, 0.5, 0), tm, N);
+  const r = rng(5), d = new THREE.Object3D(), up = V(0, 1, 0);
+  for (let i = 0; i < N; i++) {
+    const y = 1 - 2 * (i + 0.5) / N, ph = i * 2.39996323, rr = Math.sqrt(1 - y * y);   // равномерно по сфере
+    const dir = V(Math.cos(ph) * rr, y, Math.sin(ph) * rr), tan = up.clone().cross(dir);
+    const axis = dir.clone().addScaledVector(tan.lengthSq() > 1e-4 ? tan.normalize() : tan, 0.45).normalize();
+    const w = 1.8 + r() * 2.4, L = 10 + r() * 18;
+    d.position.copy(dir).multiplyScalar(53 + r() * 5); d.quaternion.setFromUnitVectors(up, axis); d.scale.set(w, L, w);
+    d.updateMatrix(); tongues.setMatrixAt(i, d.matrix);
+  }
+  tongues.renderOrder = 3; scene.add(tongues); window.__tongues = tongues;
+}
+const bolts = [];
+{
+  const mat = new THREE.MeshBasicMaterial({ color: 0xdcecff, transparent: true, opacity: 1, blending: THREE.AdditiveBlending, depthWrite: false, fog: false });
+  for (let i = 0; i < 6; i++) { const m = new THREE.Mesh(new THREE.BufferGeometry(), mat); m.visible = false; m.renderOrder = 4; scene.add(m); bolts.push({ m, t: 0 }); }
+}
+function strike(b) {
+  // молния в любой точке огненной сферы, бежит вдоль неё
+  const dir = V(Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1).normalize();
+  const t1 = V(0, 1, 0).cross(dir); if (t1.lengthSq() < 0.01) t1.set(1, 0, 0); t1.normalize();
+  const t2 = dir.clone().cross(t1), ang = Math.random() * Math.PI * 2;
+  const way = t1.multiplyScalar(Math.cos(ang)).add(t2.multiplyScalar(Math.sin(ang)));
+  let p = dir.multiplyScalar(57 + Math.random() * 15);
+  const pts = [p.clone()];
+  for (let i = 0, n = 9 + Math.random() * 7; i < n; i++) { p = p.clone().addScaledVector(way, 3 + Math.random() * 2).add(V((Math.random() - 0.5) * 4, (Math.random() - 0.5) * 4, (Math.random() - 0.5) * 4)); pts.push(p); }
+  b.m.geometry.dispose();
+  b.m.geometry = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts, false, 'catmullrom', 0), pts.length * 4, 0.22, 4, false);
+  b.m.visible = true; b.t = 0.07 + Math.random() * 0.15;
+}
+
+// ---------- 4. Восемь великих кладбищ ----------
+const labels = [];
+function label(text, pos, size = 1) {
+  const tex = canvasTex(1024, 160, (c, w, h) => {
+    c.font = '600 64px -apple-system, Inter, sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.shadowColor = 'rgba(0,0,0,.9)'; c.shadowBlur = 16; c.fillStyle = '#ffe6c8'; c.fillText(text, w / 2, h / 2);
+  });
+  const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false, fog: false }));
+  s.scale.set(12.8 * size, 2 * size, 1); s.position.copy(pos); scene.add(s); labels.push(s); return s;
+}
+{
+  const r = rng(108);
+  // пепел и земля кладбищ — кольцо между дворцом и стенами
+  const ash = canvasTex(512, 512, (c, w, h) => {
+    c.clearRect(0, 0, w, h);
+    for (let i = 0; i < 2600; i++) {
+      const x = r() * w, y = r() * h, s = 4 + r() * 22, g = 20 + r() * 40;
+      c.fillStyle = `rgba(${g + 18},${g + 6},${g},${0.25 + r() * 0.45})`; c.beginPath(); c.arc(x, y, s, 0, 7); c.fill();
+    }
+  });
+  ash.wrapS = ash.wrapT = THREE.RepeatWrapping;
+  // восемь круглых чёрных островов на уровне верха источников дхармы; соседние касаются только краями, снизу — каменные днища
+  const RC = 33.5, RI = RC * Math.sin(22.5 * DEG) - 0.05;   // радиус кольца центров и острова (касание соседей)
+  const islTop = std(0x5a514c, { map: ash, roughness: 1, emissive: 0x060404 });
+  const islRock = std(0x2c282e, { flatShading: true, roughness: 0.8, emissive: 0x0a0708, side: THREE.DoubleSide });
+  function islandGeo(C) {
+    const nr = 14, ns = 56, tp = [], bp = [], top = [], body = [];
+    for (let i = 0; i <= nr; i++) {
+      const e = Math.pow(1 - (i / nr) ** 2, 0.6), dc = r() * 1.6;
+      for (let j = 0; j < ns; j++) {
+        const a = j / ns * Math.PI * 2, q = RI * i / nr;
+        const t = C.clone().add(V(Math.cos(a) * q, ISL, Math.sin(a) * q));
+        tp.push(t); bp.push(t.clone().setY(ISL - 0.9 - e * (3.4 + (i ? r() * 1.6 : dc))));
+      }
+    }
+    const id = (i, j) => i * ns + (j % ns);
+    const tri = (arr, a, b, c) => arr.push(a.x, a.y, a.z, b.x, b.y, b.z, c.x, c.y, c.z);
+    const quad = (arr, a, b, c, d) => { tri(arr, a, b, c); tri(arr, a, c, d); };
+    for (let i = 0; i < nr; i++) for (let j = 0; j < ns; j++) {
+      quad(top, tp[id(i, j)], tp[id(i, j + 1)], tp[id(i + 1, j + 1)], tp[id(i + 1, j)]);
+      quad(body, bp[id(i, j)], bp[id(i + 1, j)], bp[id(i + 1, j + 1)], bp[id(i, j + 1)]);
+    }
+    for (let j = 0; j < ns; j++) { const a = id(nr, j), b = id(nr, j + 1); quad(body, tp[a], tp[b], bp[b], bp[a]); }
+    const mk = arr => { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(arr, 3)); g.computeVertexNormals(); return g; };
+    const gt = mk(top), pp = gt.attributes.position, uv = [];
+    for (let k = 0; k < pp.count; k++) uv.push(pp.getX(k) / 11, pp.getZ(k) / 11);
+    gt.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+    return [gt, mk(body)];
+  }
+  for (let k = 0; k < 8; k++) {
+    const [gt, gb] = islandGeo(dirPos(k * 45, RC));
+    scene.add(new THREE.Mesh(gt, islTop), new THREE.Mesh(gb, islRock));
+  }
+  const trunkM = std(0x2b2019, { roughness: 0.95 }), leafM = std(0x1d3a2a, { flatShading: true, emissive: 0x04100a });
+  const deadM = std(0x3a2c24, { roughness: 1 }), stupaM = std(0xece6d8, { emissive: 0x1a1810 });
+  const pondM = std(0x0d3346, { roughness: 0.08, metalness: 0.4, emissive: 0x06202e });
+  const rockM = std(0x3a3640, { flatShading: true });
+  const skullTex = canvasTex(256, 128, (c, w, h) => {
+    c.fillStyle = '#efe4c8'; c.fillRect(0, 0, w, h);
+    c.fillStyle = '#1a120c';
+    const fx = w * 0.25, fy = h * 0.52;
+    c.beginPath(); c.ellipse(fx - 13, fy - 4, 9, 11, 0, 0, 7); c.fill();
+    c.beginPath(); c.ellipse(fx + 13, fy - 4, 9, 11, 0, 0, 7); c.fill();
+    c.beginPath(); c.moveTo(fx, fy + 6); c.lineTo(fx - 4, fy + 14); c.lineTo(fx + 4, fy + 14); c.fill();
+    for (let i = -3; i <= 3; i++) c.fillRect(fx + i * 5 - 1, fy + 20, 2, 8);
+  });
+  const skullGeo = new THREE.SphereGeometry(1, 16, 12); skullGeo.scale(0.9, 1, 1.05);
+  window.__skull = { geo: skullGeo, mat: std(0xffffff, { map: skullTex, emissive: 0x241c10, roughness: 0.55 }) };
+
+  const bones = new THREE.InstancedMesh(new THREE.CapsuleGeometry(0.07, 0.7, 3, 6), boneM, 8 * 34);
+  const skulls = new THREE.InstancedMesh(skullGeo, window.__skull.mat, 8 * 12);
+  const d = new THREE.Object3D(); let bi = 0, si = 0;
+
+  for (let k = 0; k < 8; k++) {
+    const th = k * 45;
+    // точки на острове: fo — от центра наружу, ft — вбок
+    const C = dirPos(th, RC), o = dirPos(th, 1), tg = V(o.z, 0, -o.x);
+    const at = (fo, ft, y = 0) => C.clone().addScaledVector(o, fo).addScaledVector(tg, ft).setY(ISL + y);
+    const rnd = (k, y = 0) => { const a = r() * 6.283, q = RI * k * Math.sqrt(r()); return at(Math.cos(a) * q, Math.sin(a) * q, y); };
+    // дерево (иногда мёртвое)
+    const tree = new THREE.Group(); tree.position.copy(at(5 + r() * 2, -4 + r() * 2));
+    const H = 6 + r() * 4, dead = r() < 0.35;
+    const tr = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.6, H, 8), dead ? deadM : trunkM); tr.position.y = H / 2; tree.add(tr);
+    for (let b = 0; b < 4; b++) {
+      const br = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.2, 3 + r() * 2, 6), dead ? deadM : trunkM);
+      br.position.set(0, H * (0.6 + r() * 0.3), 0); br.rotation.set(0.6 + r() * 0.5, b * Math.PI / 2 + r(), 0);
+      br.translateY(1.4); tree.add(br);
+    }
+    if (!dead) for (let f = 0; f < 5; f++) {
+      const lf = new THREE.Mesh(new THREE.IcosahedronGeometry(1.4 + r() * 1.2, 0), leafM);
+      lf.position.set((r() - 0.5) * 3.5, H + (r() - 0.3) * 1.8, (r() - 0.5) * 3.5); tree.add(lf);
+    }
+    scene.add(tree);
+    // ступа
+    const st = new THREE.Group(); st.position.copy(at(-5 + r() * 2, 4 + r() * 2));
+    [[3.2, 0.5, 0.25], [2.5, 0.5, 0.75]].forEach(([s, h, y]) => { const m = new THREE.Mesh(new THREE.BoxGeometry(s, h, s), stupaM); m.position.y = y; st.add(m); });
+    const dm = new THREE.Mesh(new THREE.SphereGeometry(1.15, 20, 12, 0, Math.PI * 2, 0, Math.PI / 2), stupaM); dm.position.y = 1.0; st.add(dm);
+    const hm = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.45, 0.7), stupaM); hm.position.y = 2.35; st.add(hm);
+    const sp = new THREE.Mesh(new THREE.ConeGeometry(0.34, 1.9, 12), goldM); sp.position.y = 3.5; st.add(sp);
+    scene.add(st);
+    // пруд
+    const pd = new THREE.Mesh(new THREE.CircleGeometry(2 + r() * 1.2, 32), pondM); pd.rotation.x = -Math.PI / 2;
+    pd.position.copy(at(-2 + r() * 2, -6 + r() * 1.5, 0.04)); scene.add(pd);
+    // костёр
+    const fp = at(3 + r() * 2, 4 + r() * 2);
+    const fire = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.75, 2.6, 24, 1, true), fireMat({ mono: true, scale: 2.2, rise: 1.6, swirl: 0.3, intensity: 1.3, hf: 0.8 }));
+    fire.position.copy(fp).setY(ISL + 1.3); scene.add(fire);
+    for (let l = 0; l < 6; l++) {
+      const lg = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.12, 1.4, 6), deadM);
+      lg.position.copy(fp).setY(ISL + 0.12); lg.rotation.set(Math.PI / 2, 0, l * Math.PI / 3); scene.add(lg);
+    }
+    // камни
+    for (let s = 0; s < 4; s++) {
+      const rk = new THREE.Mesh(new THREE.DodecahedronGeometry(0.6 + r() * 1.2, 0), rockM);
+      rk.position.copy(rnd(0.85, 0.2)); rk.rotation.set(r() * 3, r() * 3, r() * 3); scene.add(rk);
+    }
+    // кости и черепа
+    for (let i = 0; i < 34; i++) {
+      d.position.copy(rnd(0.92, 0.08)); d.rotation.set(Math.PI / 2, 0, r() * 6.3); d.scale.setScalar(0.7 + r() * 0.6);
+      d.updateMatrix(); bones.setMatrixAt(bi++, d.matrix);
+    }
+    for (let i = 0; i < 12; i++) {
+      d.position.copy(rnd(0.9, 0.16)); d.rotation.set(-0.2, r() * 6.3, 0); d.scale.setScalar(0.17 + r() * 0.06);
+      d.updateMatrix(); skulls.setMatrixAt(si++, d.matrix);
+    }
+  }
+  scene.add(bones, skulls);
+  label('Ужасный Гнев (tum drak) · восток', dirPos(0, RC, ISL + 10.5), 0.8);
+  [['Восток', 0], ['Север', 90], ['Запад', 180], ['Юг', 270]].forEach(([t, a]) => label(t, dirPos(a, 47, ISL + 3), 0.55));
+}
+
+// ---------- 5. Два пересекающихся источника дхармы (дворец) ----------
+const PAL = { top: 7, apex: -6, R: 10 };
+const gakyils = [];
+{
+  const mat = new THREE.MeshStandardMaterial({ color: 0xe0203c, emissive: 0x7a0820, transparent: true, opacity: 0.11, side: THREE.DoubleSide, depthWrite: false, roughness: 0.25 });
+  // рёбра — светящиеся трубки: яркая сердцевина + мягкий ореол
+  const edgeCore = new THREE.MeshBasicMaterial({ color: 0xff5a70, fog: false });
+  const edgeGlow = new THREE.MeshBasicMaterial({ color: 0xff2040, transparent: true, opacity: 0.35, blending: THREE.AdditiveBlending, depthWrite: false, fog: false });
+  for (const start of [0, 180]) {   // один угол спереди (восток), другой — сзади (запад)
+    const A = V(0, PAL.apex, 0);
+    const T = [0, 120, 240].map(a => dirPos(start + a, PAL.R, PAL.top));
+    const pos = [];
+    const tri = (a, b, c) => pos.push(a.x, a.y, a.z, b.x, b.y, b.z, c.x, c.y, c.z);
+    tri(A, T[0], T[1]); tri(A, T[1], T[2]); tri(A, T[2], T[0]); tri(T[0], T[1], T[2]);
+    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.computeVertexNormals();
+    const m = new THREE.Mesh(g, mat); m.renderOrder = 1; scene.add(m);
+    for (const [p, q] of [[A, T[0]], [A, T[1]], [A, T[2]], [T[0], T[1]], [T[1], T[2]], [T[2], T[0]]]) {
+      scene.add(seg(p, q, 0.055, 0.055, edgeCore, 8));
+      const gl = seg(p, q, 0.24, 0.24, edgeGlow, 12); gl.renderOrder = 6; scene.add(gl);
+    }
+  }
+  // розовые завихрения блаженства в четырёх углах (кроме переднего и заднего), вращаются против часовой
+  const gtex = canvasTex(512, 512, (c, w, h) => {
+    c.translate(w / 2, h / 2);
+    const cols = ['#ff6fa8', '#ffa3c8', '#e2468a'];
+    for (let k = 0; k < 3; k++) {
+      c.save(); c.rotate(k * 2 * Math.PI / 3);
+      const L = [], Rr = [];
+      for (let i = 0; i <= 60; i++) {
+        const t = i / 60, ang = t * Math.PI * 1.25, rad = 230 * t, wdt = 78 * Math.sin(Math.PI * Math.pow(t, 0.55)) * (1 - 0.15 * t);
+        const px = Math.cos(ang) * rad, py = -Math.sin(ang) * rad;
+        const nx = Math.cos(ang), ny = -Math.sin(ang);
+        L.push([px + nx * wdt * 0.5, py + ny * wdt * 0.5]); Rr.push([px - nx * wdt * 0.5, py - ny * wdt * 0.5]);
+      }
+      c.beginPath(); L.forEach(([x, y], i) => i ? c.lineTo(x, y) : c.moveTo(x, y)); Rr.reverse().forEach(([x, y]) => c.lineTo(x, y));
+      c.closePath(); c.fillStyle = cols[k]; c.fill(); c.restore();
+    }
+    c.beginPath(); c.arc(0, 0, 244, 0, 7); c.lineWidth = 10; c.strokeStyle = 'rgba(255,190,215,.85)'; c.stroke();
+  });
+  const gm = new THREE.MeshBasicMaterial({ map: gtex, transparent: true, side: THREE.DoubleSide, depthWrite: false });
+  for (const a of [60, 120, 240, 300]) {
+    const g = new THREE.Mesh(new THREE.CircleGeometry(1.25, 48), gm);
+    g.position.copy(dirPos(a, PAL.R * 0.72, PAL.top + 0.06)); g.rotation.x = -Math.PI / 2; g.renderOrder = 5;
+    scene.add(g); gakyils.push(g);
+  }
+}
+
+// ---------- 6. Восьмилепестковый лотос и солнечная подушка ----------
+{
+  function petalGeo(L, W, lift) {
+    const nu = 14, nv = 8, pos = [], idx = [];
+    for (let i = 0; i <= nu; i++) {
+      const u = i / nu, w = W * Math.sin(Math.PI * Math.pow(u, 0.72));
+      for (let j = 0; j <= nv; j++) {
+        const v = j / nv * 2 - 1;
+        pos.push(u * L, lift * u * u + 0.28 * w * v * v * Math.sin(Math.PI * u), v * w);
+      }
+    }
+    for (let i = 0; i < nu; i++) for (let j = 0; j < nv; j++) {
+      const a = i * (nv + 1) + j, b = a + nv + 1;
+      idx.push(a, b, a + 1, b, b + 1, a + 1);
+    }
+    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setIndex(idx); g.computeVertexNormals();
+    return g;
+  }
+  const geo = petalGeo(2.05, 0.82, 0.75);
+  const red = std(0xc81e28, { emissive: 0x3a0606, side: THREE.DoubleSide }), yellow = std(0xf0b81c, { emissive: 0x3a2800, side: THREE.DoubleSide });
+  const green = std(0x1f9a4c, { emissive: 0x05240f, side: THREE.DoubleSide }), black = std(0x17131f, { emissive: 0x0a0818, roughness: 0.35, side: THREE.DoubleSide });
+  // стороны: В 0°, СВ 45°, С 90°, СЗ 135°, З 180°, ЮЗ 225°, Ю 270°, ЮВ 315°
+  const petalMat = { 0: red, 90: red, 180: red, 270: red, 315: yellow, 135: yellow, 225: green, 45: black };
+  for (const [a, m] of Object.entries(petalMat)) {
+    const p = new THREE.Mesh(geo, m); p.position.copy(dirPos(+a, 0.45, 0.05)); p.rotation.y = (+a) * DEG - Math.PI / 2; scene.add(p);
+  }
+  const peri = new THREE.Mesh(new THREE.CylinderGeometry(0.95, 0.75, 0.22, 40), std(0xc9c23a, { emissive: 0x262200 })); peri.position.y = 0.11; scene.add(peri);
+  const sun = new THREE.Mesh(new THREE.CylinderGeometry(1.35, 1.35, 0.09, 64), std(0xffb01f, { emissive: 0xa04800, emissiveIntensity: 0.55, roughness: 0.4 }));
+  sun.position.y = 0.255; scene.add(sun);
+}
+
+// ---------- помощники для тел ----------
+function seg(a, b, r1, r2, mat, s = 16) {
+  const d = b.clone().sub(a), len = d.length();
+  const m = new THREE.Mesh(new THREE.CylinderGeometry(r2, r1, len, s, 1, true), mat);
+  m.position.copy(a).addScaledVector(d, 0.5); m.quaternion.setFromUnitVectors(V(0, 1, 0), d.normalize());
+  return m;
+}
+function ball(p, r, mat, sc) { const m = new THREE.Mesh(new THREE.SphereGeometry(r, 20, 14), mat); m.position.copy(p); if (sc) m.scale.set(...sc); return m; }
+function limb(g, pts, rads, mat) {
+  for (let i = 0; i < pts.length - 1; i++) g.add(seg(pts[i], pts[i + 1], rads[i], rads[i + 1], mat));
+  pts.forEach((p, i) => g.add(ball(p, rads[i], mat)));
+}
+function ringAround(p, dir, r, tube = 0.008, mat = boneM) {
+  const m = new THREE.Mesh(new THREE.TorusGeometry(r, tube, 8, 28), mat);
+  m.position.copy(p); m.quaternion.setFromUnitVectors(V(0, 0, 1), dir.clone().normalize()); return m;
+}
+function beads(curve, n, r, mat = boneM) {
+  const im = new THREE.InstancedMesh(new THREE.SphereGeometry(r, 10, 8), mat, n), d = new THREE.Object3D();
+  curve.getSpacedPoints(n - 1).forEach((p, i) => { d.position.copy(p); d.updateMatrix(); im.setMatrixAt(i, d.matrix); });
+  return im;
+}
+function skullsOn(points, outward, size) {
+  const im = new THREE.InstancedMesh(window.__skull.geo, window.__skull.mat, points.length), d = new THREE.Object3D();
+  points.forEach((p, i) => { d.position.copy(p); d.lookAt(p.clone().add(outward(p))); d.scale.setScalar(size); d.updateMatrix(); im.setMatrixAt(i, d.matrix); });
+  return im;
+}
+
+// ---------- 7. Каларатри и Бхайрава ----------
+{
+  const kal = lbMat([0.62, 0.07, 0.06], [1, 0.38, 0.22], 0.55), kx = -0.66;
+  const g = new THREE.Group();
+  // красная Каларатри лежит на спине, головой на восток; правая стопа Ваджрайогини — на её груди
+  g.add(seg(V(kx, 0.41, -0.32), V(kx, 0.42, 0.12), 0.12, 0.11, kal)); g.add(ball(V(kx, 0.41, -0.32), 0.12, kal)); g.add(ball(V(kx, 0.42, 0.12), 0.11, kal));
+  g.add(ball(V(kx - 0.055, 0.51, 0.05), 0.05, kal)); g.add(ball(V(kx + 0.055, 0.51, 0.05), 0.05, kal));
+  g.add(seg(V(kx, 0.42, 0.16), V(kx, 0.41, 0.24), 0.045, 0.045, kal)); g.add(ball(V(kx, 0.41, 0.32), 0.085, kal, [1, 0.95, 1.12]));
+  for (const s of [-1, 1]) {
+    limb(g, [V(kx + s * 0.13, 0.42, 0.13), V(kx + s * 0.27, 0.38, -0.05), V(kx + s * 0.25, 0.37, -0.27)], [0.04, 0.032, 0.026], kal);
+    limb(g, [V(kx + s * 0.07, 0.4, -0.36), V(kx + s * 0.1, 0.4, -0.75), V(kx + s * 0.11, 0.37, -1.1)], [0.07, 0.05, 0.035], kal);
+  }
+  const kh = new THREE.Mesh(new THREE.SphereGeometry(0.1, 16, 10, 0, Math.PI * 2, 0, Math.PI / 1.6), std(0x0b0a0e));
+  kh.position.set(kx, 0.39, 0.36); kh.rotation.x = -Math.PI / 2; kh.scale.set(1.4, 1.6, 0.5); g.add(kh);
+  // чёрный Бхайрава лежит ничком; левая стопа — на его голове, прижатой к спине
+  const bh = lbMat([0.05, 0.06, 0.11], [0.35, 0.48, 0.95], 0.65), bx = 0.37;
+  g.add(ball(V(bx, 0.47, -0.02), 0.09, bh, [1, 0.95, 1.05]));
+  g.add(seg(V(bx, 0.44, -0.1), V(bx, 0.43, -0.2), 0.05, 0.05, bh));
+  g.add(seg(V(bx, 0.43, -0.24), V(bx, 0.42, -0.74), 0.14, 0.12, bh)); g.add(ball(V(bx, 0.43, -0.24), 0.14, bh)); g.add(ball(V(bx, 0.42, -0.74), 0.12, bh));
+  for (const s of [-1, 1]) {
+    limb(g, [V(bx + s * 0.15, 0.44, -0.24), V(bx + s * 0.38, 0.38, -0.2), V(bx + s * 0.5, 0.35, -0.02)], [0.05, 0.04, 0.03], bh);
+    limb(g, [V(bx + s * 0.08, 0.41, -0.78), V(bx + s * 0.12, 0.4, -1.12), V(bx + s * 0.14, 0.38, -1.45)], [0.075, 0.055, 0.04], bh);
+    g.add(ball(V(bx + s * 0.03, 0.5, 0.06), 0.012, std(0xffffff, { emissive: 0x666666 })));
+  }
+  scene.add(g);
+}
+
+// ---------- 8. Ваджрайогини ----------
+const skin = lbMat([0.86, 0.11, 0.06], [1.0, 0.6, 0.25], 0.95);
+const hairM = std(0x0a0a0f, { roughness: 0.38, metalness: 0.2 });
+const VY = new THREE.Group(); VY.scale.setScalar(1.1); VY.position.y = 0.5; scene.add(VY);
+const fpHidden = [];   // то, что прячем, когда смотрим её глазами
+let headG, cupWorld;
+{
+  const torso = new THREE.Mesh(new THREE.LatheGeometry([
+    [0.0, 0.77], [0.1, 0.78], [0.165, 0.84], [0.172, 0.92], [0.15, 1.0], [0.122, 1.08], [0.13, 1.17], [0.152, 1.27],
+    [0.158, 1.36], [0.13, 1.43], [0.07, 1.48], [0.048, 1.5], [0.0, 1.505]].map(([r, y]) => new THREE.Vector2(r, y)), 36), skin);
+  torso.scale.z = 0.72; VY.add(torso);
+  VY.add(ball(V(-0.072, 1.265, 0.08), 0.068, skin, [1, 0.95, 0.9]), ball(V(0.072, 1.265, 0.08), 0.068, skin, [1, 0.95, 0.9]));
+  VY.add(ball(V(-0.072, 1.262, 0.142), 0.013, lbMat([0.6, 0.05, 0.05], [1, 0.4, 0.2], 0.3)), ball(V(0.072, 1.262, 0.142), 0.013, lbMat([0.6, 0.05, 0.05], [1, 0.4, 0.2], 0.3)));
+  VY.add(ball(V(-0.07, 0.86, -0.05), 0.1, skin), ball(V(0.07, 0.86, -0.05), 0.1, skin));
+  // ноги: правая вытянута (на груди Каларатри), левая согнута (на голове Бхайравы)
+  limb(VY, [V(-0.09, 0.84, 0), V(-0.335, 0.455, 0.025), V(-0.58, 0.07, 0.05)], [0.088, 0.058, 0.04], skin);
+  limb(VY, [V(-0.58, 0.07, 0.05), V(-0.66, 0.035, 0.17)], [0.04, 0.03], skin);
+  limb(VY, [V(0.09, 0.84, 0), V(0.36, 0.52, 0.15), V(0.34, 0.08, -0.02)], [0.088, 0.058, 0.04], skin);
+  limb(VY, [V(0.34, 0.08, -0.02), V(0.4, 0.04, 0.12)], [0.04, 0.03], skin);
+  // руки: правая вниз с ножом, левая вверх с чашей
+  limb(VY, [V(-0.165, 1.41, 0), V(-0.29, 1.16, 0.05), V(-0.39, 0.93, 0.12)], [0.05, 0.036, 0.028], skin);
+  VY.add(ball(V(-0.405, 0.895, 0.135), 0.036, skin, [0.9, 1.2, 0.8]));
+  limb(VY, [V(0.165, 1.41, 0), V(0.36, 1.58, 0.06), V(0.17, 1.83, 0.15)], [0.05, 0.036, 0.028], skin);
+  VY.add(ball(V(0.14, 1.865, 0.16), 0.036, skin, [0.9, 1.1, 0.9]));
+  const neck = seg(V(0, 1.46, -0.005), V(0, 1.62, -0.02), 0.048, 0.044, skin); VY.add(neck); fpHidden.push(neck);
+
+  // голова запрокинута: пьёт из чаши, три глаза устремлены вверх, к Кечаре
+  headG = new THREE.Group(); headG.position.set(0, 1.6, -0.02); headG.rotation.x = -0.5; VY.add(headG); fpHidden.push(headG);
+  headG.add(ball(V(0, 0.1, 0.01), 1, skin, [0.095, 0.122, 0.105]));
+  const white = std(0xfff6ee, { emissive: 0x554a44 }), pupil = std(0x050308);
+  for (const s of [-1, 1]) {
+    headG.add(ball(V(s * 0.036, 0.112, 0.093), 0.016, white, [1.35, 0.75, 0.5]));
+    headG.add(ball(V(s * 0.036, 0.118, 0.1), 0.0075, pupil));
+    headG.add(seg(V(s * 0.016, 0.135, 0.1), V(s * 0.058, 0.142, 0.088), 0.004, 0.003, hairM));
+    headG.add(ringAround(V(s * 0.098, 0.07, 0.005), V(1, 0, 0), 0.022, 0.005));
+  }
+  headG.add(ball(V(0, 0.165, 0.093), 0.014, white, [0.6, 1.35, 0.5]));
+  headG.add(ball(V(0, 0.171, 0.1), 0.0065, pupil));
+  headG.add(ball(V(0, 0.087, 0.112), 0.013, skin));
+  headG.add(ball(V(0, 0.048, 0.098), 0.012, std(0x3a0006, { emissive: 0x200000 }), [1.8, 0.9, 0.6]));
+  headG.add(ball(V(0, 0.15, -0.02), 1, hairM, [0.1, 0.1, 0.1]));
+  // корона из пяти черепов, драгоценности между ними и на вершине; колесо на макушке
+  const crownPts = [-0.95, -0.48, 0, 0.48, 0.95].map(a => V(Math.sin(a) * 0.1, 0.19, Math.cos(a) * 0.1 + 0.005));
+  headG.add(skullsOn(crownPts, p => V(p.x, 0.15, p.z), 0.032));
+  const gemCols = [0x2f6bff, 0xff2a3a, 0x19c46b, 0xffcc22];
+  [-0.71, -0.24, 0.24, 0.71].forEach((a, i) => headG.add(ball(V(Math.sin(a) * 0.106, 0.185, Math.cos(a) * 0.106), 0.01, std(gemCols[i], { emissive: gemCols[i], emissiveIntensity: 0.4, metalness: 0.3 }))));
+  crownPts.forEach((p, i) => headG.add(ball(p.clone().add(V(0, 0.042, 0)), 0.009, std(gemCols[i % 4], { emissive: gemCols[i % 4], emissiveIntensity: 0.5 }))));
+  const band = new THREE.Mesh(new THREE.TorusGeometry(0.1, 0.006, 8, 40, Math.PI * 1.25), boneM); band.position.y = 0.175; band.rotation.set(Math.PI / 2, 0, -Math.PI * 0.125 + Math.PI / 2 - Math.PI * 0.5); headG.add(band);
+  const wheel = new THREE.Group(); wheel.position.set(0, 0.226, -0.005);
+  wheel.add(ringAround(V(0, 0, 0), V(0, 1, 0), 0.034, 0.005));
+  for (let i = 0; i < 8; i++) { const a = i * Math.PI / 4; wheel.add(seg(V(0, 0, 0), V(Math.cos(a) * 0.034, 0, Math.sin(a) * 0.034), 0.0025, 0.0025, boneM)); }
+  wheel.add(ball(V(0, 0.004, 0), 0.008, boneM)); headG.add(wheel);
+
+  VY.updateMatrixWorld(true);
+  // распущенные чёрные волосы до пояса
+  const hr = rng(21), hair = new THREE.Group();
+  for (let i = 0; i < 46; i++) {
+    const a = (i / 45 - 0.5) * 2.4, st = V(Math.sin(a) * 0.09, 0.07 + hr() * 0.1, -Math.cos(a) * 0.1 + 0.01).applyMatrix4(headG.matrix);
+    const x = Math.sin(a) * 0.09;
+    const pts = [st, st.clone().add(V(0, -0.05, -0.05)), V(x * 1.6, 1.36, -0.15 - hr() * 0.02), V(x * 1.9 + (hr() - 0.5) * 0.02, 1.12, -0.135), V(x * 2.1 + (hr() - 0.5) * 0.04, 0.9 + hr() * 0.07, -0.13)];
+    hair.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 24, 0.0095, 5), hairM));
+  }
+  VY.add(hair); fpHidden.push(hair);
+
+  // гирлянда из 50 черепов до колен
+  const gar = new THREE.CatmullRomCurve3([V(0, 1.53, -0.08), V(0.11, 1.5, -0.05), V(0.16, 1.42, 0.06), V(0.175, 1.2, 0.17), V(0.16, 0.95, 0.23),
+    V(0.1, 0.68, 0.27), V(0, 0.6, 0.29), V(-0.1, 0.68, 0.27), V(-0.16, 0.95, 0.23), V(-0.175, 1.2, 0.17), V(-0.16, 1.42, 0.06), V(-0.11, 1.5, -0.05)], true);
+  VY.add(skullsOn(gar.getSpacedPoints(50).slice(0, 50), p => V(p.x, 0, p.z + 0.06), 0.027));
+  // пять украшений мудры из кости: ожерелье, перекрёстные нити, браслеты, пояс-передник
+  VY.add(ringAround(V(0, 1.47, 0.0), V(0, 1, 0.35), 0.075, 0.008));
+  VY.add(beads(new THREE.CatmullRomCurve3([V(-0.06, 1.46, 0.06), V(0, 1.38, 0.12), V(0.06, 1.46, 0.06)]), 9, 0.008));
+  VY.add(beads(new THREE.CatmullRomCurve3([V(0.15, 1.44, 0.06), V(0.03, 1.3, 0.135), V(-0.06, 1.12, 0.1), V(-0.15, 0.92, 0.11)]), 34, 0.0075));
+  VY.add(beads(new THREE.CatmullRomCurve3([V(-0.15, 1.44, 0.06), V(-0.03, 1.3, 0.135), V(0.06, 1.12, 0.1), V(0.15, 0.92, 0.11)]), 34, 0.0075));
+  [[V(-0.39, 0.93, 0.12), V(-0.1, -0.23, 0.07)], [V(0.17, 1.83, 0.15), V(-0.19, 0.25, 0.09)], [V(-0.23, 1.28, 0.025), V(-0.12, -0.25, 0.05)],
+   [V(0.265, 1.495, 0.03), V(0.19, 0.17, 0.06)], [V(-0.58, 0.1, 0.05), V(-0.25, -0.39, 0.02)], [V(0.34, 0.11, -0.02), V(-0.02, -0.44, -0.17)]]
+    .forEach(([p, d]) => VY.add(ringAround(p, d, 0.04, 0.009)));
+  const belt = ringAround(V(0, 0.9, 0), V(0, 1, 0), 0.17, 0.011); belt.scale.y = 0.74; VY.add(belt);
+  for (let i = 0; i < 15; i++) {
+    const a = (i / 14 - 0.5) * 3.6, top = V(Math.sin(a) * 0.172, 0.89, Math.cos(a) * 0.125);
+    const bot = top.clone().add(V(Math.sin(a) * 0.03, -0.2, Math.cos(a) * 0.04));
+    VY.add(beads(new THREE.LineCurve3(top, bot), 8, 0.0065));
+  }
+  VY.add(beads(new THREE.CatmullRomCurve3(Array.from({ length: 13 }, (_, i) => { const a = (i / 12 - 0.5) * 3.6; return V(Math.sin(a) * 0.19, 0.79, Math.cos(a) * 0.15); })), 40, 0.0055));
+
+  // нож с рукоятью-ваджрой в правой руке
+  const knife = new THREE.Group(); knife.position.set(-0.41, 0.88, 0.14);
+  knife.quaternion.setFromUnitVectors(V(0, -1, 0), V(-0.25, -0.9, 0.3).normalize());
+  knife.add(seg(V(0, 0.04, 0), V(0, -0.1, 0), 0.009, 0.009, goldM));
+  knife.add(ball(V(0, 0.05, 0), 0.016, goldM), ball(V(0, -0.1, 0), 0.016, goldM));
+  for (let i = 0; i < 4; i++) { const a = i * Math.PI / 2; knife.add(seg(V(0, 0.06, 0), V(Math.cos(a) * 0.012, 0.09, Math.sin(a) * 0.012), 0.004, 0.002, goldM)); }
+  const sh = new THREE.Shape();
+  sh.moveTo(-0.075, 0); sh.quadraticCurveTo(0, 0.025, 0.075, 0); sh.lineTo(0.09, 0.03);
+  sh.quadraticCurveTo(0.1, -0.02, 0.065, -0.045); sh.quadraticCurveTo(0, -0.085, -0.065, -0.045); sh.quadraticCurveTo(-0.09, -0.02, -0.075, 0);
+  const blade = new THREE.Mesh(new THREE.ExtrudeGeometry(sh, { depth: 0.006, bevelEnabled: false }), silverM);
+  blade.position.set(0, -0.11, -0.003); knife.add(blade); VY.add(knife);
+
+  // чаша из черепа с кровью в левой руке; струя нектара — в запрокинутый рот
+  const cup = new THREE.Group(); cup.position.set(0.12, 1.92, 0.17);
+  const bowl = new THREE.Mesh(new THREE.LatheGeometry(Array.from({ length: 13 }, (_, i) => { const a = i / 12 * Math.PI / 2; return new THREE.Vector2(Math.sin(a) * 0.075, -Math.cos(a) * 0.06); }), 28), boneM);
+  bowl.material = boneM.clone(); bowl.material.side = THREE.DoubleSide; cup.add(bowl);
+  const blood = new THREE.Mesh(new THREE.CircleGeometry(0.068, 28), std(0x8a0008, { emissive: 0xa00010, emissiveIntensity: 1.2, roughness: 0.15 }));
+  blood.rotation.x = -Math.PI / 2; blood.position.y = -0.012; cup.add(blood);
+  const mouth = V(0, 0.048, 0.098).applyMatrix4(headG.matrix);
+  cup.quaternion.setFromUnitVectors(V(0, 1, 0), mouth.clone().sub(cup.position).normalize().add(V(0, 1.1, 0)).normalize());
+  VY.add(cup);
+  const lip = V(0, 0, 0.075).applyQuaternion(cup.quaternion).add(cup.position);
+  lip.copy(cup.position).add(mouth.clone().sub(cup.position).setY(0).normalize().multiplyScalar(0.07)).add(V(0, 0.005, 0));
+  const stream = seg(lip, mouth.clone().add(V(0, 0.01, 0.005)), 0.006, 0.004, std(0xa0000c, { emissive: 0xc00010, emissiveIntensity: 1.3 }));
+  VY.add(stream); fpHidden.push(stream);
+
+  // катванга на левом плече, отмеченная ваджрой; с неё свисают дамару, колокольчик и трёхконечное знамя
+  const kb = V(0.45, 0.25, -0.12), kt = V(0.12, 2.15, -0.05), kd = kt.clone().sub(kb).normalize();
+  VY.add(seg(kb, kt, 0.011, 0.011, silverM));
+  for (const [p, s] of [[kt, 1], [kb, -1]]) {
+    const vj = new THREE.Group(); vj.position.copy(p); vj.quaternion.setFromUnitVectors(V(0, 1, 0), kd.clone().multiplyScalar(s));
+    vj.add(ball(V(0, 0, 0), 0.02, goldM));
+    vj.add(seg(V(0, 0.02, 0), V(0, 0.1, 0), 0.006, 0.003, goldM));
+    for (let i = 0; i < 4; i++) { const a = i * Math.PI / 2; vj.add(seg(V(0, 0.02, 0), V(Math.cos(a) * 0.028, 0.06, Math.sin(a) * 0.028), 0.004, 0.004, goldM), seg(V(Math.cos(a) * 0.028, 0.06, Math.sin(a) * 0.028), V(0, 0.1, 0), 0.004, 0.003, goldM)); }
+    VY.add(vj);
+  }
+  const H = kb.clone().lerp(kt, 0.86);
+  const hang = new THREE.Group(); hang.position.copy(H); VY.add(hang); window.__hang = hang;
+  hang.add(seg(V(0, 0, 0), V(0.05, -0.08, 0.02), 0.002, 0.002, goldM), seg(V(0, 0, 0), V(-0.03, -0.1, 0.03), 0.002, 0.002, goldM));
+  const dam = new THREE.Group(); dam.position.set(0.05, -0.12, 0.02); dam.rotation.z = Math.PI / 2;
+  const drumM = std(0x8a2a1a, { emissive: 0x200400 });
+  const c1 = new THREE.Mesh(new THREE.ConeGeometry(0.035, 0.04, 20, 1, true), drumM); c1.position.y = 0.02; c1.rotation.x = Math.PI;
+  const c2 = new THREE.Mesh(new THREE.ConeGeometry(0.035, 0.04, 20, 1, true), drumM); c2.position.y = -0.02;
+  dam.add(c1, c2, ringAround(V(0, 0.04, 0), V(0, 1, 0), 0.035, 0.004, goldM), ringAround(V(0, -0.04, 0), V(0, 1, 0), 0.035, 0.004, goldM)); hang.add(dam);
+  const bell = new THREE.Mesh(new THREE.LatheGeometry([[0.0, 0.05], [0.012, 0.048], [0.02, 0.03], [0.026, 0.0], [0.034, -0.025], [0.04, -0.03]].map(([r, y]) => new THREE.Vector2(r, y)), 24), goldM.clone());
+  bell.material.side = THREE.DoubleSide; bell.position.set(-0.03, -0.15, 0.03); hang.add(bell);
+  const btex = canvasTex(64, 256, (c, w, h) => { ['#2f6bff', '#ffffff', '#ff2a3a', '#19c46b', '#ffcc22'].forEach((col, i) => { c.fillStyle = col; c.fillRect(0, i * h / 5, w, h / 5); }); });
+  const bs = new THREE.Shape(); bs.moveTo(-0.045, 0); bs.lineTo(0.045, 0); bs.lineTo(0.045, -0.22); bs.lineTo(0.03, -0.17); bs.lineTo(0.015, -0.24);
+  bs.lineTo(0, -0.17); bs.lineTo(-0.015, -0.24); bs.lineTo(-0.03, -0.17); bs.lineTo(-0.045, -0.22); bs.closePath();
+  const bg = new THREE.ShapeGeometry(bs); const uv = bg.attributes.uv, ps = bg.attributes.position;
+  for (let i = 0; i < uv.count; i++) uv.setXY(i, (ps.getX(i) + 0.045) / 0.09, 1 + ps.getY(i) / 0.24);
+  const banner = new THREE.Mesh(bg, new THREE.MeshStandardMaterial({ map: btex, side: THREE.DoubleSide, roughness: 0.8, emissive: 0x222222 }));
+  banner.position.set(0.02, -0.01, -0.02); banner.rotation.y = 0.9; hang.add(banner);
+
+  // пламя мудрости вокруг неё
+  const wf1 = new THREE.Mesh(new THREE.CylinderGeometry(1.15, 1.45, 3.4, 64, 1, true), fireMat({ mono: true, scale: 2.6, rise: 1.3, swirl: 0.35, intensity: 0.32, hf: 1.3, lean: 0.4 }));
+  wf1.position.y = 2.0; scene.add(wf1);
+  const wf2 = new THREE.Mesh(new THREE.CylinderGeometry(1.6, 1.75, 3.9, 64, 1, true), fireMat({ mono: true, scale: 3.4, rise: 1.1, swirl: 0.25, intensity: 0.22, hf: 1.1, lean: 0.5 }));
+  wf2.position.y = 2.2; scene.add(wf2);
+}
+VY.updateMatrixWorld(true);
+const EYE = VY.localToWorld(V(0, 1.72, 0.11));   // точка зрения «её глазами»
+
+// ---------- режимы ----------
+const hint = document.getElementById('hint'), card = document.getElementById('card'), pride = document.getElementById('pride');
+const HINTS = {
+  orbit: mobile ? 'Веди пальцем — вращать, щипок — ближе/дальше' : 'Тяни мышью — вращать, колесо — ближе/дальше, правая кнопка — сдвиг',
+  top: 'Вид сверху: восток внизу',
+  tour: 'От внешнего огня к центру — как велит Кхен Ринпоче',
+  fp: mobile ? 'Веди пальцем — оглядеться. Посмотри вниз и вверх' : 'Тяни мышью — оглядеться, колесо — угол обзора. Посмотри вниз и вверх',
+};
+let mode = 'orbit', fly = null, yaw = Math.PI, pitch = 0.04;
+window.__look = (y, p) => { yaw = y; pitch = p; };
+
+function flyTo(pos, tgt, dur = 2.4, done) {
+  fly = { p0: camera.position.clone(), t0: controls.target.clone(), p1: pos.clone(), t1: tgt.clone(), s: performance.now(), d: dur * 1000, done };
+  controls.enabled = false;
+}
+function setFP(on) {
+  fpHidden.forEach(o => o.visible = !on);
+  camera.fov = on ? 78 : 55; camera.updateProjectionMatrix();
+  labels.forEach(l => l.visible = !on);
+}
+function setMode(m) {
+  if (mode === 'fp' && m !== 'fp') { setFP(false); camera.position.copy(EYE).add(V(0.3, 0.15, 1.6)); controls.target.set(0, 1.7, 0); }
+  mode = m;
+  document.querySelectorAll('#modes button').forEach(b => b.classList.toggle('on', b.dataset.m === m));
+  hint.textContent = HINTS[m];
+  card.hidden = m !== 'tour';
+  if (m === 'orbit') flyTo(V(2.3, 2.4, 4.6), V(0, 1.7, 0), 2);
+  if (m === 'top') flyTo(V(0, 160, 0.01), V(0, 0, 0), 2.4);
+  if (m === 'tour') showStep(0);
+  if (m === 'fp') {
+    flyTo(EYE.clone().add(V(0, 0.02, 0.02)), EYE.clone().add(V(0, 0.04, 1)), 1.6, () => {
+      setFP(true); yaw = Math.PI; pitch = 0.04; controls.enabled = false;
+      pride.style.opacity = 1; setTimeout(() => pride.style.opacity = 0, 3200);
+    });
+  }
+}
+document.querySelectorAll('#modes button').forEach(b => b.onclick = () => setMode(b.dataset.m));
+
+// взгляд «её глазами»: тянем — оглядываемся
+{
+  let drag = null;
+  const el = renderer.domElement;
+  el.addEventListener('pointerdown', e => { if (mode !== 'fp') return; drag = { x: e.clientX, y: e.clientY }; el.setPointerCapture(e.pointerId); });
+  el.addEventListener('pointermove', e => {
+    if (mode !== 'fp' || !drag) return;
+    const k = (mobile ? 0.006 : 0.0045) * camera.fov / 78;
+    yaw -= (e.clientX - drag.x) * k; pitch -= (e.clientY - drag.y) * k;
+    pitch = Math.max(-1.5, Math.min(1.5, pitch)); drag = { x: e.clientX, y: e.clientY };
+  });
+  el.addEventListener('pointerup', () => drag = null);
+  el.addEventListener('pointercancel', () => drag = null);
+  el.addEventListener('wheel', e => { if (mode !== 'fp') return; camera.fov = Math.max(40, Math.min(105, camera.fov + e.deltaY * 0.05)); camera.updateProjectionMatrix(); }, { passive: true });
+}
+
+// ---------- тур: снаружи к центру (цитаты — Кхен Ринпоче, йога 6) ----------
+const STEPS = [
+  { t: 'Пятицветное кольцо огня', pos: V(0, 40, 165), tgt: V(0, 0, 0),
+    q: ['Мандала имеет несокрушимую алмазную основу, стены, крышу и потолок, которые снаружи окружены пятицветным кольцом бушующего огня, языки которого закручиваются влево.',
+        'Это кольцо огня очень велико и простирается на несколько миль. Огонь охватывает всю область за пределами основания, стен и крыши.'],
+    c: 'Языки, закрученные влево, указывают на то, что это практика материнской тантры.' },
+  { t: 'Молнии в огне', pos: V(-24, 16, 92), tgt: V(0, 12, 58),
+    q: ['Чтобы помешать им проникнуть, огненное кольцо содержит молнии, которые удерживают богов огня снаружи. Поскольку по своей природе оно является нераздельной мудростью блаженства-пустоты, оно обладает огромной силой и может защищать вас.'] },
+  { t: 'Алмазная основа, стены, крыша и потолок', pos: V(14, -3, 26), tgt: V(0, -14, 0),
+    q: ['Dorjey sa shi означает, что у мандалы есть алмазная основа, состоящая из множества ваджр разных размеров.',
+        'Таким образом, основа, стены, крыша и потолок состоят из множества ваджр, сущность которых — нераздельная мудрость блаженства-пустоты.'] },
+  { t: 'Восемь великих кладбищ', pos: V(-14, 1.4, 14), tgt: V(0, 4.5, 32),
+    q: ['Внутри расположены восемь великих кладбищ, таких как «Ужасный Гнев», которые образуют круг.',
+        '«Ужасный Гнев» (tum drak) — это название кладбища, расположенного на востоке. Оно и остальные семь образуют круг вокруг внутренней стороны алмазных стен. Границы каждого кладбища примыкают к границам соседнего.'],
+    c: 'Кладбища здесь — восемь круглых чёрных островов, соседние касаются краями. Деревья, ступы, пруды и костры на них — условность сцены; в комментарии кладбища так не описаны.' },
+  { t: 'Дворец: два источника дхармы', pos: V(9, 13, 24), tgt: V(0, 2.5, 0),
+    q: ['В центре находятся два пересекающихся красных источника дхармы, их большие плоские поверхности обращены вверх, а заострённые концы уходят в землю.',
+        'В данном случае два пересекающихся источника дхармы представляют собой дворец, внутри которого обитает Ваджрайогини в своей мандале.'] },
+  { t: 'Завихрения блаженства', pos: V(0, 24, 9), tgt: V(0, 6, 0),
+    q: ['За исключением двух углов спереди и сзади, каждый из остальных четырёх углов отмечен розовым завихрением блаженства, который вращается против часовой стрелки.'] },
+  { t: 'Лотос и солнечная подушка', pos: V(2.2, 4.6, 4.6), tgt: V(0, 0.3, 0),
+    q: ['Внутри источников дхармы находится разноцветный лотос с восемью лепестками, а в его центре — солнечная подушка.',
+        'Четыре лепестка, расположенные в основных направлениях, красные; в юго-восточном и северо-западном направлениях жёлтые; в юго-западном — зелёный; в северо-восточном — чёрный.'] },
+  { t: 'Каларатри и Бхайрава', pos: V(-1.5, 1.7, 2.4), tgt: V(-0.1, 0.45, -0.35),
+    q: ['Правая нога вытянута и наступает на грудь красной Каларатри. Левая нога согнута и наступает на голову чёрного Бхайравы, которая прижата к его спине.',
+        'Стоя таким образом на этих существах, Ваджрайогини символизирует устранение трёх ядов ума — желания, невежества и ненависти.'] },
+  { t: 'Тело', pos: V(0.6, 2.3, 3.9), tgt: V(0, 1.65, 0),
+    q: ['Моё красное тело сияет, подобно огню, уничтожающему мир в конце кальпы. У меня одно лицо, две руки и три глаза, устремлённые вверх к раю Кечары.',
+        'Это выражение означает: «Если вы последуете за мной, я приведу вас в рай Кечара».'] },
+  { t: 'Нож, чаша, катванга', pos: V(1.9, 2.5, 2.4), tgt: V(0, 1.75, 0),
+    q: ['Правая рука вытянута вниз и держит нож для рубки, отмеченный ваджрой. Левая рука поднята вверх и держит чашу из черепа, наполненную кровью, из которой я пью, запрокинув голову.',
+        'На левом плече я ношу катванка, отмеченный ваджрой, с которого свисают дамару, колокольчик и трёхконечное знамя.'] },
+  { t: 'Украшения', pos: V(-0.5, 2.55, 1.9), tgt: V(0, 2.0, 0),
+    q: ['Мои распущенные чёрные волосы покрывают мою спину до пояса. Моя голова украшена пятью человеческими черепами, и я ношу гирлянду из пятидесяти черепов. Я обнажёна, украшена пятью украшениями мудры.',
+        'Колесо на макушке головы; серьги; ожерелье; медитационные нити — одна через каждое плечо и под противоположной рукой; браслеты на руках, запястьях и лодыжках.'] },
+  { t: 'Пламя мудрости', pos: V(0, 2.4, 6.5), tgt: V(0, 1.8, 0),
+    q: ['…и стою в центре пылающего огня мудрости.',
+        'Мудрость Ваджрайогини настолько мощна и ярка, что она излучает лучи света, формируя вокруг себя круг огня.'] },
+  { t: 'Это я', pos: V(0.25, 2.5, 1.4), tgt: V(0, 2.4, 0),
+    q: ['В этот момент необходимо полностью отождествить себя с этим образом и развить божественную гордость: «Это я, я являюсь этим».',
+        'К моменту, когда вы достигаете части визуализации, в которой стоите в центре пламени мудрости, образ всей мандалы должен возникать в вашем уме совершенно ясно.'],
+    last: true },
+];
+let step = 0;
+const esc = s => s.replace(/[&<>]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[ch]));
+function showStep(i) {
+  step = Math.max(0, Math.min(STEPS.length - 1, i));
+  const s = STEPS[step];
+  document.getElementById('ct').textContent = s.t;
+  document.getElementById('cn').textContent = `${step + 1} / ${STEPS.length}`;
+  document.getElementById('cq').innerHTML = s.q.map(p => `<p>«${esc(p.replace(/^«|»$/g, ''))}»</p>`).join('');
+  document.getElementById('cc').textContent = (s.c ? s.c + ' ' : '') + '— Сермей Кхенсур Лобсанг Тарчин Ринпоче (Кхен Ринпоче), «Высший путь» (Sublime Path to Kechara Paradise), йога 6';
+  document.getElementById('prev').disabled = step === 0;
+  const nx = document.getElementById('next');
+  nx.textContent = s.last ? 'войти — её глазами' : 'дальше →'; nx.classList.toggle('go', !!s.last);
+  flyTo(s.pos, s.tgt, step === 0 ? 2.2 : 3);
+}
+document.getElementById('prev').onclick = () => showStep(step - 1);
+document.getElementById('next').onclick = () => STEPS[step].last ? setMode('fp') : showStep(step + 1);
+addEventListener('keydown', e => {
+  if (mode === 'tour' && e.key === 'ArrowRight') document.getElementById('next').click();
+  if (mode === 'tour' && e.key === 'ArrowLeft') showStep(step - 1);
+});
+
+// ---------- цикл ----------
+const clock = new THREE.Clock();
+const ease = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+function frame() {
+  const dt = Math.min(clock.getDelta(), 0.05), t = clock.elapsedTime;
+  fireMats.forEach(m => m.uniforms.uTime.value = t);
+  gakyils.forEach(g => g.rotation.z += dt * 0.6);
+  window.__tongues.rotation.y += dt * FIRE_SPIN;
+  window.__hang.rotation.z = Math.sin(t * 1.3) * 0.08; window.__hang.rotation.x = Math.sin(t * 0.9) * 0.06;
+  deityLight.intensity = 7 + Math.sin(t * 7) * 0.6 + Math.sin(t * 13) * 0.4;
+  for (const b of bolts) {
+    if (b.m.visible) { b.t -= dt; b.m.material.opacity = Math.random() < 0.3 ? 0.4 : 1; if (b.t <= 0) b.m.visible = false; }
+    else if (Math.random() < dt * 0.45) strike(b);
+  }
+  if (fly) {
+    const k = Math.min(1, (performance.now() - fly.s) / fly.d), e = ease(k);
+    camera.position.lerpVectors(fly.p0, fly.p1, e); controls.target.lerpVectors(fly.t0, fly.t1, e);
+    camera.lookAt(controls.target);
+    if (k >= 1) { const d = fly.done; fly = null; if (mode !== 'fp') controls.enabled = true; d && d(); }
+  } else if (mode === 'fp') {
+    camera.position.copy(EYE); camera.rotation.order = 'YXZ'; camera.rotation.set(pitch, yaw, 0);
+  } else controls.update();
+  renderer.render(scene, camera);
+  requestAnimationFrame(frame);
+}
+addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
+document.getElementById('load').remove();
+hint.textContent = HINTS.orbit;
+frame();
+</script>
+</body>
+</html>
